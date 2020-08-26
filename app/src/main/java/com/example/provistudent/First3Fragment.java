@@ -23,12 +23,12 @@ public class First3Fragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.button_first).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(First3Fragment.this)
-                        .navigate(R.id.action_First3Fragment_to_Second3Fragment);
-            }
-        });
+//        view.findViewById(R.id.button_first).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                NavHostFragment.findNavController(First3Fragment.this)
+//                        .navigate(R.id.action_First3Fragment_to_Second3Fragment);
+//            }
+//        });
     }
 }

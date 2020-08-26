@@ -22,38 +22,43 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/rejestracja"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#0b5225"
             android:gravity="center"
-            android:text="REJESTRACJA UŻYTKOWNIKA"
+            android:text="@string/rejestracja_u_ytkownika"
             android:textColor="@android:color/white"
             android:textSize="30sp"
             android:textStyle="bold|normal"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="0dp" />
-<!--        <View-->
-<!--            android:layout_width="1dp"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_weight="1" />-->
+        <!--        <View-->
+        <!--            android:layout_width="1dp"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:layout_weight="1" />-->
 
         <LinearLayout
             android:id="@+id/linearLayout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/imie"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="10px"
                 android:text="Jak się nazywasz?"
                 android:textColor="@android:color/black"
                 android:textSize="18dp"
-                android:textStyle="bold|normal" />
+                android:textStyle="bold|normal"
+                android:layout_marginStart="10px" />
+
             <View
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_weight="1" />
 
@@ -61,36 +66,41 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:hint="@string/wpisz_swoje_imie" />
-        </LinearLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/poleimie"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginRight="30px"
+                    android:hint="@string/wpisz_swoje_imie" />
+            </LinearLayout>
         </LinearLayout>
 
-<!--        <View-->
-<!--            android:layout_width="1dp"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_weight="1" />-->
+        <!--        <View-->
+        <!--            android:layout_width="1dp"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:layout_weight="1" />-->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
+            android:background="@android:color/darker_gray" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             tools:ignore="MissingConstraints">
+
             <TextView
                 android:id="@+id/dochodmiech"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
                 android:text="Dochód miesięczny:"
                 android:textColor="@android:color/black"
                 android:textSize="18dp"
@@ -98,46 +108,53 @@
                 tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="200dp"
                 tools:layout_editor_absoluteY="90dp" />
+
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-            <Spinner
-                android:id="@+id/spinner1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+
+                <Spinner
+                    android:id="@+id/spinner1"
+                    android:layout_marginRight="30px"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
         </LinearLayout>
 
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
+            android:background="@android:color/darker_gray" />
 
         <LinearLayout
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:orientation="horizontal">
-        <TextView
-            android:id="@+id/oplatystale"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Czy posiadasz opłaty stałe?"
-            android:textColor="@android:color/black"
-            android:textSize="18dp"
-            android:textStyle="bold|normal"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="200dp"
-            tools:layout_editor_absoluteY="90dp" />
+
+            <TextView
+                android:id="@+id/oplatystale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
+                android:text="Czy posiadasz opłaty stałe?"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:textStyle="bold|normal"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="200dp"
+                tools:layout_editor_absoluteY="90dp" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -147,23 +164,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-        <CheckBox
-            android:id="@+id/checkoplaty"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Tak" />
-        </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/checkoplaty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30px"
+                    android:layout_gravity="center"
+                    android:text="Tak" />
+            </LinearLayout>
         </LinearLayout>
 
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
+            android:background="@android:color/darker_gray" />
 
         <LinearLayout
             android:layout_height="wrap_content"
@@ -174,6 +194,7 @@
                 android:id="@+id/przypominacz"
                 android:layout_width="226dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
                 android:text="Czy chcesz otrzymywać przypomnienia o zapłacie rachunków?"
                 android:textColor="@android:color/black"
                 android:textSize="18dp"
@@ -181,8 +202,9 @@
                 tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="200dp"
                 tools:layout_editor_absoluteY="90dp" />
+
             <View
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_weight="1" />
 
@@ -190,12 +212,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-            <CheckBox
-            android:id="@+id/checkoplatykiedy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-                android:gravity="center"
-            android:text="Tak" />
+
+                <CheckBox
+                    android:id="@+id/checkoplatykiedy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30px"
+                    android:gravity="center"
+                    android:text="Tak" />
             </LinearLayout>
         </LinearLayout>
 
@@ -203,62 +227,124 @@
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
+            android:background="@android:color/darker_gray" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-        <TextView
-            android:id="@+id/przypominaczkiedy"
-            android:layout_width="226dp"
-            android:layout_height="wrap_content"
-            android:text="W jaki dzień chcesz otrzymywać powiadomienia?"
-            android:textColor="@android:color/black"
-            android:textSize="18dp"
-            android:textStyle="bold|normal"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="200dp"
-            tools:layout_editor_absoluteY="90dp" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_weight="1" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-    </LinearLayout>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/przypominaczkiedy"
+                android:layout_width="226dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
+                android:text="W jaki dzień chcesz otrzymywać powiadomienia?"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:textStyle="bold|normal"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="200dp"
+                tools:layout_editor_absoluteY="90dp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Spinner
+                    android:id="@+id/spinnernieten"
+                    android:layout_marginRight="30px"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
 
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
+            android:background="@android:color/darker_gray" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-        <TextView
-            android:id="@+id/oszczednoscimiech"
-            android:layout_width="wrap_content"
+
+            <TextView
+                android:id="@+id/oszczednoscimiech"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
+                android:text="Czy posiadasz oszczędności?"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:textStyle="bold|normal"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="200dp"
+                tools:layout_editor_absoluteY="90dp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/checkoszczednosci"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30px"
+                    android:gravity="center"
+                    android:text="Tak" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Czy posiadasz oszczędności?"
-            android:textColor="@android:color/black"
-            android:textSize="18dp"
-            android:textStyle="bold|normal"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="200dp"
-            tools:layout_editor_absoluteY="90dp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/kwotaoszczednosci"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
+                android:text="@string/kwotaoszczednosci"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold|normal"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="200dp"
+                tools:layout_editor_absoluteY="90dp" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -268,75 +354,39 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-        <CheckBox
-            android:id="@+id/checkoszczednosci"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Tak" />
-        </LinearLayout>
+                <!--        napisz ten margines w znaczku
+        android:layout_marginLeft="30px">-->
+            </LinearLayout>
         </LinearLayout>
 
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
+            android:background="@android:color/darker_gray" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-        <TextView
-            android:id="@+id/kwotaoszczednosci"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Podaj kwotę oszczędności:"
-            android:textColor="@android:color/black"
-            android:textSize="18dp"
-            android:textStyle="bold|normal"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="200dp"
-            tools:layout_editor_absoluteY="90dp" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_weight="1" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-    </LinearLayout>
-        </LinearLayout>
+            <TextView
+                android:id="@+id/wlasnedane"
+                android:layout_width="226dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
+                android:text="Czy chcesz codziennie wpisywać dane o wydatkach?"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:textStyle="bold|normal"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="200dp"
+                tools:layout_editor_absoluteY="90dp" />
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-        <TextView
-            android:id="@+id/wlasnedane"
-            android:layout_width="226dp"
-            android:layout_height="wrap_content"
-            android:text="Czy chcesz codziennie wpisywać dane o wydatkach?"
-            android:textColor="@android:color/black"
-            android:textSize="18dp"
-            android:textStyle="bold|normal"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="200dp"
-            tools:layout_editor_absoluteY="90dp" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -346,55 +396,60 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-        <CheckBox
-            android:id="@+id/checkdane"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Tak" />
-    </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/checkdane"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30px"
+                    android:gravity="center"
+                    android:text="@string/tak4"
+                    android:layout_marginEnd="30px" />
+            </LinearLayout>
         </LinearLayout>
 
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
+            android:background="@android:color/darker_gray" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-        <TextView
-            android:id="@+id/kiedywlasnedane"
-            android:layout_width="226dp"
-            android:layout_height="wrap_content"
-            android:text="O której godzinie chcesz otrzymywać powiadomienia?"
-            android:textColor="@android:color/black"
-            android:textSize="18dp"
-            android:textStyle="bold|normal"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="200dp"
-            tools:layout_editor_absoluteY="90dp" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_weight="1" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <CheckBox
-            android:id="@+id/checknic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Tak" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/kiedywlasnedane"
+                android:layout_width="226dp"
+                android:layout_height="wrap_content"
+                android:text="O której godzinie chcesz otrzymywać powiadomienia?"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold|normal"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="200dp"
+                tools:layout_editor_absoluteY="90dp" />
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/przypominaczgodzina"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/wybierz" />
+            </LinearLayout>
         </LinearLayout>
 
         <View
@@ -406,7 +461,7 @@
             android:id="@+id/zapisz"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ZAPISZ" />
+            android:text="@string/zapisz" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

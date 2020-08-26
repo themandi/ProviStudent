@@ -12,7 +12,6 @@
     <string name="menu_slideshow">Slideshow</string>
 
     <string name="home_second">Home Second</string>
-    <string name="title_activity_stats_activity.java">StatsActivity.java</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
@@ -22,10 +21,28 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_stats">StatsActivity</string>
+    <!--    Wykorzystywane do spinnera w rejestracji, zbiór środków do wybrania-->
     <string-array name="srodki">
         <item>Karta kredytowa</item>
         <item>Gotówka</item>
     </string-array>
+
     <string name="title_activity_register">RegisterActivity</string>
     <string name="wpisz_swoje_imie">wpisz swoje imię</string>
+    <string name="statystyki">STATYSTYKI</string>
+    <string name="oszczednosci">Oszczędności: 500zł</string>
+    <string name="zasoby">ZASOBY</string>
+    <string name="karta_bankowa_123z">Karta bankowa: 123zł</string>
+    <string name="gotowka">Gotówka: 1235zł</string>
+    <string name="dochod">Dochód: 1234 zł</string>
+    <string name="wydatki">WYDATKI</string>
+    <string name="wydatkimain">Wydatki: 950 zł</string>
+    <string name="miesiac">Marzec</string>
+    <string name="powiadomienia">O której godzinie chcesz otrzymywać powiadomienia?</string>
+    <string name="string_powiadomienia" />
+    <string name="zapisz">ZAPISZ</string>
+    <string name="tak4">Tak</string>
+    <string name="rejestracja_u_ytkownika">REJESTRACJA UŻYTKOWNIKA</string>
+    <string name="kwotaoszczednosci">Podaj kwotę oszczędności:</string>
+    <string name="wybierz">Wybierz</string>
 </resources>
