@@ -111,6 +111,11 @@
                     tools:ignore="MissingConstraints"
                     tools:layout_editor_absoluteX="200dp"
                     tools:layout_editor_absoluteY="162dp" />
+                <Button
+                    android:id="@+id/cheatday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="CHEAT DAY" />
             </LinearLayout>
         </LinearLayout>
 

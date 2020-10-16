@@ -1,6 +1,8 @@
 package com.example.provistudent;
 
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -14,14 +16,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,TimePickerDialog.OnTimeSetListener {
+import java.util.Calendar;
+
+public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     EditText poleimie;
     Button przyciskzapisz;
     Button przypominaczgodzina;
+    Button przypominaczdzien;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,26 +40,86 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         setSupportActionBar(toolbar);
 
         //Spinner wykorzystywany podczas pierwszej rejestracji użytkownika w Dochodzie
-        Spinner spinner = findViewById(R.id.spinner1);
+        Spinner spinner = (Spinner) findViewById(R.id.spinner1);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.srodki, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+//                    case 0:
+//                        Toast.makeText(parent.getContext(), "Proszę wybrać jedną z opcji", Toast.LENGTH_SHORT).show();
+//                        Wymyśl pomysł co zrobić aby nie można bylo zaznaczyć tej opcji
+//                        break;
+                    case 1:
+                        Intent intent = new Intent(RegisterActivity.this, IncomeActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 2:
+                        Intent intent2 = new Intent(RegisterActivity.this, IncomeActivity2.class);
+                        startActivity(intent2);
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected (AdapterView < ? > parent){
+
+            }
+            });
+
+        //Spinner wykorzystywany podczas pierwszej rejestracji użytkownika w Częstotliwości powiadomień
+        Spinner spinner2 = findViewById(R.id.spinner2);
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this,
+                R.array.czestotliwosc, android.R.layout.simple_spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner2.setAdapter(adapter2);
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+//                        Toast.makeText(parent.getContext(), "Prosze wybrać jedną z opcji!", Toast.LENGTH_SHORT).show();
+//                        Wymyśl pomysł co zrobić aby nie można bylo zaznaczyć tej opcji
+                        break;
+                    case 1:
+                        Toast.makeText(parent.getContext(), "Spinner item 2!", Toast.LENGTH_SHORT).show();
+//                        Sprawdzic czy to musi byc register czy main, w classie ta klasa mala do wystartowania
+//                        Intent intent = new Intent(RegisterActivity.this, CashActivity.class);
+//                        startActivity(intent);
+                        break;
+                    case 2:
+                        Toast.makeText(parent.getContext(), "Spinner item 3!", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 3:
+                        Toast.makeText(parent.getContext(), "Spinner item 4!", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 4:
+                        Toast.makeText(parent.getContext(), "Spinner item 5!", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected (AdapterView < ? > parent){
+            }
+        });
+
+
 
         poleimie = (EditText) findViewById(R.id.poleimie);
 
         przyciskzapisz = (Button) findViewById(R.id.zapisz);
-        przyciskzapisz.setOnClickListener(
-                new View.OnClickListener()
-                {
+        przyciskzapisz.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View view)
                     {
                         onZapisz();
                     }
                 }
         );
-
+//      przypominacz godziny
         przypominaczgodzina = (Button) findViewById(R.id.przypominaczgodzina);
         przypominaczgodzina.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,7 +128,22 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 timePicker.show(getSupportFragmentManager(), "time picker");
             }
         });
+//      przypominacz czasu
+        przypominaczdzien = (Button) findViewById(R.id.przypominaczdzien);
+        przypominaczdzien.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
+        });
     }
+
+            private void showDatePickerDialog() {
+                DatePickerDialog datepicker = new DatePickerDialog(this,this, Calendar.getInstance().get(Calendar.YEAR),Calendar.getInstance().get(Calendar.MONTH),Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+                );
+                datepicker.show();
+            }
 
     //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onZapisz() {
@@ -68,10 +152,20 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     }
 
     @Override
-//    Halo, Agnieszka to jest miejsce JAK WYBIERZESZ TĄ RZECZ. TUTAJ BĘDZIESZ ZMIENIAĆ ŻEBY WYŚWIETLAŁ SIE INNY CONTENT
+    public void onTimeSet(android.widget.TimePicker view, int hourOfDay, int minute) {
+        TextView powiadomieniagodzina = (TextView) findViewById(R.id.powiadomieniagodzina);
+        powiadomieniagodzina.setText("Czas: " + hourOfDay + ":" + minute);
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        TextView powiadomieniadzien = (TextView) findViewById(R.id.powiadomieniadzien);
+        powiadomieniadzien.setText("Data: "+ dayOfMonth + "/" + month + "/" + year);
+    }
+
+    @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String zaznaczonesrodki = parent.getItemAtPosition(position).toString();
-        Toast.makeText(parent.getContext(), zaznaczonesrodki, Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -79,8 +173,87 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
     }
 
-    @Override
-    public void onTimeSet(android.widget.TimePicker view, int hourOfDay, int minute) {
+    public void onCheckboxClicked(View view) {
+        switch(view.getId()) {
+            case R.id.checkoplaty:
+                boolean zaznaczony =((CheckBox)view).isChecked();
+                if(zaznaczony == true)
+                {
+                    Intent intent = new Intent(RegisterActivity.this, CashActivity.class);
+                    startActivity(intent);
+                }
+                break;
+            case R.id.checkoplatykiedy:
+                boolean zaznaczony2 =((CheckBox)view).isChecked();
+                if(zaznaczony2 == true) {
+                    LinearLayout linearlayout4 = findViewById(R.id.linearlayout4);
+                    LinearLayout linearlayout5 = findViewById(R.id.linearlayout5);
+                    View view1 = findViewById(R.id.view1);
+                    View view2 = findViewById(R.id.view2);
+                    View view3 = findViewById(R.id.view3);
+                    View view4 = findViewById(R.id.view4);
+                    linearlayout4.setVisibility(View.VISIBLE);
+                    linearlayout5.setVisibility(View.VISIBLE);
+                    view1.setVisibility(View.VISIBLE);
+                    view2.setVisibility(View.VISIBLE);
+                    view3.setVisibility(View.VISIBLE);
+                    view4.setVisibility(View.VISIBLE);
+                }
+                else {
+                    LinearLayout linearlayout4 = findViewById(R.id.linearlayout4);
+                    LinearLayout linearlayout5 = findViewById(R.id.linearlayout5);
+                    View view1 = findViewById(R.id.view1);
+                    View view2 = findViewById(R.id.view2);
+                    View view3 = findViewById(R.id.view3);
+                    View view4 = findViewById(R.id.view4);
+                    linearlayout4.setVisibility(View.GONE);
+                    linearlayout5.setVisibility(View.GONE);
+                    view1.setVisibility(View.GONE);
+                    view2.setVisibility(View.GONE);
+                    view3.setVisibility(View.GONE);
+                    view4.setVisibility(View.GONE);
+                }
+                break;
 
+            case R.id.checkoszczednosci:
+                boolean zaznaczony3 =((CheckBox)view).isChecked();
+                if(zaznaczony3 == true) {
+                    LinearLayout linearlayout6 = findViewById(R.id.linearlayout6);
+                    View view5 = findViewById(R.id.view5);
+                    View view6 = findViewById(R.id.view6);
+                    linearlayout6.setVisibility(View.VISIBLE);
+                    view5.setVisibility(View.VISIBLE);
+                    view6.setVisibility(View.VISIBLE);
+                }
+                else {
+                    LinearLayout linearlayout6 = findViewById(R.id.linearlayout6);
+                    View view5 = findViewById(R.id.view5);
+                    View view6 = findViewById(R.id.view6);
+                    linearlayout6.setVisibility(View.GONE);
+                    view5.setVisibility(View.GONE);
+                    view6.setVisibility(View.GONE);
+                }
+
+                break;
+            case R.id.checkdane:
+                boolean zaznaczony4 =((CheckBox)view).isChecked();
+                if(zaznaczony4 == true) {
+                    LinearLayout linearlayout7 = findViewById(R.id.linearlayout7);
+                    View view7 = findViewById(R.id.view7);
+                    View view8 = findViewById(R.id.view8);
+                    linearlayout7.setVisibility(View.VISIBLE);
+                    view7.setVisibility(View.VISIBLE);
+                    view8.setVisibility(View.VISIBLE);
+                }
+                else {
+                    LinearLayout linearlayout7 = findViewById(R.id.linearlayout7);
+                    View view7 = findViewById(R.id.view7);
+                    View view8 = findViewById(R.id.view8);
+                    linearlayout7.setVisibility(View.GONE);
+                    view7.setVisibility(View.GONE);
+                    view8.setVisibility(View.GONE);
+                }
+                break;
+        }
     }
 }

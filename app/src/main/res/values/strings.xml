@@ -23,12 +23,46 @@
     <string name="title_activity_stats">StatsActivity</string>
     <!--    Wykorzystywane do spinnera w rejestracji, zbiór środków do wybrania-->
     <string-array name="srodki">
-        <item>Karta kredytowa</item>
+        <item>Wybierz</item>
         <item>Gotówka</item>
+        <item>Karta kredytowa</item>
+    </string-array>
+    <!--    Wykorzystywane do spinnera w rejestracji, czestotliwosc powiadomien-->
+    <string-array name="czestotliwosc">
+        <item>Wybierz</item>
+        <item>Co miesiąc</item>
+        <item>Co trzy miesiące</item>
+        <item>Co pół roku</item>
+        <item>Co roku</item>
+    </string-array>
+    <!--    Wykorzystywane do spinnera w rejestracji, zbiór środków do wyboru w wyborze gotowki-->
+    <string-array name="wybordochodu">
+        <item>-Rozwiń-</item>
+        <item>Zakwaterowanie</item>
+        <item>Media</item>
+        <item>Długi</item>
+        <item>Kredyt</item>
+        <item>Internet</item>
+        <item>Netflix</item>
+        <item>Telefon</item>
+        <item>Transport</item>
+        <item>Zakwaterowanie</item>
+        <item>Samochód</item>
+        <item>Dodaj nowy +</item>
+    </string-array>
+    <!--    Wykorzystywane do spinnera w cheatday-->
+    <string-array name="wyborcheatday">
+        <item>-Rozwiń-</item>
+        <item>Alkohol</item>
+        <item>Ciuchy</item>
+        <item>Jedzenie</item>
+        <item>Impreza</item>
+        <item>Dodaj nowy +</item>
     </string-array>
 
     <string name="title_activity_register">RegisterActivity</string>
     <string name="wpisz_swoje_imie">wpisz swoje imię</string>
+    <string name="wpisz_kwote">wpisz kwote (w zł)</string>
     <string name="statystyki">STATYSTYKI</string>
     <string name="oszczednosci">Oszczędności: 500zł</string>
     <string name="zasoby">ZASOBY</string>

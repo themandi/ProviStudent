@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     float dochod = 1234;
     float wydatki = 950;
     float oszczednosci = 500;
+    Button cheatday;
 
     private static final String TAG = "MainActivity";
     private CalendarView mCalendarView;
@@ -55,6 +56,15 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "onSelectDayChange: data:" + data);
             }
         });
+
+        cheatday = (Button) findViewById(R.id.cheatday);
+        cheatday.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, CheatdayActivity.class);
+                startActivity(intent);
+            }
+        });
+
         wykreskolowy = (PieChart) findViewById(R.id.wykreskolowy);
         wykreskolowy.setNoDataText("");
         wykreskolowy.setUsePercentValues(true);

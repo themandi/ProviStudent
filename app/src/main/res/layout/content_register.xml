@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+    <!--    CTRL + ALT + L - ukladanie kodu-->
     <fragment
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
@@ -50,12 +51,12 @@
                 android:id="@+id/imie"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginStart="10px"
                 android:layout_marginLeft="10px"
                 android:text="Jak się nazywasz?"
                 android:textColor="@android:color/black"
                 android:textSize="18dp"
-                android:textStyle="bold|normal"
-                android:layout_marginStart="10px" />
+                android:textStyle="bold|normal" />
 
             <View
                 android:layout_width="0dp"
@@ -75,8 +76,8 @@
                     android:id="@+id/poleimie"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:layout_marginRight="30px"
+                    android:gravity="center"
                     android:hint="@string/wpisz_swoje_imie" />
             </LinearLayout>
         </LinearLayout>
@@ -121,9 +122,9 @@
 
                 <Spinner
                     android:id="@+id/spinner1"
-                    android:layout_marginRight="30px"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30px" />
             </LinearLayout>
         </LinearLayout>
 
@@ -138,8 +139,8 @@
             android:background="@android:color/darker_gray" />
 
         <LinearLayout
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
@@ -169,8 +170,9 @@
                     android:id="@+id/checkoplaty"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="30px"
                     android:layout_gravity="center"
+                    android:onClick="onCheckboxClicked"
+                    android:layout_marginRight="30px"
                     android:text="Tak" />
             </LinearLayout>
         </LinearLayout>
@@ -186,8 +188,8 @@
             android:background="@android:color/darker_gray" />
 
         <LinearLayout
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
@@ -218,17 +220,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="30px"
+                    android:onClick="onCheckboxClicked"
                     android:gravity="center"
                     android:text="Tak" />
             </LinearLayout>
         </LinearLayout>
 
         <View
+            android:visibility="gone"
+            android:id="@+id/view1"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <View
+            android:visibility="gone"
+            android:id="@+id/view2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray" />
@@ -236,14 +243,74 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:id="@+id/linearlayout4">
 
             <TextView
                 android:id="@+id/przypominaczkiedy"
                 android:layout_width="226dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10px"
-                android:text="W jaki dzień chcesz otrzymywać powiadomienia?"
+                android:text="Kiedy chcesz otrzymywać powiadomienia?"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:textStyle="bold|normal"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="200dp"
+                tools:layout_editor_absoluteY="90dp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/powiadomieniadzien"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/przypominaczdzien" />
+
+                <Button
+                    android:id="@+id/przypominaczdzien"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/wybierz" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:visibility="gone"
+            android:id="@+id/view3"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <View
+            android:visibility="gone"
+            android:id="@+id/view4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:id="@+id/linearlayout5">
+
+            <TextView
+                android:id="@+id/czestotliwosc"
+                android:layout_width="226dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
+                android:text="Z jaką częstotliwością chcesz otrzymywać powiadomienia?"
                 android:textColor="@android:color/black"
                 android:textSize="18dp"
                 android:textStyle="bold|normal"
@@ -262,10 +329,10 @@
                 android:orientation="vertical">
 
                 <Spinner
-                    android:id="@+id/spinnernieten"
-                    android:layout_marginRight="30px"
+                    android:id="@+id/spinner2"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30px" />
             </LinearLayout>
         </LinearLayout>
 
@@ -312,17 +379,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="30px"
+                    android:onClick="onCheckboxClicked"
                     android:gravity="center"
                     android:text="Tak" />
             </LinearLayout>
         </LinearLayout>
 
         <View
+            android:visibility="gone"
+            android:id="@+id/view5"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <View
+            android:visibility="gone"
+            android:id="@+id/view6"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray" />
@@ -330,7 +402,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:id="@+id/linearlayout6">
 
             <TextView
                 android:id="@+id/kwotaoszczednosci"
@@ -346,7 +420,7 @@
                 tools:layout_editor_absoluteY="90dp" />
 
             <View
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_weight="1" />
 
@@ -354,8 +428,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <!--        napisz ten margines w znaczku
-        android:layout_marginLeft="30px">-->
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/poleoszczednosci"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30px"
+                    android:gravity="center"
+                    android:hint="@string/wpisz_kwote" />
             </LinearLayout>
         </LinearLayout>
 
@@ -401,19 +485,24 @@
                     android:id="@+id/checkdane"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="30px"
                     android:layout_marginRight="30px"
+                    android:onClick="onCheckboxClicked"
                     android:gravity="center"
-                    android:text="@string/tak4"
-                    android:layout_marginEnd="30px" />
+                    android:text="@string/tak4" />
             </LinearLayout>
         </LinearLayout>
 
         <View
+            android:visibility="gone"
+            android:id="@+id/view7"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <View
+            android:visibility="gone"
+            android:id="@+id/view8"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray" />
@@ -421,7 +510,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:id="@+id/linearlayout7">
 
             <TextView
                 android:id="@+id/kiedywlasnedane"
@@ -434,6 +525,7 @@
                 tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="200dp"
                 tools:layout_editor_absoluteY="90dp" />
+
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
@@ -443,6 +535,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/powiadomieniagodzina"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/przypominaczgodzina" />
 
                 <Button
                     android:id="@+id/przypominaczgodzina"
