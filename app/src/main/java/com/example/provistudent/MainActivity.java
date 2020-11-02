@@ -1,18 +1,13 @@
 package com.example.provistudent;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.Menu;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.Spinner;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -22,32 +17,33 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     PieChart wykreskolowy;
     float dochod = 1234;
     float wydatki = 950;
     float oszczednosci = 500;
     Button cheatday;
 
+    private DrawerLayout drawer;
     private static final String TAG = "MainActivity";
     private CalendarView mCalendarView;
-    private AppBarConfiguration mAppBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         mCalendarView = (CalendarView) findViewById(R.id.zobaczKalendarz);
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -91,32 +87,87 @@ public class MainActivity extends AppCompatActivity {
         wykreskolowy.setData(data);
         wykreskolowy.invalidate();
 
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
-                .setDrawerLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+//        if (savedInstanceState == null) {
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                    new ProfileFragment()).commit();
+//            navigationView.setCheckedItem(R.id.nav_profile);
+//        }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_profile:
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_stats:
+                Intent intent1 = new Intent(MainActivity.this, StatsActivity.class);
+                startActivity(intent1);
+                break;
+            case R.id.nav_settings:
+                Intent intent2 = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent2);
+                break;
+            case R.id.nav_help:
+                Intent intent3 = new Intent(MainActivity.this, HelpActivity.class);
+                startActivity(intent3);
+                break;
+            case R.id.nav_info:
+                Intent intent4 = new Intent(MainActivity.this, InfoActivity.class);
+                startActivity(intent4);
+                break;
+            case R.id.nav_exit:
+                Intent intent5 = new Intent(MainActivity.this, ExitActivity.class);
+                startActivity(intent5);
+                break;
+        }
+
+//        switch (item.getItemId()) {
+//            case R.id.nav_profile:
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                        new ProfileFragment()).commit();
+//                break;
+//            case R.id.nav_stats:
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                        new StatsFragment()).commit();
+//                break;
+//            case R.id.nav_settings:
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                        new SettingsFragment()).commit();
+//                break;
+//            case R.id.nav_help:
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                        new HelpFragment()).commit();
+//                break;
+//            case R.id.nav_info:
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                        new ApplicationFragment()).commit();
+//                break;
+//            case R.id.nav_exit:
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                        new ExitFragment()).commit();
+//                break;
+//    }
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 }

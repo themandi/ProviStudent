@@ -18,7 +18,6 @@
             android:icon="@drawable/ic_settings"
             android:title="Ustawienia" />
     </group>
-
     <item android:title="Więcej informacji">
         <menu>
             <item
@@ -29,6 +28,10 @@
                 android:id="@+id/nav_info"
                 android:icon="@drawable/ic_info"
                 android:title="O aplikacji" />
+            <item
+                android:id="@+id/nav_exit"
+                android:icon="@drawable/ic_exit"
+                android:title="Wyjdź" />
         </menu>
     </item>
 </menu>
