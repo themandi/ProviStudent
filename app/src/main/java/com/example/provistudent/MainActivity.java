@@ -1,13 +1,17 @@
 package com.example.provistudent;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.DatePicker;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -17,13 +21,19 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import java.text.DateFormat;
+import java.time.Month;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     PieChart wykreskolowy;
@@ -46,10 +56,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mCalendarView = (CalendarView) findViewById(R.id.zobaczKalendarz);
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 String data = year + "/" + month + "/" + dayOfMonth;
                 Log.d(TAG, "onSelectDayChange: data:" + data);
+                String dzienimiesiac = dayOfMonth + "/" + month;
+                Log.d(TAG, "onSelectDayChange: data:" + dzienimiesiac);
+
+                Intent intent = new Intent(MainActivity.this, DayofcalendarActivity.class);
+                intent.putExtra("data",data);
+                intent.putExtra("data2",dzienimiesiac);
+                startActivity(intent);
             }
         });
 
@@ -125,33 +143,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     System.exit(0);
                 break;
         }
-
-//        switch (item.getItemId()) {
-//            case R.id.nav_profile:
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                        new ProfileFragment()).commit();
-//                break;
-//            case R.id.nav_stats:
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                        new StatsFragment()).commit();
-//                break;
-//            case R.id.nav_settings:
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                        new SettingsFragment()).commit();
-//                break;
-//            case R.id.nav_help:
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                        new HelpFragment()).commit();
-//                break;
-//            case R.id.nav_info:
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                        new ApplicationFragment()).commit();
-//                break;
-//            case R.id.nav_exit:
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                        new ExitFragment()).commit();
-//                break;
-//    }
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
