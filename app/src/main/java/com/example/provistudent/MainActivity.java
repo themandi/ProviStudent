@@ -95,12 +95,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-//        if (savedInstanceState == null) {
-//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                    new ProfileFragment()).commit();
-//            navigationView.setCheckedItem(R.id.nav_profile);
-//        }
     }
 
     @Override
@@ -127,8 +121,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent4);
                 break;
             case R.id.nav_exit:
-                Intent intent5 = new Intent(MainActivity.this, ExitActivity.class);
-                startActivity(intent5);
+                    finish();
+                    System.exit(0);
                 break;
         }
 

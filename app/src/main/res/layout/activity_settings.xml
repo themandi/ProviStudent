@@ -1,11 +1,552 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Ustawienia"
-        android:textSize="30sp" />
-</RelativeLayout>
+    <!--    CTRL + ALT + L - ukladanie kodu-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/ustawienia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#0b5225"
+            android:gravity="center"
+            android:text="USTAWIENIA UŻYTKOWNIKA"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            android:textStyle="bold|normal"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="0dp" />
+        <!--        <View-->
+        <!--            android:layout_width="1dp"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:layout_weight="1" />-->
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/imie"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10px"
+                android:layout_marginLeft="10px"
+                android:text="Jak się nazywasz?"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:textStyle="bold|normal" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/poleimie"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30px"
+                    android:gravity="center"
+                    android:hint="@string/wpisz_swoje_imie" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!--        <View-->
+        <!--            android:layout_width="1dp"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:layout_weight="1" />-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:ignore="MissingConstraints">
+
+            <TextView
+                android:id="@+id/dochodmiech"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
+                android:text="Dochód miesięczny:"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:textStyle="bold|normal"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="200dp"
+                tools:layout_editor_absoluteY="90dp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Spinner
+                    android:id="@+id/spinner1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30px" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/oplatystale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
+                android:text="Czy posiadasz opłaty stałe?"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:textStyle="bold|normal"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="200dp"
+                tools:layout_editor_absoluteY="90dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/checkoplaty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:onClick="onCheckboxClicked"
+                    android:layout_marginRight="30px"
+                    android:text="Tak" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/przypominacz"
+                android:layout_width="226dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
+                android:text="Czy chcesz otrzymywać przypomnienia o zapłacie rachunków?"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:textStyle="bold|normal"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="200dp"
+                tools:layout_editor_absoluteY="90dp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/checkoplatykiedy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30px"
+                    android:onClick="onCheckboxClicked"
+                    android:gravity="center"
+                    android:text="Tak" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:visibility="gone"
+            android:id="@+id/view1"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <View
+            android:visibility="gone"
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:id="@+id/linearlayout4">
+
+            <TextView
+                android:id="@+id/przypominaczkiedy"
+                android:layout_width="226dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
+                android:text="Kiedy chcesz otrzymywać powiadomienia?"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:textStyle="bold|normal"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="200dp"
+                tools:layout_editor_absoluteY="90dp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/powiadomieniadzien"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/przypominaczdzien" />
+
+                <Button
+                    android:id="@+id/przypominaczdzien"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/wybierz" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:visibility="gone"
+            android:id="@+id/view3"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <View
+            android:visibility="gone"
+            android:id="@+id/view4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:id="@+id/linearlayout5">
+
+            <TextView
+                android:id="@+id/czestotliwosc"
+                android:layout_width="226dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
+                android:text="Z jaką częstotliwością chcesz otrzymywać powiadomienia?"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:textStyle="bold|normal"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="200dp"
+                tools:layout_editor_absoluteY="90dp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Spinner
+                    android:id="@+id/spinner2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30px" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/oszczednoscimiech"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
+                android:text="Czy posiadasz oszczędności?"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:textStyle="bold|normal"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="200dp"
+                tools:layout_editor_absoluteY="90dp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/checkoszczednosci"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30px"
+                    android:onClick="onCheckboxClicked"
+                    android:gravity="center"
+                    android:text="Tak" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:visibility="gone"
+            android:id="@+id/view5"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <View
+            android:visibility="gone"
+            android:id="@+id/view6"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:id="@+id/linearlayout6">
+
+            <TextView
+                android:id="@+id/kwotaoszczednosci"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
+                android:text="@string/kwotaoszczednosci"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold|normal"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="200dp"
+                tools:layout_editor_absoluteY="90dp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/poleoszczednosci"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30px"
+                    android:gravity="center"
+                    android:hint="@string/wpisz_kwote" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/wlasnedane"
+                android:layout_width="226dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
+                android:text="Czy chcesz codziennie wpisywać dane o wydatkach?"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:textStyle="bold|normal"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="200dp"
+                tools:layout_editor_absoluteY="90dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/checkdane"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="30px"
+                    android:layout_marginRight="30px"
+                    android:onClick="onCheckboxClicked"
+                    android:gravity="center"
+                    android:text="@string/tak4" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:visibility="gone"
+            android:id="@+id/view7"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <View
+            android:visibility="gone"
+            android:id="@+id/view8"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:id="@+id/linearlayout7">
+
+            <TextView
+                android:id="@+id/kiedywlasnedane"
+                android:layout_width="226dp"
+                android:layout_height="wrap_content"
+                android:text="O której godzinie chcesz otrzymywać powiadomienia?"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold|normal"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="200dp"
+                tools:layout_editor_absoluteY="90dp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/powiadomieniagodzina"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/przypominaczgodzina" />
+
+                <Button
+                    android:id="@+id/przypominaczgodzina"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/wybierz" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/zapisz"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/zapisz" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

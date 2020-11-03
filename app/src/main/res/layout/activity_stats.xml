@@ -1,11 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StatsActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Statystyki"
-        android:textSize="30sp" />
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/statystyki"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#0b5225"
+            android:gravity="center"
+            android:text="STATYSTYKI"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            android:textStyle="bold|normal"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="0dp" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Statystyki użytkownika z ostatnich kilku miesięcy"
+                android:textSize="24sp"
+                android:gravity="center"
+                android:textColor="@android:color/black"/>
+        </LinearLayout>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:orientation="vertical">
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/wykres"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.github.mikephil.charting.charts.BarChart>
+    </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
