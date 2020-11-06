@@ -20,14 +20,20 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
+    Bazadanych bazadanych;
+    ArrayList lista;
+    ArrayAdapter adapterlisty;
     EditText poleimie;
+    ListView listView;
     Button przyciskzapisz;
     Button przypominaczgodzina;
     Button przypominaczdzien;
@@ -36,8 +42,26 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        poleimie = findViewById(R.id.poleimie);
+        przyciskzapisz = findViewById(R.id.zapisz);
+        listView = findViewById(R.id.listview);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //Baza danych
+        bazadanych = new Bazadanych(RegisterActivity.this);
+        lista = bazadanych.odczytajtekst();
+        adapterlisty = new ArrayAdapter(RegisterActivity.this, android.R.layout.simple_expandable_list_item_1,lista);
+
+        listView.setAdapter(adapterlisty);
+        przyciskzapisz.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view)
+            {
+                onZapisz();
+            }
+        });
 
         //Spinner wykorzystywany podczas pierwszej rejestracji użytkownika w Dochodzie
         Spinner spinner = (Spinner) findViewById(R.id.spinner1);
@@ -107,18 +131,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             }
         });
 
-
-
-        poleimie = (EditText) findViewById(R.id.poleimie);
-
-        przyciskzapisz = (Button) findViewById(R.id.zapisz);
-        przyciskzapisz.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View view)
-                    {
-                        onZapisz();
-                    }
-                }
-        );
 //      przypominacz godziny
         przypominaczgodzina = (Button) findViewById(R.id.przypominaczgodzina);
         przypominaczgodzina.setOnClickListener(new View.OnClickListener() {
@@ -147,8 +159,18 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
     //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onZapisz() {
+        Toast.makeText(getApplicationContext(), "Dochodze tu", Toast.LENGTH_SHORT).show();
         String imie = poleimie.getText().toString();
-        System.out.println(imie);
+        if(!imie.isEmpty()) {
+            if(bazadanych.dodajtekst(imie)) {
+                poleimie.setText("");
+                lista.clear();
+                lista.addAll(bazadanych.odczytajtekst());
+                adapterlisty.notifyDataSetChanged();
+                listView.invalidateViews();
+                listView.refreshDrawableState();
+            }
+        }
     }
 
     @Override

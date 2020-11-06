@@ -30,10 +30,6 @@
             android:textStyle="bold|normal"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="0dp" />
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        android:layout_weight="1" />
         <LinearLayout
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
