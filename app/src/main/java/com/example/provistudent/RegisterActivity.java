@@ -35,8 +35,14 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     Button przypominaczdzien;
     Cursor cursor;
     CheckBox checkoplaty;
+    CheckBox checkoplatykiedy;
+    CheckBox checkoszczednosci;
+    CheckBox checkdane;
 
     String wybranocheckoplaty = "No";
+    String wybranocheckoplaty2 = "No";
+    String wybranocheckoplaty3 = "No";
+    String wybranocheckoplaty4 = "No";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +51,12 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
         poleimie = findViewById(R.id.poleimie);
         przyciskzapisz = findViewById(R.id.zapisz);
-        Toolbar toolbar = findViewById(R.id.toolbar);
         checkoplaty = findViewById(R.id.checkoplaty);
+        checkoplatykiedy= findViewById(R.id.checkoplatykiedy);
+        checkoszczednosci = findViewById(R.id.checkoszczednosci);
+        checkdane = findViewById(R.id.checkdane);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //Baza danych
@@ -61,6 +70,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             while(cursor.moveToNext())
             {
                 Toast.makeText(getApplicationContext(), "1: "+cursor.getString(1),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "2: "+cursor.getString(2),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "3: "+cursor.getString(3),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "4: "+cursor.getString(4),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "5: "+cursor.getString(5),Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -70,6 +83,59 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 onZapisz();
             }
         });
+
+        //Metoda wykorzystywana do pobierania wybranej opcji w checkboxie Opłat oraz zapisywaniu do bazy danych
+        checkoplaty.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean zaznaczone) {
+                if(zaznaczone){
+                    wybranocheckoplaty = "Yes";
+                }
+                else {
+                    wybranocheckoplaty = "No";
+                }
+            }
+        });
+
+        //Metoda wykorzystywana do pobierania wybranej opcji w checkboxie Opłat kiedy oraz zapisywaniu do bazy danych
+        checkoplatykiedy.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean zaznaczone) {
+                if(zaznaczone){
+                    wybranocheckoplaty2 = "Yes";
+                }
+                else {
+                    wybranocheckoplaty2 = "No";
+                }
+            }
+        });
+
+        //Metoda wykorzystywana do pobierania wybranej opcji w checkboxie oszczednosci oraz zapisywaniu do bazy danych
+        checkoszczednosci.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean zaznaczone) {
+                if(zaznaczone){
+                    wybranocheckoplaty3 = "Yes";
+                }
+                else {
+                    wybranocheckoplaty3 = "No";
+                }
+            }
+        });
+
+        //Metoda wykorzystywana do pobierania wybranej opcji w checkboxie danych oraz zapisywaniu do bazy danych
+        checkdane.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean zaznaczone) {
+                if(zaznaczone){
+                    wybranocheckoplaty4 = "Yes";
+                }
+                else {
+                    wybranocheckoplaty4 = "No";
+                }
+            }
+        });
+
 
         //Spinner wykorzystywany podczas pierwszej rejestracji użytkownika w Dochodzie
         Spinner spinner = (Spinner) findViewById(R.id.spinner1);
@@ -170,12 +236,12 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         String imie = poleimie.getText().toString();
         if(!imie.isEmpty()) {
             if(cursor.getCount()==0) {
-                if (bazadanych.dodajtekst(imie)) {
+                if (bazadanych.dodajtekst(imie, wybranocheckoplaty, wybranocheckoplaty2, wybranocheckoplaty3, wybranocheckoplaty4)) {
                     poleimie.setText("");
                 }
             }
             else if(cursor.getCount()>0) {
-                if (bazadanych.zaaktualizujtekst(imie)) {
+                if (bazadanych.zaaktualizujtekst(imie, wybranocheckoplaty, wybranocheckoplaty2, wybranocheckoplaty3, wybranocheckoplaty4)) {
                     poleimie.setText("");
                 }
             }
