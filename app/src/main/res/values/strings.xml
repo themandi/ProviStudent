@@ -21,11 +21,12 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_stats">StatsActivity</string>
+
     <!--    Wykorzystywane do spinnera w rejestracji, zbiór środków do wybrania-->
     <string-array name="srodki">
         <item>Wybierz</item>
         <item>Gotówka</item>
-        <item>Karta kredytowa</item>
+        <item>Karta płatnicza</item>
     </string-array>
     <!--    Wykorzystywane do spinnera w rejestracji, czestotliwosc powiadomien-->
     <string-array name="czestotliwosc">

@@ -104,13 +104,13 @@ public class CashActivity extends AppCompatActivity {
     }
     //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onZapisz() {
-        Intent intent = new Intent(CashActivity.this, MainActivity.class);
+        Intent intent = new Intent(CashActivity.this, RegisterActivity.class);
         startActivity(intent);
         //Metoda do zapisywania
     }
     //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onDodaj() {
-        Intent intent = new Intent(CashActivity.this, MainActivity.class);
+        Intent intent = new Intent(CashActivity.this, RegisterActivity.class);
         startActivity(intent);
         //Metoda do dodawania
     }

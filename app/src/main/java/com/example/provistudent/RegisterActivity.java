@@ -38,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     CheckBox checkoplatykiedy;
     CheckBox checkoszczednosci;
     CheckBox checkdane;
+    Spinner spinnerdochod;
 
     String wybranocheckoplaty = "No";
     String wybranocheckoplaty2 = "No";
@@ -138,12 +139,12 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
 
         //Spinner wykorzystywany podczas pierwszej rejestracji użytkownika w Dochodzie
-        Spinner spinner = (Spinner) findViewById(R.id.spinner1);
+        spinnerdochod = (Spinner) findViewById(R.id.spinner1);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.srodki, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerdochod.setAdapter(adapter);
+        spinnerdochod.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
