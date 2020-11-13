@@ -3,40 +3,40 @@ package com.example.provistudent;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.CompoundButton;
 
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     Bazadanych bazadanych;
-    ArrayList lista;
-    ArrayAdapter adapterlisty;
     EditText poleimie;
-    ListView listView;
     Button przyciskzapisz;
     Button przypominaczgodzina;
     Button przypominaczdzien;
+    Cursor cursor;
+    CheckBox checkoplaty;
+
+    String wybranocheckoplaty = "No";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +45,25 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
         poleimie = findViewById(R.id.poleimie);
         przyciskzapisz = findViewById(R.id.zapisz);
-        listView = findViewById(R.id.listview);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
+        checkoplaty = findViewById(R.id.checkoplaty);
+
         setSupportActionBar(toolbar);
 
         //Baza danych
+        //JAK SKONCZYSZ BAWIC SIE TUTAJ Z BAZA PROSZE USUN TE WYSWIETLENIA
         bazadanych = new Bazadanych(RegisterActivity.this);
-        lista = bazadanych.odczytajtekst();
-        adapterlisty = new ArrayAdapter(RegisterActivity.this, android.R.layout.simple_expandable_list_item_1,lista);
+        cursor = bazadanych.odczytajtekst();
+        if(cursor.getCount()==0){
+            Toast.makeText(getApplicationContext(), "No data",Toast.LENGTH_SHORT).show();
+        }
+        else {
+            while(cursor.moveToNext())
+            {
+                Toast.makeText(getApplicationContext(), "1: "+cursor.getString(1),Toast.LENGTH_SHORT).show();
+            }
+        }
 
-        listView.setAdapter(adapterlisty);
         przyciskzapisz.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
             {
@@ -159,16 +167,17 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
     //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onZapisz() {
-        Toast.makeText(getApplicationContext(), "Dochodze tu", Toast.LENGTH_SHORT).show();
         String imie = poleimie.getText().toString();
         if(!imie.isEmpty()) {
-            if(bazadanych.dodajtekst(imie)) {
-                poleimie.setText("");
-                lista.clear();
-                lista.addAll(bazadanych.odczytajtekst());
-                adapterlisty.notifyDataSetChanged();
-                listView.invalidateViews();
-                listView.refreshDrawableState();
+            if(cursor.getCount()==0) {
+                if (bazadanych.dodajtekst(imie)) {
+                    poleimie.setText("");
+                }
+            }
+            else if(cursor.getCount()>0) {
+                if (bazadanych.zaaktualizujtekst(imie)) {
+                    poleimie.setText("");
+                }
             }
         }
     }

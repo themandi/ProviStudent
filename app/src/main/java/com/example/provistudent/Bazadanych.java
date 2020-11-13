@@ -6,11 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.ArrayList;
-
 public class Bazadanych extends SQLiteOpenHelper{
     private static final String TAG = "Bazadanych";
-    private static final String TABLE_NAME = "uzytkownicy";
+    private static final String TABLE_NAME = "Uzytkownik";
     private static final String COL1 = "ID";
     private static final String COL2 = "nazwa_uzytkownika";
 
@@ -32,28 +30,25 @@ public class Bazadanych extends SQLiteOpenHelper{
 
     }
 
-    public boolean dodajtekst(String text){
-        //uzyskujemy zapisywalną baze danych
+    public boolean dodajtekst(String nazwa_uzytkownika){
         SQLiteDatabase sqLitebaza = this.getWritableDatabase();
-        //tworzymy wartości treści
         ContentValues zawartosc = new ContentValues();
-        zawartosc.put(COL2,text);
-        //dodajemy wartości do bazy
-        sqLitebaza.insert(TABLE_NAME, null, zawartosc);
+        zawartosc.put(COL2,nazwa_uzytkownika);
+        sqLitebaza.insert("Uzytkownik", null, zawartosc);
         return true;
     }
-    public ArrayList odczytajtekst(){
+    public boolean zaaktualizujtekst(String nazwa_uzytkownika){
+        SQLiteDatabase sqLitebaza = this.getWritableDatabase();
+        ContentValues zawartosc = new ContentValues();
+        zawartosc.put(COL2, nazwa_uzytkownika);
+        sqLitebaza.update("Uzytkownik", zawartosc, COL1 + "=ID", null);
+        return true;
+    }
+    public Cursor odczytajtekst(){
         //uzyskujemy odczytywalna baze
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
-        ArrayList<String> lista = new ArrayList<String>();
         //tworzymy kursor aby zaznaczyc wszystkie wartosci
-        Cursor cursor = sqLitebaza.rawQuery("select * from " + TABLE_NAME, null);
-        cursor.moveToFirst();
-
-        while(!cursor.isAfterLast()){
-            lista.add(cursor.getString(cursor.getColumnIndex(COL2)));
-            cursor.moveToNext();
-        }
-        return lista;
+        Cursor cursor = sqLitebaza.rawQuery("select * from  Uzytkownik", null);
+        return cursor;
     }
 }
