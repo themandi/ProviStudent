@@ -76,6 +76,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 Toast.makeText(getApplicationContext(), "4: "+cursor.getString(4),Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), "5: "+cursor.getString(5),Toast.LENGTH_SHORT).show();
             }
+            cursor.close();
         }
 
         przyciskzapisz.setOnClickListener(new View.OnClickListener() {
@@ -247,6 +248,9 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 }
             }
         }
+        cursor.close();
+        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
     @Override

@@ -78,17 +78,16 @@ public class Bazadanych extends SQLiteOpenHelper{
 
     public boolean zaaktualizujtekst2(String zasob, String kwota){
         SQLiteDatabase sqLitebaza = this.getWritableDatabase();
-        ContentValues zawartosc2 = new ContentValues();
+        ContentValues zawartosc2 =  new ContentValues();
         zawartosc2.put(COL2_2,zasob);
         zawartosc2.put(COL2_3,kwota);
         sqLitebaza.update(TABLE_NAME2, zawartosc2, COL2_1 + "=ID", null);
         return true;
     }
 
-    public boolean usuntekst2(String zasob, String kwota){
+    public Integer usuntekst2(String id) {
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
-        sqLitebaza.delete(TABLE_NAME2, COL2_1 + "=ID", null);
-        return true;
+        return sqLitebaza.delete(TABLE_NAME2, COL2_1 + "=ID", null);
     }
 
     public Cursor odczytajtekst(){
