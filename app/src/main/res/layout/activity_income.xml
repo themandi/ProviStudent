@@ -127,7 +127,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             tools:ignore="MissingConstraints">
-<!--            Dodaj przekierowanie do powrotnej strony-->
             <Button
                 android:id="@+id/edytuj"
                 android:layout_width="match_parent"

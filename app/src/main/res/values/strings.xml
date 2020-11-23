@@ -34,7 +34,7 @@
         <item>Co miesiąc</item>
         <item>Co trzy miesiące</item>
         <item>Co pół roku</item>
-        <item>Co roku</item>
+        <item>Co rok</item>
     </string-array>
     <!--    Wykorzystywane do spinnera w rejestracji, zbiór środków do wyboru w wyborze gotowki-->
     <string-array name="wybordochodu">

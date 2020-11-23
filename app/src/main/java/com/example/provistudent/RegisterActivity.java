@@ -17,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -34,16 +33,22 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     Button przypominaczgodzina;
     Button przypominaczdzien;
     Cursor cursor;
+    Cursor cursor2;
     CheckBox checkoplaty;
     CheckBox checkoplatykiedy;
     CheckBox checkoszczednosci;
     CheckBox checkdane;
     Spinner spinnerdochod;
-
-    String wybranocheckoplaty = "No";
-    String wybranocheckoplaty2 = "No";
-    String wybranocheckoplaty3 = "No";
-    String wybranocheckoplaty4 = "No";
+    TextView poleoszczednosci;
+    TextView powiadomieniagodzina;
+    TextView powiadomieniadzien;
+    String czestotliwoscopcje;
+    String wybrano = "No";
+    String wybrano2 = "No";
+    String wybrano3 = "No";
+    String wybrano4 = "No";
+    String data;
+    String godzina;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         checkoplatykiedy= findViewById(R.id.checkoplatykiedy);
         checkoszczednosci = findViewById(R.id.checkoszczednosci);
         checkdane = findViewById(R.id.checkdane);
+        poleoszczednosci = findViewById(R.id.poleoszczednosci);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -64,6 +70,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         //JAK SKONCZYSZ BAWIC SIE TUTAJ Z BAZA PROSZE USUN TE WYSWIETLENIA
         bazadanych = new Bazadanych(RegisterActivity.this);
         cursor = bazadanych.odczytajtekst();
+        cursor2 = bazadanych.odczytajtekst4();
         if(cursor.getCount()==0){
             Toast.makeText(getApplicationContext(), "No data",Toast.LENGTH_SHORT).show();
         }
@@ -75,8 +82,23 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 Toast.makeText(getApplicationContext(), "3: "+cursor.getString(3),Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), "4: "+cursor.getString(4),Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), "5: "+cursor.getString(5),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "6: "+cursor.getString(6),Toast.LENGTH_SHORT).show();
+
             }
             cursor.close();
+        }
+
+        if(cursor2.getCount()==0){
+            Toast.makeText(getApplicationContext(), "No data",Toast.LENGTH_SHORT).show();
+        }
+        else {
+            while(cursor2.moveToNext())
+            {
+                Toast.makeText(getApplicationContext(), "1: "+cursor2.getString(1),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "2: "+cursor2.getString(2),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "3: "+cursor2.getString(3),Toast.LENGTH_SHORT).show();
+            }
+            cursor2.close();
         }
 
         przyciskzapisz.setOnClickListener(new View.OnClickListener() {
@@ -91,10 +113,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean zaznaczone) {
                 if(zaznaczone){
-                    wybranocheckoplaty = "Yes";
+                    wybrano = "Yes";
                 }
                 else {
-                    wybranocheckoplaty = "No";
+                    wybrano = "No";
                 }
             }
         });
@@ -104,10 +126,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean zaznaczone) {
                 if(zaznaczone){
-                    wybranocheckoplaty2 = "Yes";
+                    wybrano2 = "Yes";
                 }
                 else {
-                    wybranocheckoplaty2 = "No";
+                    wybrano2 = "No";
                 }
             }
         });
@@ -117,10 +139,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean zaznaczone) {
                 if(zaznaczone){
-                    wybranocheckoplaty3 = "Yes";
+                    wybrano3 = "Yes";
                 }
                 else {
-                    wybranocheckoplaty3 = "No";
+                    wybrano3 = "No";
                 }
             }
         });
@@ -130,10 +152,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean zaznaczone) {
                 if(zaznaczone){
-                    wybranocheckoplaty4 = "Yes";
+                    wybrano4 = "Yes";
                 }
                 else {
-                    wybranocheckoplaty4 = "No";
+                    wybrano4 = "No";
                 }
             }
         });
@@ -149,10 +171,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
-//                    case 0:
-//                        Toast.makeText(parent.getContext(), "Proszę wybrać jedną z opcji", Toast.LENGTH_SHORT).show();
-//                        Wymyśl pomysł co zrobić aby nie można bylo zaznaczyć tej opcji
-//                        break;
                     case 1:
                         Intent intent = new Intent(RegisterActivity.this, IncomeActivity.class);
                         startActivity(intent);
@@ -179,25 +197,19 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                czestotliwoscopcje = parent.getItemAtPosition(position).toString();
                 switch (position) {
-                    case 0:
-//                        Toast.makeText(parent.getContext(), "Prosze wybrać jedną z opcji!", Toast.LENGTH_SHORT).show();
-//                        Wymyśl pomysł co zrobić aby nie można bylo zaznaczyć tej opcji
-                        break;
                     case 1:
-                        Toast.makeText(parent.getContext(), "Spinner item 2!", Toast.LENGTH_SHORT).show();
-//                        Sprawdzic czy to musi byc register czy main, w classie ta klasa mala do wystartowania
-//                        Intent intent = new Intent(RegisterActivity.this, CashActivity.class);
-//                        startActivity(intent);
+                        Toast.makeText(parent.getContext(), "Wybrano opcje: Co miesiąc", Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
-                        Toast.makeText(parent.getContext(), "Spinner item 3!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(parent.getContext(), "Wybrano opcje: Co trzy miesiące", Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
-                        Toast.makeText(parent.getContext(), "Spinner item 4!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(parent.getContext(), "Wybrano opcje: Co pół roku", Toast.LENGTH_SHORT).show();
                         break;
                     case 4:
-                        Toast.makeText(parent.getContext(), "Spinner item 5!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(parent.getContext(), "Wybrano opcje: Co rok", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
@@ -236,32 +248,47 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onZapisz() {
         String imie = poleimie.getText().toString();
+        String oszczednosci = poleoszczednosci.getText().toString();
+        godzina = powiadomieniagodzina.getText().toString();
+        data = powiadomieniadzien.getText().toString();
         if(!imie.isEmpty()) {
             if(cursor.getCount()==0) {
-                if (bazadanych.dodajtekst(imie, wybranocheckoplaty, wybranocheckoplaty2, wybranocheckoplaty3, wybranocheckoplaty4)) {
+                if (bazadanych.dodajtekst(imie, wybrano, wybrano2, wybrano3, wybrano4, oszczednosci)) {
                     poleimie.setText("");
+                    poleoszczednosci.setText("");
                 }
             }
             else if(cursor.getCount()>0) {
-                if (bazadanych.zaaktualizujtekst(imie, wybranocheckoplaty, wybranocheckoplaty2, wybranocheckoplaty3, wybranocheckoplaty4)) {
+                if (bazadanych.zaaktualizujtekst(imie, wybrano, wybrano2, wybrano3, wybrano4, oszczednosci)) {
                     poleimie.setText("");
+                    poleoszczednosci.setText("");
                 }
             }
         }
+        if(!godzina.isEmpty() || !data.isEmpty() || !czestotliwoscopcje.isEmpty()) {
+            if(cursor2.getCount()==0){
+                bazadanych.dodajtekst4(data, czestotliwoscopcje, godzina);
+                }
+            else if(cursor2.getCount()>0) {
+                bazadanych.zaaktualizujtekst4(data, czestotliwoscopcje, godzina);
+            }
+        }
+
         cursor.close();
+        cursor2.close();
         Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
         startActivity(intent);
     }
 
     @Override
     public void onTimeSet(android.widget.TimePicker view, int hourOfDay, int minute) {
-        TextView powiadomieniagodzina = (TextView) findViewById(R.id.powiadomieniagodzina);
+        powiadomieniagodzina = (TextView) findViewById(R.id.powiadomieniagodzina);
         powiadomieniagodzina.setText("Czas: " + hourOfDay + ":" + minute);
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        TextView powiadomieniadzien = (TextView) findViewById(R.id.powiadomieniadzien);
+        powiadomieniadzien = (TextView) findViewById(R.id.powiadomieniadzien);
         powiadomieniadzien.setText("Data: "+ dayOfMonth + "/" + month + "/" + year);
     }
 

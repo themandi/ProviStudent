@@ -30,6 +30,7 @@ public class IncomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_income);
 
         bazadanych = new Bazadanych(IncomeActivity.this);
+        cursor = bazadanych.odczytajtekst2();
 
         polekwota = findViewById(R.id.polekwota);
         przyciskcofnij = (Button) findViewById(R.id.cofnij);
@@ -65,9 +66,14 @@ public class IncomeActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Nie można zaaktualizować!",Toast.LENGTH_SHORT).show();
                     }
                 else if (cursor.getCount() > 0) {
-                    if (bazadanych.zaaktualizujtekst2(zasob, kwota)) {
-                        polekwota.setText("");
-                        Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!",Toast.LENGTH_SHORT).show();
+                    if(!kwota.isEmpty()) {
+                        if (bazadanych.zaaktualizujtekst2(zasob, kwota)) {
+                            polekwota.setText("");
+                            Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "Nie zostały wprowadzone dane!", Toast.LENGTH_SHORT).show();
                     }
                 }
                 cursor.close();
@@ -80,7 +86,6 @@ public class IncomeActivity extends AppCompatActivity {
                 cursor = bazadanych.odczytajtekst2();
                 if (cursor.getCount() == 0) {
                     wyswietlwiadomosc("Error", "Brak zapisanych zasobów!");
-                    Toast.makeText(getApplicationContext(), "No data", Toast.LENGTH_SHORT).show();
                     return;
                 }
                         StringBuffer buffer = new StringBuffer();
@@ -88,8 +93,6 @@ public class IncomeActivity extends AppCompatActivity {
                             buffer.append("ID: " + cursor.getString(0) + "\n");
                             buffer.append("Zasób: " + cursor.getString(1) + "\n");
                             buffer.append("Kwota: " + cursor.getString(2) + "\n");
-                            Toast.makeText(getApplicationContext(), "1: " + cursor.getString(1), Toast.LENGTH_SHORT).show();
-                            Toast.makeText(getApplicationContext(), "2: " + cursor.getString(2), Toast.LENGTH_SHORT).show();
                         }
                         wyswietlwiadomosc("Zapisane zasoby: ", buffer.toString());
                         cursor.close();
@@ -135,8 +138,11 @@ public class IncomeActivity extends AppCompatActivity {
                 if (bazadanych.dodajtekst2(zasob, kwota)) {
                     polekwota.setText("");
                 }
+            Toast.makeText(getApplicationContext(), "Dodano!",Toast.LENGTH_SHORT).show();
             }
-        Toast.makeText(getApplicationContext(), "Dodano!",Toast.LENGTH_SHORT).show();
+        else {
+            Toast.makeText(getApplicationContext(), "Błąd! Dane nie zostały wprowadzone.",Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void wyswietlwiadomosc(String tytul, String wiadomosc){

@@ -30,16 +30,6 @@ public class IncomeActivity2 extends AppCompatActivity {
 
         bazadanych = new Bazadanych(IncomeActivity2.this);
         cursor = bazadanych.odczytajtekst2();
-        if(cursor.getCount()==0){
-            Toast.makeText(getApplicationContext(), "No data",Toast.LENGTH_SHORT).show();
-        }
-        else {
-            while(cursor.moveToNext())
-            {
-                Toast.makeText(getApplicationContext(), "1: "+cursor.getString(1),Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "2: "+cursor.getString(2),Toast.LENGTH_SHORT).show();
-            }
-        }
 
         polekwota2 = findViewById(R.id.polekwota2);
         przyciskcofnij = (Button) findViewById(R.id.cofnij);
@@ -75,9 +65,14 @@ public class IncomeActivity2 extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Nie można zaaktualizować!",Toast.LENGTH_SHORT).show();
                 }
                 else if (cursor.getCount() > 0) {
-                    if (bazadanych.zaaktualizujtekst2(zasob, kwota)) {
-                        polekwota2.setText("");
-                        Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!",Toast.LENGTH_SHORT).show();
+                    if (!kwota.isEmpty()) {
+                        if (bazadanych.zaaktualizujtekst2(zasob, kwota)) {
+                            polekwota2.setText("");
+                            Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "Nie zostały wprowadzone dane!", Toast.LENGTH_SHORT).show();
                     }
                 }
                 cursor.close();
@@ -90,7 +85,6 @@ public class IncomeActivity2 extends AppCompatActivity {
                 cursor = bazadanych.odczytajtekst2();
                 if (cursor.getCount() == 0) {
                     wyswietlwiadomosc("Error", "Brak zapisanych zasobów!");
-                    Toast.makeText(getApplicationContext(), "No data", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 StringBuffer buffer = new StringBuffer();
@@ -98,8 +92,6 @@ public class IncomeActivity2 extends AppCompatActivity {
                     buffer.append("ID: " + cursor.getString(0) + "\n");
                     buffer.append("Zasób: " + cursor.getString(1) + "\n");
                     buffer.append("Kwota: " + cursor.getString(2) + "\n");
-                    Toast.makeText(getApplicationContext(), "1: " + cursor.getString(1), Toast.LENGTH_SHORT).show();
-                    Toast.makeText(getApplicationContext(), "2: " + cursor.getString(2), Toast.LENGTH_SHORT).show();
                 }
                 wyswietlwiadomosc("Zapisane zasoby: ", buffer.toString());
                 cursor.close();
@@ -145,8 +137,11 @@ public class IncomeActivity2 extends AppCompatActivity {
             if (bazadanych.dodajtekst2(zasob, kwota)) {
                 polekwota2.setText("");
             }
+            Toast.makeText(getApplicationContext(), "Dodano!",Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(getApplicationContext(), "Dodano!",Toast.LENGTH_SHORT).show();
+        else {
+            Toast.makeText(getApplicationContext(), "Błąd! Dane nie zostały wprowadzone.",Toast.LENGTH_SHORT).show();
+        }
     }
     public void wyswietlwiadomosc(String tytul, String wiadomosc){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
