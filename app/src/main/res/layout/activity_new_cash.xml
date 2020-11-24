@@ -80,12 +80,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/poleoplata"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="10px"
                 android:layout_marginLeft="10px"
-                android:hint="Nazwa opłaty"/>
+                android:gravity="center"
+                android:hint="Nazwa opłaty" />
 
             <View
                 android:layout_width="0dp"
@@ -102,7 +104,7 @@
                     android:layout_height="wrap_content"></com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/poleimie"
+                    android:id="@+id/polekwota"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="50dp"
@@ -116,12 +118,45 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             tools:ignore="MissingConstraints" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:ignore="MissingConstraints">
+            <Button
+                android:id="@+id/edytuj"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="EDYTUJ" />
+            <View
+                android:layout_width="10mm"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+            <!--           Aby gdy przyciśniemy przycisk dodaj moglibysmy wybrac czy chcemy gotowke czy karte-->
+            <Button
+                android:id="@+id/dodaj"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DODAJ +" />
+            <View
+                android:layout_width="10mm"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+            <!--            Przycisk zapisz zapisujący do bazy dane-->
+            <Button
+                android:id="@+id/wyswietl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3mm"
+                android:text="WYŚWIETL" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             tools:ignore="MissingConstraints">
+            <!--            Dodaj przekierowanie do powrotnej strony-->
             <Button
                 android:id="@+id/cofnij"
                 android:layout_width="match_parent"
@@ -132,14 +167,15 @@
                 android:layout_height="1dp"
                 android:layout_weight="1" />
             <Button
-                android:id="@+id/dodajkolejne"
+                android:id="@+id/usun"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="DODAJ KOLEJNE +" />
+                android:text="USUŃ" />
             <View
                 android:layout_width="10mm"
                 android:layout_height="1dp"
                 android:layout_weight="1" />
+            <!--            Przycisk zapisz zapisujący do bazy dane-->
             <Button
                 android:id="@+id/zapisz"
                 android:layout_width="match_parent"
