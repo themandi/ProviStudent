@@ -66,8 +66,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Baza danych
-        //JAK SKONCZYSZ BAWIC SIE TUTAJ Z BAZA PROSZE USUN TE WYSWIETLENIA
         bazadanych = new Bazadanych(RegisterActivity.this);
         cursor = bazadanych.odczytajtekst();
         cursor2 = bazadanych.odczytajtekst4();
@@ -248,36 +246,63 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onZapisz() {
         String imie = poleimie.getText().toString();
-        String oszczednosci = poleoszczednosci.getText().toString();
-        godzina = powiadomieniagodzina.getText().toString();
-        data = powiadomieniadzien.getText().toString();
+        int oszczednosci = 0;
+        if(wybrano2 == "Yes") {
+            data = powiadomieniadzien.getText().toString();
+        }
+        if(wybrano3 == "Yes") {
+            oszczednosci = Integer.parseInt(poleoszczednosci.getText().toString());
+        }
+        if(wybrano4 == "Yes") {
+            godzina = powiadomieniagodzina.getText().toString();
+        }
         if(!imie.isEmpty()) {
-            if(cursor.getCount()==0) {
+            if (cursor.getCount() == 0) {
                 if (bazadanych.dodajtekst(imie, wybrano, wybrano2, wybrano3, wybrano4, oszczednosci)) {
                     poleimie.setText("");
                     poleoszczednosci.setText("");
                 }
             }
-            else if(cursor.getCount()>0) {
+            else if (cursor.getCount() > 0) {
                 if (bazadanych.zaaktualizujtekst(imie, wybrano, wybrano2, wybrano3, wybrano4, oszczednosci)) {
                     poleimie.setText("");
                     poleoszczednosci.setText("");
                 }
             }
-        }
-        if(!godzina.isEmpty() || !data.isEmpty() || !czestotliwoscopcje.isEmpty()) {
-            if(cursor2.getCount()==0){
-                bazadanych.dodajtekst4(data, czestotliwoscopcje, godzina);
+            if(wybrano2 == "Yes" & wybrano4 == "Yes") {
+                if(cursor2.getCount() == 0) {
+                    bazadanych.dodajtekst4(data, czestotliwoscopcje, godzina);
                 }
-            else if(cursor2.getCount()>0) {
-                bazadanych.zaaktualizujtekst4(data, czestotliwoscopcje, godzina);
+                else {
+                    bazadanych.zaaktualizujtekst4(data, czestotliwoscopcje, godzina);
+                }
             }
+            else if(wybrano2 == "Yes") {
+                godzina = "";
+                if(cursor2.getCount() == 0) {
+                    bazadanych.dodajtekst4(data, czestotliwoscopcje, godzina);
+                }
+                else {
+                    bazadanych.zaaktualizujtekst4(data, czestotliwoscopcje, godzina);
+                }
+            }
+            else if(wybrano4 == "Yes") {
+                data = "";
+                if(cursor2.getCount() == 0) {
+                    bazadanych.dodajtekst4(data, czestotliwoscopcje, godzina);
+                }
+                else {
+                    bazadanych.zaaktualizujtekst4(data, czestotliwoscopcje, godzina);
+                }
+            }
+            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+            startActivity(intent);
         }
-
+        else {
+            Toast.makeText(getApplicationContext(), "Nic nie zostało zapisane!",Toast.LENGTH_SHORT).show();
+        }
         cursor.close();
         cursor2.close();
-        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-        startActivity(intent);
     }
 
     @Override

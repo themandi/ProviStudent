@@ -22,6 +22,7 @@ public class IncomeActivity2 extends AppCompatActivity {
     Cursor cursor;
     EditText polekwota2;
     String zasob;
+    int kwota;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,15 +58,14 @@ public class IncomeActivity2 extends AppCompatActivity {
         przyciskedytuj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String kwota = polekwota2.getText().toString();
-                int numer = 1;
-                zasob = "Karta płatnicza " + numer;
-                numer++;
+                String kwotapole = polekwota2.getText().toString();
+                zasob = "Karta płatnicza";
                 if (cursor.getCount() == 0) {
                     Toast.makeText(getApplicationContext(), "Nie można zaaktualizować!",Toast.LENGTH_SHORT).show();
                 }
                 else if (cursor.getCount() > 0) {
-                    if (!kwota.isEmpty()) {
+                    if (!kwotapole.isEmpty()) {
+                        kwota = Integer.parseInt(polekwota2.getText().toString());
                         if (bazadanych.zaaktualizujtekst2(zasob, kwota)) {
                             polekwota2.setText("");
                             Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
@@ -129,11 +129,12 @@ public class IncomeActivity2 extends AppCompatActivity {
 
     //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onDodaj() {
-        String kwota = polekwota2.getText().toString();
-        int numer = 1;
-        String zasob = "Karta płatnicza " + numer;
-        numer++;
-        if(!kwota.isEmpty()) {
+        String kwotapole = polekwota2.getText().toString();
+        if(!kwotapole.isEmpty()) {
+            kwota = Integer.parseInt(polekwota2.getText().toString());
+        }
+        String zasob = "Karta płatnicza";
+        if(!kwotapole.isEmpty()) {
             if (bazadanych.dodajtekst2(zasob, kwota)) {
                 polekwota2.setText("");
             }

@@ -86,7 +86,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="10px"
                 android:layout_marginLeft="10px"
-                android:text="Karta kredytowa"
+                android:text="Karta płatnicza"
                 android:textColor="@android:color/black"
                 android:textSize="18dp"
                 android:textStyle="bold|normal" />

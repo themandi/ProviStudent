@@ -2,6 +2,8 @@ package com.example.provistudent;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -29,19 +32,30 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import java.text.DateFormat;
-import java.time.Month;
-import java.time.format.TextStyle;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+//HALO AGNIESZKA PISZE DO CIEBIE Z PRZESZLOSCI ZAPISZ SOBIE WYDATKI STAŁE W ZMIENNEJ (W TABLICY NA RAZIE ZAPISUJESZ INO TO, A POTEM WEŹ TO OGARNIJ pozdrawiam lofki
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     PieChart wykreskolowy;
-    float dochod = 1234;
-    float wydatki = 950;
-    float oszczednosci = 500;
+    Bazadanych bazadanych;
     Button cheatday;
+    TextView miesiac;
+    TextView dochod;
+    TextView dochodaktualny;
+    TextView wydatki;
+    TextView oszczednosci;
+    TextView kartabankowa;
+    TextView gotowka;
+    int sumadochodu;
+    int sumawydatkow;
+    int sumaoszczednosci;
+    int sumadochodaktualny;
+    int sumakartabankowa;
+    int sumagotowka;
 
     private DrawerLayout drawer;
     private static final String TAG = "MainActivity";
@@ -54,15 +68,83 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        bazadanych = new Bazadanych(MainActivity.this);
+
+        miesiac = findViewById(R.id.miesiac);
+        Calendar cal=Calendar.getInstance();
+        SimpleDateFormat nazwa_miesiaca= new SimpleDateFormat("LLLL", new Locale("pl", "PL"));
+        String miesiacwybrane=nazwa_miesiaca.format(cal.getTime());
+        miesiac.setText(miesiacwybrane.toUpperCase());
+
+        dochod = findViewById(R.id.dochod);
+        sumadochodu = bazadanych.sumadochodu();
+        dochod.setText("Dochód początkowy: " + Integer.toString(sumadochodu) + " zł");
+
+        wydatki = findViewById(R.id.wydatki);
+        sumawydatkow = bazadanych.sumawydatkow();
+        wydatki.setText("Wydatki: " + Integer.toString(sumawydatkow) + " zł");
+
+        dochodaktualny = findViewById(R.id.dochodaktualny);
+        sumadochodaktualny = sumadochodu - sumawydatkow;
+        dochodaktualny.setText("Dochód aktualny: " + Integer.toString(sumadochodaktualny) + " zł");
+
+        oszczednosci = findViewById(R.id.oszczednosci);
+        sumaoszczednosci = bazadanych.sumaoszczednosci();
+        oszczednosci.setText("Oszczędności: " + Integer.toString(sumaoszczednosci) + " zł");
+
+        kartabankowa = findViewById(R.id.zasob1);
+        sumakartabankowa = bazadanych.sumakartabankowa();
+        kartabankowa.setText("Karta bankowa: " + Integer.toString(sumakartabankowa) + " zł");
+
+        gotowka = findViewById(R.id.zasob2);
+        sumagotowka = bazadanych.sumagotowka();
+        gotowka.setText("Gotówka: " + Integer.toString(sumagotowka) + " zł");
 
         mCalendarView = (CalendarView) findViewById(R.id.zobaczKalendarz);
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                String miesiac = "";
                 String data = year + "/" + month + "/" + dayOfMonth;
                 Log.d(TAG, "onSelectDayChange: data:" + data);
-                String dzienimiesiac = dayOfMonth + "/" + month;
+                if(month == 0) {
+                    miesiac = "stycznia";
+                }
+                if(month == 1) {
+                    miesiac = "lutego";
+                }
+                if(month == 2) {
+                    miesiac = "marca";
+                }
+                if(month == 3) {
+                    miesiac = "kwietnia";
+                }
+                if(month == 4) {
+                    miesiac = "maja";
+                }
+                if(month == 5) {
+                    miesiac = "czerwca";
+                }
+                if(month == 6) {
+                    miesiac = "lipca";
+                }
+                if(month == 7) {
+                    miesiac = "sierpnia";
+                }
+                if(month == 8) {
+                    miesiac = "września";
+                }
+                if(month == 9) {
+                    miesiac = "października";
+                }
+                if(month == 10) {
+                    miesiac = "listopada";
+                }
+                if(month == 11) {
+                    miesiac = "grudnia";
+                }
+                String dzienimiesiac = dayOfMonth + " " + miesiac;
                 Log.d(TAG, "onSelectDayChange: data:" + dzienimiesiac);
 
                 Intent intent = new Intent(MainActivity.this, DayofcalendarActivity.class);
@@ -91,9 +173,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         wykreskolowy.setDrawEntryLabels(false);
 
         ArrayList<PieEntry> listawykres = new ArrayList<>();
-        listawykres.add(new PieEntry(dochod, "Dochód"));
-        listawykres.add(new PieEntry(wydatki, "Wydatki"));
-        listawykres.add(new PieEntry(oszczednosci, "Oszczędności"));
+        listawykres.add(new PieEntry(sumadochodu, "Dochód"));
+        listawykres.add(new PieEntry(sumawydatkow, "Wydatki"));
+        listawykres.add(new PieEntry(sumaoszczednosci, "Oszczędności"));
 
         PieDataSet dataSet = new PieDataSet(listawykres, "");
         dataSet.setSelectionShift(5f);

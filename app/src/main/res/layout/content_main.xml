@@ -14,7 +14,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/wydatki"
+            android:id="@+id/wydatkipoczatek"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#0b5225"
@@ -29,18 +29,18 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="163dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/wykreskolowy"
-                android:layout_width="226dp"
-                android:layout_height="match_parent"></com.github.mikephil.charting.charts.PieChart>
+                android:layout_width="150dp"
+                android:layout_height="150dp"></com.github.mikephil.charting.charts.PieChart>
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1" />
+<!--            <View-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="1dp"-->
+<!--                android:layout_weight="1" />-->
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginLeft="20dp"
-                    android:gravity="center"
+                    android:layout_gravity="center"
                     android:text="@string/miesiac"
                     android:textColor="@android:color/black"
                     android:textSize="22sp"
@@ -66,8 +66,19 @@
                     android:id="@+id/dochod"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:text="@string/dochod"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold|normal"
+                    tools:ignore="MissingConstraints"
+                    tools:layout_editor_absoluteX="200dp"
+                    tools:layout_editor_absoluteY="90dp" />
+
+                <TextView
+                    android:id="@+id/dochodaktualny"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dochód aktualny: 123zł"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold|normal"
@@ -79,7 +90,6 @@
                     android:id="@+id/wydatki"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:text="@string/wydatkimain"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
@@ -152,14 +162,14 @@
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="262dp" />
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+<!--        <View-->
+<!--            android:layout_width="1dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1" />-->
 
         <CalendarView
             android:id="@+id/zobaczKalendarz"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="#FFF"

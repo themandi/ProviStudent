@@ -60,12 +60,13 @@ public class NewCashActivity extends AppCompatActivity {
         przyciskedytuj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String kwota = polekwota.getText().toString();
+                String kwotapole = polekwota.getText().toString();
+                int kwota = Integer.parseInt(polekwota.getText().toString());
                 String oplata = poleoplata.getText().toString();
                 if (cursor.getCount() == 0) {
                     Toast.makeText(getApplicationContext(), "Nie można zaaktualizować!", Toast.LENGTH_SHORT).show();
                 } else if (cursor.getCount() > 0) {
-                    if (!kwota.isEmpty()) {
+                    if (!kwotapole.isEmpty()) {
                         if (bazadanych.zaaktualizujtekst3(oplata, kwota)) {
                             polekwota.setText("");
                             Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
@@ -125,11 +126,12 @@ public class NewCashActivity extends AppCompatActivity {
     }
 
     void onDodaj() {
-        String kwota = polekwota.getText().toString();
+        String kwotapole = polekwota.getText().toString();
+        int kwota = Integer.parseInt(polekwota.getText().toString());
         String oplata = poleoplata.getText().toString();
 
 
-        if (!kwota.isEmpty()) {
+        if (!kwotapole.isEmpty()) {
             if (bazadanych.dodajtekst3(oplata, kwota)) {
                 polekwota.setText("");
                 poleoplata.setText("");

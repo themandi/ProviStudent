@@ -23,6 +23,7 @@ public class IncomeActivity extends AppCompatActivity {
     Cursor cursor;
     EditText polekwota;
     String zasob;
+    int kwota;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,15 +59,14 @@ public class IncomeActivity extends AppCompatActivity {
         przyciskedytuj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String kwota = polekwota.getText().toString();
-                int numer = 1;
-                zasob = "Gotówka " + numer;
-                numer++;
+                String kwotapole = polekwota.getText().toString();
+                zasob = "Gotówka";
                 if (cursor.getCount() == 0) {
                     Toast.makeText(getApplicationContext(), "Nie można zaaktualizować!",Toast.LENGTH_SHORT).show();
                     }
                 else if (cursor.getCount() > 0) {
-                    if(!kwota.isEmpty()) {
+                    if(!kwotapole.isEmpty()) {
+                        kwota = Integer.parseInt(polekwota.getText().toString());
                         if (bazadanych.zaaktualizujtekst2(zasob, kwota)) {
                             polekwota.setText("");
                             Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
@@ -129,12 +129,11 @@ public class IncomeActivity extends AppCompatActivity {
     }
 
     void onDodaj() {
-        String kwota = polekwota.getText().toString();
-        int numer = 1;
-        zasob = "Gotowka " + numer;
-        numer++;
+        String kwotapole = polekwota.getText().toString();
+        zasob = "Gotówka";
 
-        if(!kwota.isEmpty()) {
+        if(!kwotapole.isEmpty()) {
+            kwota = Integer.parseInt(polekwota.getText().toString());
                 if (bazadanych.dodajtekst2(zasob, kwota)) {
                     polekwota.setText("");
                 }
