@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="409dp"
     android:layout_height="325dp"
-    tools:context=".CheatdayActivity">
+    tools:context=".NewCheatdayActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:background="#0b5225"
             android:gravity="center"
-            android:text="CHEAT DAY - na co zmarnowałeś/aś pieniądze?"
+            android:text="Dodaj nowy wydatek (Cheatday)"
             android:textColor="@android:color/white"
             android:textSize="30sp"
             android:textStyle="bold|normal"
@@ -42,12 +42,12 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/oplatastala"
+                android:id="@+id/polewydatek"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="10px"
                 android:layout_marginLeft="10px"
-                android:text="Opłata stała za:"
+                android:text="Wydatek za:"
                 android:textColor="@android:color/black"
                 android:textSize="18dp"
                 android:textStyle="bold|normal" />
@@ -80,12 +80,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/spinner3"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/poleoplata"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="10px"
-                android:layout_marginLeft="10px"/>
+                android:layout_marginLeft="10px"
+                android:gravity="center"
+                android:hint="Nazwa opłaty" />
 
             <View
                 android:layout_width="0dp"
@@ -116,7 +118,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             tools:ignore="MissingConstraints" />
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

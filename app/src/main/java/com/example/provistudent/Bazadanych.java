@@ -34,6 +34,11 @@ public class Bazadanych extends SQLiteOpenHelper {
     private static final String COL4_3 = "czestotliwosc";
     private static final String COL4_4 = "kiedydane";
 
+    private static final String TABLE_NAME5 = "Wydatki";
+    private static final String COL5_1 = "ID";
+    private static final String COL5_2 = "wydatek";
+    private static final String COL5_3 = "kwota";
+
     public Bazadanych(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
@@ -48,11 +53,14 @@ public class Bazadanych extends SQLiteOpenHelper {
                 COL3_2 + " TEXT, " + COL3_3 + " INTEGER)";
         String stworztabele4 = "CREATE TABLE " + TABLE_NAME4 + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL4_2 + " TEXT, " + COL4_3 + " TEXT, " + COL4_4 + " TEXT)";
+        String stworztabele5 = "CREATE TABLE " + TABLE_NAME5 + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL5_2 + " TEXT, " + COL5_3 + " INTEGER)";
 
         db.execSQL(stworztabele);
         db.execSQL(stworztabele2);
         db.execSQL(stworztabele3);
         db.execSQL(stworztabele4);
+        db.execSQL(stworztabele5);
     }
 
     @Override
@@ -61,6 +69,7 @@ public class Bazadanych extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME2);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME3);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME4);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME5);
         onCreate(db);
     }
 
@@ -104,6 +113,14 @@ public class Bazadanych extends SQLiteOpenHelper {
         sqLitebaza.insert(TABLE_NAME4, null, zawartosc4);
         return true;
     }
+    public boolean dodajtekst5(String wydatek, Integer kwota) {
+        SQLiteDatabase sqLitebaza = this.getWritableDatabase();
+        ContentValues zawartosc5 = new ContentValues();
+        zawartosc5.put(COL5_2, wydatek);
+        zawartosc5.put(COL5_3, kwota);
+        sqLitebaza.insert(TABLE_NAME5, null, zawartosc5);
+        return true;
+    }
 
     public boolean zaaktualizujtekst(String nazwa_uzytkownika, String wybranocheckoplaty, String wybranocheckoplatykiedy, String wybranocheckoszczednosci, String wybranocheckdane, Integer oszczednosci) {
         SQLiteDatabase sqLitebaza = this.getWritableDatabase();
@@ -145,6 +162,14 @@ public class Bazadanych extends SQLiteOpenHelper {
         sqLitebaza.update(TABLE_NAME4, zawartosc4, COL4_1 + "=ID", null);
         return true;
     }
+    public boolean zaaktualizujtekst5(String wydatek, Integer kwota) {
+        SQLiteDatabase sqLitebaza = this.getWritableDatabase();
+        ContentValues zawartosc5 = new ContentValues();
+        zawartosc5.put(COL5_2, wydatek);
+        zawartosc5.put(COL5_3, kwota);
+        sqLitebaza.update(TABLE_NAME3, zawartosc5, COL5_1 + "=ID", null);
+        return true;
+    }
 
     public Integer usuntekst2(String id) {
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
@@ -154,6 +179,11 @@ public class Bazadanych extends SQLiteOpenHelper {
     public Integer usuntekst3(String id) {
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
         return sqLitebaza.delete(TABLE_NAME3, COL3_1 + "=ID", null);
+    }
+
+    public Integer usuntekst5(String id) {
+        SQLiteDatabase sqLitebaza = this.getReadableDatabase();
+        return sqLitebaza.delete(TABLE_NAME5, COL5_1 + "=ID", null);
     }
 
     public Cursor odczytajtekst() {
@@ -185,6 +215,14 @@ public class Bazadanych extends SQLiteOpenHelper {
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
         //tworzymy kursor aby zaznaczyc wszystkie wartosci
         Cursor cursor = sqLitebaza.rawQuery("SELECT * FROM " + TABLE_NAME4, null);
+        return cursor;
+    }
+
+    public Cursor odczytajtekst5() {
+        //uzyskujemy odczytywalna baze
+        SQLiteDatabase sqLitebaza = this.getReadableDatabase();
+        //tworzymy kursor aby zaznaczyc wszystkie wartosci
+        Cursor cursor = sqLitebaza.rawQuery("SELECT * FROM " + TABLE_NAME5, null);
         return cursor;
     }
 
@@ -236,6 +274,16 @@ public class Bazadanych extends SQLiteOpenHelper {
         int suma = 0;
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
         Cursor cursor = sqLitebaza.rawQuery("SELECT SUM(" + COL2_3 + ") FROM Dochod WHERE zasob = 'Gotówka'", null);
+        if (cursor.moveToFirst()) {
+            suma = cursor.getInt(0);
+        }
+        cursor.close();
+        return suma;
+    }
+    public int kwotawydana() {
+        int suma = 0;
+        SQLiteDatabase sqLitebaza = this.getReadableDatabase();
+        Cursor cursor = sqLitebaza.rawQuery("SELECT kwota FROM Wydatki", null);
         if (cursor.moveToFirst()) {
             suma = cursor.getInt(0);
         }

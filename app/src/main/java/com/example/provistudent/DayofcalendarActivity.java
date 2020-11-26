@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -24,17 +26,55 @@ public class DayofcalendarActivity extends AppCompatActivity{
     Button przyciskcofnij;
     Button przyciskedytuj;
     Button przyciskcheat;
+    Bazadanych bazadanych;
+    Cursor cursor;
+    TextView dochodaktualny;
+    TextView kwotadowydania;
+    TextView wydanokwota;
+    int sumadochodu;
+    int sumawydatkow;
+    int sumadochodaktualny;
+    int kwotawydaj;
+    int kwotawydana;
+    boolean klikniete=false;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dayofcalendar);
+        bazadanych = new Bazadanych(DayofcalendarActivity.this);
+        cursor = bazadanych.odczytajtekst5();
 
         Intent calendarz = getIntent();
         String date = calendarz.getStringExtra("data2");
         TextView tekstdata = (TextView) findViewById(R.id.jakidzien);
         tekstdata.setText(date);
+
+        Calendar cal=Calendar.getInstance();
+        int days = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        sumadochodu = bazadanych.sumadochodu();
+        sumawydatkow = bazadanych.sumawydatkow();
+
+        dochodaktualny = findViewById(R.id.dochodaktualny);
+        sumadochodaktualny = sumadochodu - sumawydatkow;
+        dochodaktualny.setText("Dochód aktualny: " + Integer.toString(sumadochodaktualny) + " zł");
+
+        kwotadowydania = findViewById(R.id.kwotadowydania);
+        kwotawydaj = sumadochodu/days;
+        kwotadowydania.setText("Sugerowany wydatek na dziś: " + Integer.toString(kwotawydaj) + " zł");
+
+        wydanokwota = findViewById(R.id.wydanokwota);
+        if(klikniete == false) {
+            kwotawydana = kwotawydaj;
+            onDodaj();
+        }
+        else {
+            kwotawydana = bazadanych.kwotawydana();
+        }
+        wydanokwota.setText("Kwota wydatków dzisiejszych: " + Integer.toString(kwotawydana) + " zł");
+
 
         przyciskcofnij = (Button) findViewById(R.id.cofnij);
         przyciskcofnij.setOnClickListener(new View.OnClickListener() {
@@ -49,6 +89,7 @@ public class DayofcalendarActivity extends AppCompatActivity{
         przyciskedytuj.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
             {
+                klikniete = true;
                 Intent intent = new Intent(DayofcalendarActivity.this, EditCashActivity.class);
                 startActivity(intent);
             }
@@ -59,6 +100,7 @@ public class DayofcalendarActivity extends AppCompatActivity{
             public void onClick(View view)
             {
                 Intent intent = new Intent(DayofcalendarActivity.this, CheatdayActivity.class);
+                intent.putExtra("activity","first");
                 startActivity(intent);
             }
         });
@@ -79,8 +121,11 @@ public class DayofcalendarActivity extends AppCompatActivity{
     }
     //Metoda wykorzystywana podczas wywołania przycisku "Dodaj"
     void onDodaj() {
-        Intent intent = new Intent(DayofcalendarActivity.this, MainActivity.class);
-        startActivity(intent);
-        //Metoda do dodawania
+        String wydatek = "Wydatek";
+        int kwota = kwotawydaj;
+        bazadanych.dodajtekst5(wydatek, kwota);
+        while(cursor.moveToNext()) {
+            Toast.makeText(getApplicationContext(),cursor.getString(2),Toast.LENGTH_SHORT).show();
+        }
     }
 }
