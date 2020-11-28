@@ -80,4 +80,7 @@
     <string name="rejestracja_u_ytkownika">REJESTRACJA UŻYTKOWNIKA</string>
     <string name="kwotaoszczednosci">Podaj kwotę oszczędności:</string>
     <string name="wybierz">Wybierz</string>
+    <string name="zobacz_list_wydatk_w"><![CDATA[>>Zobacz listę wydatków<<]]></string>
+    <string name="wydaj_oszcz_dno_ci"><![CDATA[>>Wydaj oszczędności<<]]></string>
+    <string name="wykorzystaj_oszcz_dno_ci"><![CDATA[>>Wykorzystaj oszczędności<<]]></string>
 </resources>

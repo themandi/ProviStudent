@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class NewCheatdayActivity extends AppCompatActivity {
     Button przyciskzapisz;
@@ -22,11 +24,16 @@ public class NewCheatdayActivity extends AppCompatActivity {
     Cursor cursor;
     TextView polekwota;
     TextView polewydatek;
+    Intent calendarz;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_cheatday);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         bazadanych = new Bazadanych(NewCheatdayActivity.this);
         cursor = bazadanych.odczytajtekst5();
@@ -59,11 +66,14 @@ public class NewCheatdayActivity extends AppCompatActivity {
                 String kwotapole = polekwota.getText().toString();
                 int kwota = Integer.parseInt(polekwota.getText().toString());
                 String wydatek = polewydatek.getText().toString();
+                String cheatday = "Yes";
+                calendarz = getIntent();
+                String data = calendarz.getStringExtra("data");
                 if (cursor.getCount() == 0) {
                     Toast.makeText(getApplicationContext(), "Nie można zaaktualizować!", Toast.LENGTH_SHORT).show();
                 } else if (cursor.getCount() > 0) {
                     if (!kwotapole.isEmpty()) {
-                        if (bazadanych.zaaktualizujtekst5(wydatek, kwota)) {
+                        if (bazadanych.zaaktualizujtekst5(data, wydatek, kwota, cheatday)) {
                             polekwota.setText("");
                             Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
                         }
@@ -86,10 +96,11 @@ public class NewCheatdayActivity extends AppCompatActivity {
                 StringBuffer buffer = new StringBuffer();
                 while (cursor.moveToNext()) {
                     buffer.append("ID: " + cursor.getString(0) + "\n");
-                    buffer.append("Opłata: " + cursor.getString(1) + "\n");
-                    buffer.append("Kwota: " + cursor.getString(2) + "\n");
+                    buffer.append("Data: " + cursor.getString(1) + " (cheatday)" + "\n");
+                    buffer.append("Wydatek: " + cursor.getString(2) + "\n");
+                    buffer.append("Kwota: " + cursor.getString(3) + "\n");
                 }
-                wyswietlwiadomosc("Zapisane wydatki stałe: ", buffer.toString());
+                wyswietlwiadomosc("Zapisane wydatki: ", buffer.toString());
                 cursor.close();
             }
         });
@@ -108,7 +119,11 @@ public class NewCheatdayActivity extends AppCompatActivity {
             }
         });
     }
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
+    }
     //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onZapisz() {
         if (cursor.getCount() == 0) {
@@ -125,10 +140,11 @@ public class NewCheatdayActivity extends AppCompatActivity {
         String kwotapole = polekwota.getText().toString();
         int kwota = Integer.parseInt(polekwota.getText().toString());
         String wydatek = polewydatek.getText().toString();
-
-
+        String cheatday = "Yes";
+        calendarz = getIntent();
+        String data = calendarz.getStringExtra("data");
         if (!kwotapole.isEmpty()) {
-            if (bazadanych.dodajtekst5(wydatek, kwota)) {
+            if (bazadanych.dodajtekst5(data, wydatek, kwota, cheatday)) {
                 polekwota.setText("");
                 polewydatek.setText("");
             }

@@ -1,11 +1,13 @@
 package com.example.provistudent;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,6 +37,10 @@ public class CheatdayActivity extends AppCompatActivity {
 
         bazadanych = new Bazadanych(CheatdayActivity.this);
         cursor = bazadanych.odczytajtekst5();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         spinner3 = findViewById(R.id.spinner3);
         polekwota = findViewById(R.id.polekwota);
@@ -70,7 +76,10 @@ public class CheatdayActivity extends AppCompatActivity {
                 else if (cursor.getCount() > 0) {
                     if (!kwotapole.isEmpty()) {
                         kwota = Integer.parseInt(polekwota.getText().toString());
-                        if (bazadanych.zaaktualizujtekst5(wydatek, kwota)) {
+                        String cheatday = "Yes";
+                        Intent calendarz = getIntent();
+                        String data = calendarz.getStringExtra("data");
+                        if (bazadanych.zaaktualizujtekst5(data, wydatek, kwota, cheatday)) {
                             polekwota.setText("");
                             Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
                         }
@@ -94,10 +103,11 @@ public class CheatdayActivity extends AppCompatActivity {
                 StringBuffer buffer = new StringBuffer();
                 while (cursor.moveToNext()) {
                     buffer.append("ID: " + cursor.getString(0) + "\n");
-                    buffer.append("Wydatek: " + cursor.getString(1) + "\n");
-                    buffer.append("Kwota: " + cursor.getString(2) + "\n");
+                    buffer.append("Data: " + cursor.getString(1) + "\n");
+                    buffer.append("Wydatek: " + cursor.getString(2) + "\n");
+                    buffer.append("Kwota: " + cursor.getString(3) + "\n");
                 }
-                wyswietlwiadomosc("Zapisane wydatki stałe: ", buffer.toString());
+                wyswietlwiadomosc("Zapisane wydatki: ", buffer.toString());
                 cursor.close();
             }
         });
@@ -173,6 +183,11 @@ public class CheatdayActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
+    }
     //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onZapisz() {
         if(cursor.getCount()==0) {
@@ -190,7 +205,10 @@ public class CheatdayActivity extends AppCompatActivity {
         String kwotapole = polekwota.getText().toString();
         if(!kwotapole.isEmpty()) {
             kwota = Integer.parseInt(polekwota.getText().toString());
-            if (bazadanych.dodajtekst5(wydatek, kwota)) {
+            String cheatday = "Yes";
+            Intent calendarz = getIntent();
+            String data = calendarz.getStringExtra("data");
+            if (bazadanych.dodajtekst5(data, wydatek, kwota, cheatday)) {
                 polekwota.setText("");
             }
             Toast.makeText(getApplicationContext(), "Dodano!",Toast.LENGTH_SHORT).show();

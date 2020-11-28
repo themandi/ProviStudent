@@ -35,7 +35,7 @@
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/wykreskolowy"
                 android:layout_width="150dp"
-                android:layout_height="150dp"></com.github.mikephil.charting.charts.PieChart>
+                android:layout_height="220dp"></com.github.mikephil.charting.charts.PieChart>
 
 <!--            <View-->
 <!--                android:layout_width="0dp"-->
@@ -90,9 +90,22 @@
                     android:id="@+id/wydatki"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/wydatkimain"
+                    android:text="Wydatki: 123zł"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
+                    android:textStyle="bold|normal"
+                    tools:ignore="MissingConstraints"
+                    tools:layout_editor_absoluteX="200dp"
+                    tools:layout_editor_absoluteY="90dp" />
+
+
+                <TextView
+                    android:id="@+id/zobaczwydatki"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/zobacz_list_wydatk_w"
+                    android:textColor="@color/gradient_start_color"
+                    android:textSize="13sp"
                     android:textStyle="bold|normal"
                     tools:ignore="DuplicateIds,MissingConstraints"
                     tools:layout_editor_absoluteX="200dp"
@@ -109,6 +122,17 @@
                     tools:ignore="MissingConstraints"
                     tools:layout_editor_absoluteX="200dp"
                     tools:layout_editor_absoluteY="162dp" />
+                <TextView
+                    android:id="@+id/wydajoszczednosci"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/wykorzystaj_oszcz_dno_ci"
+                    android:textColor="@color/gradient_start_color"
+                    android:textSize="13sp"
+                    android:textStyle="bold|normal"
+                    tools:ignore="DuplicateIds,MissingConstraints"
+                    tools:layout_editor_absoluteX="200dp"
+                    tools:layout_editor_absoluteY="126dp" />
                 <Button
                     android:id="@+id/cheatday"
                     android:layout_width="match_parent"

@@ -1,11 +1,14 @@
 package com.example.provistudent;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Layout;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,12 +35,17 @@ public class CashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cash);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         bazadanych = new Bazadanych(CashActivity.this);
         cursor = bazadanych.odczytajtekst3();
 
         spinner3 = findViewById(R.id.spinner3);
         polekwota = findViewById(R.id.polekwota);
+
         przyciskcofnij = (Button) findViewById(R.id.cofnij);
         przyciskcofnij.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
@@ -172,6 +180,11 @@ public class CashActivity extends AppCompatActivity {
             public void onNothingSelected (AdapterView < ? > parent){
             }
         });
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
     }
     //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onZapisz() {

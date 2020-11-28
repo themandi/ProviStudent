@@ -9,41 +9,70 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EditCashActivity"></activity>
-        <activity android:name=".DayofcalendarActivity" />
-        <activity android:name=".CheatdayActivity" />
-        <activity android:name=".IncomeActivity2" />
-        <activity android:name=".IncomeActivity" />
-        <activity android:name=".NewCashActivity" />
-        <activity android:name=".CashActivity" />
+
+        <activity
+            android:name=".EditCashActivity">
+            android:label="ProviStud"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".DayofcalendarActivity"
+            android:label="ProviStud"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".CheatdayActivity"
+            android:label="ProviStud"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".IncomeActivity2"
+            android:label="ProviStud"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".IncomeActivity"
+            android:label="ProviStud"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".NewCashActivity"
+            android:label="ProviStud"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".CashActivity"
+            android:label="ProviStud"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity
             android:name=".ProfileActivity"
-            android:label="ProfileActivity"
+            android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".SettingsActivity"
-            android:label="SettingsActivity"
+            android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".HelpActivity"
-            android:label="HelpActivity"
+            android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".InfoActivity"
-            android:label="InfoActivity"
+            android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
         android:name=".NewCheatdayActivity"
-        android:label="NewCheatday"
+        android:label="ProviStud"
         android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".RegisterActivity"
-            android:label="@string/title_activity_register"
+            android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar">
 <!--        <intent-filter>-->
 <!--            <action android:name="android.intent.action.MAIN" />-->
@@ -53,11 +82,11 @@
         </activity>
         <activity
             android:name=".StatsActivity"
-            android:label="@string/title_activity_stats"
+            android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"
+            android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar">
 <!--             <intent-filter>-->
 <!--             <action android:name="android.intent.action.MAIN" />-->
@@ -67,7 +96,7 @@
         </activity>
         <activity
             android:name=".IntroActivity"
-            android:label="IntroActivity">
+            android:label="ProviStud">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

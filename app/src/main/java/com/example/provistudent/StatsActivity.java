@@ -2,7 +2,10 @@ package com.example.provistudent;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.MenuItem;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -23,6 +26,11 @@ public class StatsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         wykres = findViewById(R.id.wykres);
 
             List<BarEntry> dochod = new ArrayList<>();
@@ -83,5 +91,10 @@ public class StatsActivity extends AppCompatActivity {
         wykres.getXAxis().setAxisMaximum(0+wykres.getBarData().getGroupWidth(grupaprzestrzeni,przestrzenwykresu)*7);
         wykres.groupBars(0, grupaprzestrzeni, przestrzenwykresu);
         wykres.invalidate();
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
     }
 }

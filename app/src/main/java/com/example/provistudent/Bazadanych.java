@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
+import static android.os.Build.ID;
+
 public class Bazadanych extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "bazadanych";
     private static final String TABLE_NAME = "Uzytkownik";
@@ -36,8 +38,10 @@ public class Bazadanych extends SQLiteOpenHelper {
 
     private static final String TABLE_NAME5 = "Wydatki";
     private static final String COL5_1 = "ID";
-    private static final String COL5_2 = "wydatek";
-    private static final String COL5_3 = "kwota";
+    private static final String COL5_2 = "data";
+    private static final String COL5_3 = "wydatek";
+    private static final String COL5_4 = "kwota";
+    private static final String COL5_5 = "cheatday";
 
     public Bazadanych(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -54,7 +58,7 @@ public class Bazadanych extends SQLiteOpenHelper {
         String stworztabele4 = "CREATE TABLE " + TABLE_NAME4 + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL4_2 + " TEXT, " + COL4_3 + " TEXT, " + COL4_4 + " TEXT)";
         String stworztabele5 = "CREATE TABLE " + TABLE_NAME5 + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COL5_2 + " TEXT, " + COL5_3 + " INTEGER)";
+                COL5_2 + " TEXT, " + COL5_3 + " TEXT, " + COL5_4 + " TEXT, " + COL5_5 + " INTEGER)";
 
         db.execSQL(stworztabele);
         db.execSQL(stworztabele2);
@@ -113,11 +117,13 @@ public class Bazadanych extends SQLiteOpenHelper {
         sqLitebaza.insert(TABLE_NAME4, null, zawartosc4);
         return true;
     }
-    public boolean dodajtekst5(String wydatek, Integer kwota) {
+    public boolean dodajtekst5(String data, String wydatek, Integer kwota, String cheatday) {
         SQLiteDatabase sqLitebaza = this.getWritableDatabase();
         ContentValues zawartosc5 = new ContentValues();
-        zawartosc5.put(COL5_2, wydatek);
-        zawartosc5.put(COL5_3, kwota);
+        zawartosc5.put(COL5_2, data);
+        zawartosc5.put(COL5_3, wydatek);
+        zawartosc5.put(COL5_4, kwota);
+        zawartosc5.put(COL5_5, cheatday);
         sqLitebaza.insert(TABLE_NAME5, null, zawartosc5);
         return true;
     }
@@ -140,7 +146,7 @@ public class Bazadanych extends SQLiteOpenHelper {
         ContentValues zawartosc2 = new ContentValues();
         zawartosc2.put(COL2_2, zasob);
         zawartosc2.put(COL2_3, kwota);
-        sqLitebaza.update(TABLE_NAME2, zawartosc2, COL2_1 + "=ID", null);
+        sqLitebaza.update(TABLE_NAME2, zawartosc2, COL2_1 + " = (SELECT max(" + COL2_1 + ") FROM " + TABLE_NAME2 + ")" , null);
         return true;
     }
 
@@ -149,7 +155,7 @@ public class Bazadanych extends SQLiteOpenHelper {
         ContentValues zawartosc3 = new ContentValues();
         zawartosc3.put(COL3_2, wydatek);
         zawartosc3.put(COL3_3, kwota);
-        sqLitebaza.update(TABLE_NAME3, zawartosc3, COL3_1 + "=ID", null);
+        sqLitebaza.update(TABLE_NAME3, zawartosc3, COL3_1 +" = (SELECT max(" + COL3_1 + ") FROM " + TABLE_NAME3 + ")" , null);
         return true;
     }
 
@@ -162,28 +168,30 @@ public class Bazadanych extends SQLiteOpenHelper {
         sqLitebaza.update(TABLE_NAME4, zawartosc4, COL4_1 + "=ID", null);
         return true;
     }
-    public boolean zaaktualizujtekst5(String wydatek, Integer kwota) {
+    public boolean zaaktualizujtekst5(String data, String wydatek, Integer kwota, String cheatday) {
         SQLiteDatabase sqLitebaza = this.getWritableDatabase();
         ContentValues zawartosc5 = new ContentValues();
-        zawartosc5.put(COL5_2, wydatek);
-        zawartosc5.put(COL5_3, kwota);
-        sqLitebaza.update(TABLE_NAME3, zawartosc5, COL5_1 + "=ID", null);
+        zawartosc5.put(COL5_2, data);
+        zawartosc5.put(COL5_3, wydatek);
+        zawartosc5.put(COL5_4, kwota);
+        zawartosc5.put(COL5_5, cheatday);
+        sqLitebaza.update(TABLE_NAME5, zawartosc5, " = (SELECT max(" + COL5_1 + ") FROM " + TABLE_NAME5 + ")", null);
         return true;
     }
 
     public Integer usuntekst2(String id) {
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
-        return sqLitebaza.delete(TABLE_NAME2, COL2_1 + "=ID", null);
+        return sqLitebaza.delete(TABLE_NAME2, COL2_1 + " = (SELECT max(" + COL2_1 + ") FROM " + TABLE_NAME2 + ")", null);
     }
 
     public Integer usuntekst3(String id) {
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
-        return sqLitebaza.delete(TABLE_NAME3, COL3_1 + "=ID", null);
+        return sqLitebaza.delete(TABLE_NAME3, COL3_1 + " = (SELECT max(" + COL3_1 + ") FROM " + TABLE_NAME3 + ")", null);
     }
 
     public Integer usuntekst5(String id) {
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
-        return sqLitebaza.delete(TABLE_NAME5, COL5_1 + "=ID", null);
+        return sqLitebaza.delete(TABLE_NAME5, COL5_1 + " = (SELECT max(" + COL5_1 + ") FROM " + TABLE_NAME5 + ")", null);
     }
 
     public Cursor odczytajtekst() {
@@ -237,7 +245,7 @@ public class Bazadanych extends SQLiteOpenHelper {
         return suma;
     }
 
-    public int sumawydatkow() {
+    public int sumawydatkowstalych() {
         int suma = 0;
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
         Cursor cursor = sqLitebaza.rawQuery("SELECT SUM(" + COL3_3 + ") FROM " + TABLE_NAME3, null);
@@ -284,6 +292,17 @@ public class Bazadanych extends SQLiteOpenHelper {
         int suma = 0;
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
         Cursor cursor = sqLitebaza.rawQuery("SELECT kwota FROM Wydatki", null);
+        if (cursor.moveToFirst()) {
+            suma = cursor.getInt(0);
+        }
+        cursor.close();
+        return suma;
+    }
+
+    public int sumacheatday() {
+        int suma = 0;
+        SQLiteDatabase sqLitebaza = this.getReadableDatabase();
+        Cursor cursor = sqLitebaza.rawQuery("SELECT SUM(" + COL5_4 + ") FROM Wydatki WHERE cheatday = 'Yes'", null);
         if (cursor.moveToFirst()) {
             suma = cursor.getInt(0);
         }

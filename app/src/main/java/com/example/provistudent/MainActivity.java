@@ -1,5 +1,6 @@
 package com.example.provistudent;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -50,8 +51,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView oszczednosci;
     TextView kartabankowa;
     TextView gotowka;
+    TextView zobaczwydatki;
+    TextView wydajoszczednosci;
+    Cursor cursor;
     int sumadochodu;
-    int sumawydatkow;
+    int sumawydatkowstalych;
     int sumaoszczednosci;
     int sumadochodaktualny;
     int sumakartabankowa;
@@ -81,11 +85,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dochod.setText("Dochód początkowy: " + Integer.toString(sumadochodu) + " zł");
 
         wydatki = findViewById(R.id.wydatki);
-        sumawydatkow = bazadanych.sumawydatkow();
-        wydatki.setText("Wydatki: " + Integer.toString(sumawydatkow) + " zł");
+        sumawydatkowstalych = bazadanych.sumawydatkowstalych();
+        wydatki.setText("Wydatki: " + Integer.toString(sumawydatkowstalych) + " zł");
 
         dochodaktualny = findViewById(R.id.dochodaktualny);
-        sumadochodaktualny = sumadochodu - sumawydatkow;
+        sumadochodaktualny = sumadochodu - sumawydatkowstalych;
         dochodaktualny.setText("Dochód aktualny: " + Integer.toString(sumadochodaktualny) + " zł");
 
         oszczednosci = findViewById(R.id.oszczednosci);
@@ -100,14 +104,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sumagotowka = bazadanych.sumagotowka();
         gotowka.setText("Gotówka: " + Integer.toString(sumagotowka) + " zł");
 
+        zobaczwydatki = (TextView) findViewById(R.id.zobaczwydatki);
+        zobaczwydatki.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                cursor = bazadanych.odczytajtekst5();
+                if (cursor.getCount() == 0) {
+                    wyswietlwiadomosc("Error", "Brak zapisanych zasobów!");
+                    return;
+                }
+                StringBuffer buffer = new StringBuffer();
+                while (cursor.moveToNext()) {
+                    buffer.append("ID: " + cursor.getString(0) + "\n");
+                    buffer.append("Data: " + cursor.getString(1) + "\n");
+                    buffer.append("Wydatek: " + cursor.getString(2) + "\n");
+                    buffer.append("Kwota: " + cursor.getString(3) + "\n");
+                }
+                wyswietlwiadomosc("Zapisane wydatki: ", buffer.toString());
+                cursor.close();
+            }
+        });
+
+        wydajoszczednosci = (TextView) findViewById(R.id.wydajoszczednosci);
+        wydajoszczednosci.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                cursor = bazadanych.odczytajtekst();
+                StringBuffer buffer = new StringBuffer();
+                    buffer.append("Posiadasz: " + sumaoszczednosci + " zł oszczędności"+ "\n");
+                    buffer.append("Na co chcesz wykorzystać swoje oszczędności?" + "\n");
+                    buffer.append("- Na nic" + "\n");
+                    buffer.append("A to sorry że pytam" + "\n");
+                wyswietlwiadomosc("Wykorzystaj oszczędności", buffer.toString());
+            }
+        });
+
         mCalendarView = (CalendarView) findViewById(R.id.zobaczKalendarz);
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                String miesiac = "";
-                String data = year + "/" + month + "/" + dayOfMonth;
+                String data = dayOfMonth + "/" + month + "/" + year;
                 Log.d(TAG, "onSelectDayChange: data:" + data);
+
+                String miesiac = "";
                 if(month == 0) {
                     miesiac = "stycznia";
                 }
@@ -174,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         ArrayList<PieEntry> listawykres = new ArrayList<>();
         listawykres.add(new PieEntry(sumadochodu, "Dochód"));
-        listawykres.add(new PieEntry(sumawydatkow, "Wydatki"));
+        listawykres.add(new PieEntry(sumawydatkowstalych, "Wydatki"));
         listawykres.add(new PieEntry(sumaoszczednosci, "Oszczędności"));
 
         PieDataSet dataSet = new PieDataSet(listawykres, "");
@@ -222,8 +260,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent4);
                 break;
             case R.id.nav_exit:
-                    finish();
-                    System.exit(0);
+                Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                homeIntent.addCategory( Intent.CATEGORY_HOME );
+                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(homeIntent);
+                System.exit(1);
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);
@@ -237,5 +278,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             super.onBackPressed();
         }
+    }
+    public void wyswietlwiadomosc(String tytul, String wiadomosc){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(tytul);
+        builder.setMessage(wiadomosc);
+        builder.show();
     }
 }

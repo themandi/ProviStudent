@@ -12,6 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <include
+            layout="@layout/app_bar_other"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <TextView
             android:id="@+id/profiluzytkownika"
             android:layout_width="match_parent"
@@ -102,6 +108,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/dochodprofil"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Dochód"
@@ -125,7 +132,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/oplatystale"
+                android:id="@+id/oplatystaletekst"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10px"
@@ -133,7 +140,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="18dp"
                 android:textStyle="bold|normal"
-                tools:ignore="MissingConstraints"
+                tools:ignore="DuplicateIds,MissingConstraints"
                 tools:layout_editor_absoluteX="200dp"
                 tools:layout_editor_absoluteY="90dp" />
 
@@ -148,6 +155,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/oplatystale"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Oplaty"
@@ -194,14 +202,15 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/powiadomieniadzien"
+                    android:id="@+id/powiadomieniadzienprofil"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_above="@id/przypominaczdzien" />
                 <TextView
+                    android:id="@+id/cojakiczas"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Co jaki czas bedzie"/>
+                    android:text="Brak"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -244,6 +253,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/oszczednosciprofil"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Oszczedności"
@@ -290,10 +300,10 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/powiadomieniagodzina"
+                    android:id="@+id/powiadomieniagodzinaprofil"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_above="@id/przypominaczgodzina" />
+                    android:text="Brak"/>
             </LinearLayout>
         </LinearLayout>
 
