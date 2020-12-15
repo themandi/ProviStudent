@@ -5,9 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
-
-import static android.os.Build.ID;
 
 public class Bazadanych extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "bazadanych";
@@ -24,6 +21,7 @@ public class Bazadanych extends SQLiteOpenHelper {
     private static final String COL2_1 = "ID";
     private static final String COL2_2 = "zasob";
     private static final String COL2_3 = "kwota";
+    private static final String COL2_4 = "nazwadochodu";
 
     private static final String TABLE_NAME3 = "Wydatki_stale";
     private static final String COL3_1 = "ID";
@@ -33,8 +31,9 @@ public class Bazadanych extends SQLiteOpenHelper {
     private static final String TABLE_NAME4 = "Powiadomienia";
     private static final String COL4_1 = "ID";
     private static final String COL4_2 = "kiedypow";
-    private static final String COL4_3 = "czestotliwosc";
-    private static final String COL4_4 = "kiedydane";
+    private static final String COL4_3 = "kiedypowczas";
+    private static final String COL4_4 = "czestotliwosc";
+    private static final String COL4_5 = "kiedydane";
 
     private static final String TABLE_NAME5 = "Wydatki";
     private static final String COL5_1 = "ID";
@@ -52,13 +51,13 @@ public class Bazadanych extends SQLiteOpenHelper {
         String stworztabele = "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL2 + " TEXT, " + COL3 + " TEXT, " + COL4 + " TEXT, " + COL5 + " TEXT, " + COL6 + " TEXT, " + COL7 + " INTEGER)";
         String stworztabele2 = "CREATE TABLE " + TABLE_NAME2 + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COL2_2 + " TEXT, " + COL2_3 + " INTEGER)";
+                COL2_2 + " TEXT, " + COL2_3 + " INTEGER, " + COL2_4 + " TEXT)";
         String stworztabele3 = "CREATE TABLE " + TABLE_NAME3 + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL3_2 + " TEXT, " + COL3_3 + " INTEGER)";
         String stworztabele4 = "CREATE TABLE " + TABLE_NAME4 + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COL4_2 + " TEXT, " + COL4_3 + " TEXT, " + COL4_4 + " TEXT)";
+                COL4_2 + " TEXT, " + COL4_3 + " TEXT, " + COL4_4 + " TEXT, " + COL4_5 + " TEXT)";
         String stworztabele5 = "CREATE TABLE " + TABLE_NAME5 + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COL5_2 + " TEXT, " + COL5_3 + " TEXT, " + COL5_4 + " TEXT, " + COL5_5 + " INTEGER)";
+                COL5_2 + " INTEGER, " + COL5_3 + " TEXT, " + COL5_4 + " TEXT, " + COL5_5 + " INTEGER)";
 
         db.execSQL(stworztabele);
         db.execSQL(stworztabele2);
@@ -90,11 +89,12 @@ public class Bazadanych extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean dodajtekst2(String zasob, Integer kwota) {
+    public boolean dodajtekst2(String zasob, Integer kwota, String nazwadochodu) {
         SQLiteDatabase sqLitebaza = this.getWritableDatabase();
         ContentValues zawartosc2 = new ContentValues();
         zawartosc2.put(COL2_2, zasob);
         zawartosc2.put(COL2_3, kwota);
+        zawartosc2.put(COL2_4, nazwadochodu);
         sqLitebaza.insert(TABLE_NAME2, null, zawartosc2);
         return true;
     }
@@ -108,16 +108,18 @@ public class Bazadanych extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean dodajtekst4(String kiedypow, String czestotliwosc, String kiedydane) {
+    public boolean dodajtekst4(String kiedypow, String kiedypowczas, String czestotliwosc, String kiedydane) {
         SQLiteDatabase sqLitebaza = this.getWritableDatabase();
         ContentValues zawartosc4 = new ContentValues();
         zawartosc4.put(COL4_2, kiedypow);
-        zawartosc4.put(COL4_3, czestotliwosc);
-        zawartosc4.put(COL4_4, kiedydane);
+        zawartosc4.put(COL4_3, kiedypowczas);
+        zawartosc4.put(COL4_4, czestotliwosc);
+        zawartosc4.put(COL4_5, kiedydane);
         sqLitebaza.insert(TABLE_NAME4, null, zawartosc4);
         return true;
     }
-    public boolean dodajtekst5(String data, String wydatek, Integer kwota, String cheatday) {
+
+    public boolean dodajtekst5(Integer data, String wydatek, Integer kwota, String cheatday) {
         SQLiteDatabase sqLitebaza = this.getWritableDatabase();
         ContentValues zawartosc5 = new ContentValues();
         zawartosc5.put(COL5_2, data);
@@ -141,12 +143,13 @@ public class Bazadanych extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean zaaktualizujtekst2(String zasob, Integer kwota) {
+    public boolean zaaktualizujtekst2(String zasob, Integer kwota, String nazwadochodu) {
         SQLiteDatabase sqLitebaza = this.getWritableDatabase();
         ContentValues zawartosc2 = new ContentValues();
         zawartosc2.put(COL2_2, zasob);
         zawartosc2.put(COL2_3, kwota);
-        sqLitebaza.update(TABLE_NAME2, zawartosc2, COL2_1 + " = (SELECT max(" + COL2_1 + ") FROM " + TABLE_NAME2 + ")" , null);
+        zawartosc2.put(COL2_4, nazwadochodu);
+        sqLitebaza.update(TABLE_NAME2, zawartosc2, COL2_1 + " = (SELECT max(" + COL2_1 + ") FROM " + TABLE_NAME2 + ")", null);
         return true;
     }
 
@@ -155,27 +158,40 @@ public class Bazadanych extends SQLiteOpenHelper {
         ContentValues zawartosc3 = new ContentValues();
         zawartosc3.put(COL3_2, wydatek);
         zawartosc3.put(COL3_3, kwota);
-        sqLitebaza.update(TABLE_NAME3, zawartosc3, COL3_1 +" = (SELECT max(" + COL3_1 + ") FROM " + TABLE_NAME3 + ")" , null);
+        sqLitebaza.update(TABLE_NAME3, zawartosc3, COL3_1 + " = (SELECT max(" + COL3_1 + ") FROM " + TABLE_NAME3 + ")", null);
         return true;
     }
 
-    public boolean zaaktualizujtekst4(String kiedypow, String czestotliwosc, String kiedydane) {
+    public boolean zaaktualizujtekst4(String kiedypow, String kiedypowczas, String czestotliwosc, String kiedydane) {
         SQLiteDatabase sqLitebaza = this.getWritableDatabase();
         ContentValues zawartosc4 = new ContentValues();
         zawartosc4.put(COL4_2, kiedypow);
-        zawartosc4.put(COL4_3, czestotliwosc);
-        zawartosc4.put(COL4_4, kiedydane);
+        zawartosc4.put(COL4_3, kiedypowczas);
+        zawartosc4.put(COL4_4, czestotliwosc);
+        zawartosc4.put(COL4_5, kiedydane);
         sqLitebaza.update(TABLE_NAME4, zawartosc4, COL4_1 + "=ID", null);
         return true;
     }
-    public boolean zaaktualizujtekst5(String data, String wydatek, Integer kwota, String cheatday) {
+
+    public boolean zaaktualizujtekst5(Integer data, String wydatek, Integer kwota, String cheatday) {
         SQLiteDatabase sqLitebaza = this.getWritableDatabase();
         ContentValues zawartosc5 = new ContentValues();
         zawartosc5.put(COL5_2, data);
         zawartosc5.put(COL5_3, wydatek);
         zawartosc5.put(COL5_4, kwota);
         zawartosc5.put(COL5_5, cheatday);
-        sqLitebaza.update(TABLE_NAME5, zawartosc5, " = (SELECT max(" + COL5_1 + ") FROM " + TABLE_NAME5 + ")", null);
+        sqLitebaza.update(TABLE_NAME5, zawartosc5, COL5_1 + " = (SELECT max(" + COL5_1 + ") FROM " + TABLE_NAME5 + ")", null);
+        return true;
+    }
+
+    public boolean zaaktualizujtekstcash(Integer data, String wydatek, Integer kwota, String cheatday) {
+        SQLiteDatabase sqLitebaza = this.getWritableDatabase();
+        ContentValues zawartosc5 = new ContentValues();
+        zawartosc5.put(COL5_2, data);
+        zawartosc5.put(COL5_3, wydatek);
+        zawartosc5.put(COL5_4, kwota);
+        zawartosc5.put(COL5_5, cheatday);
+        sqLitebaza.update(TABLE_NAME5, zawartosc5, COL5_3 + "=Wydatek automatyczny", null);
         return true;
     }
 
@@ -288,10 +304,22 @@ public class Bazadanych extends SQLiteOpenHelper {
         cursor.close();
         return suma;
     }
+
     public int kwotawydana() {
         int suma = 0;
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
         Cursor cursor = sqLitebaza.rawQuery("SELECT kwota FROM Wydatki", null);
+        if (cursor.moveToFirst()) {
+            suma = cursor.getInt(0);
+        }
+        cursor.close();
+        return suma;
+    }
+
+    public int sumawydatkow() {
+        int suma = 0;
+        SQLiteDatabase sqLitebaza = this.getReadableDatabase();
+        Cursor cursor = sqLitebaza.rawQuery("SELECT SUM(" + COL5_4 + ") FROM " + TABLE_NAME5, null);
         if (cursor.moveToFirst()) {
             suma = cursor.getInt(0);
         }
@@ -308,5 +336,29 @@ public class Bazadanych extends SQLiteOpenHelper {
         }
         cursor.close();
         return suma;
+    }
+
+    public int odczytajmaxdate() {
+        int maxid = 0;
+        SQLiteDatabase sqLitebaza = this.getReadableDatabase();
+        Cursor cursor = sqLitebaza.rawQuery("SELECT MAX(" + COL5_2 + ") FROM " + TABLE_NAME5, null);
+        maxid = (cursor.moveToFirst() ? cursor.getInt(0) : 0);
+        return maxid;
+    }
+
+    public int datapowiadomienia() {
+        int datapow = 0;
+        SQLiteDatabase sqLitebaza = this.getReadableDatabase();
+        Cursor cursor = sqLitebaza.rawQuery("SELECT MAX(" + COL4_2 + ") FROM " + TABLE_NAME4, null);
+        datapow = (cursor.moveToFirst() ? cursor.getInt(0) : 0);
+        return datapow;
+    }
+
+    public int godzpowiadomienia() {
+        int godzpowiad = 0;
+        SQLiteDatabase sqLitebaza = this.getReadableDatabase();
+        Cursor cursor = sqLitebaza.rawQuery("SELECT MAX(" + COL4_3 + ") FROM " + TABLE_NAME4, null);
+        godzpowiad = (cursor.moveToFirst() ? cursor.getInt(0) : 0);
+        return godzpowiad;
     }
 }

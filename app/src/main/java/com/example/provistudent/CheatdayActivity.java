@@ -16,6 +16,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 public class CheatdayActivity extends AppCompatActivity {
     Button przyciskzapisz;
     Button przyciskcofnij;
@@ -29,14 +33,26 @@ public class CheatdayActivity extends AppCompatActivity {
     TextView polekwota;
     String wydatek;
     int kwota;
+    String datadozapisu;
+    int datadozapisuint;
+    String dzienimiesiac;
+    String data;
+    int data_aktualnaint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cheatday);
-
         bazadanych = new Bazadanych(CheatdayActivity.this);
         cursor = bazadanych.odczytajtekst5();
+        Intent calendarz = getIntent();
+        dzienimiesiac = calendarz.getStringExtra("data2");
+        data = calendarz.getStringExtra("data");
+        datadozapisu = calendarz.getStringExtra("datadozapisu");
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
+        String data_aktualnastring =  data_aktualna.format(cal.getTime());
+        data_aktualnaint = Integer.parseInt(data_aktualnastring);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -77,11 +93,20 @@ public class CheatdayActivity extends AppCompatActivity {
                     if (!kwotapole.isEmpty()) {
                         kwota = Integer.parseInt(polekwota.getText().toString());
                         String cheatday = "Yes";
-                        Intent calendarz = getIntent();
-                        String data = calendarz.getStringExtra("data");
-                        if (bazadanych.zaaktualizujtekst5(data, wydatek, kwota, cheatday)) {
-                            polekwota.setText("");
-                            Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
+                        Intent i = getIntent();
+                        Bundle extras = i.getExtras();
+                        if (extras.containsKey("Main")) {
+                            if (bazadanych.zaaktualizujtekst5(data_aktualnaint, wydatek, kwota, cheatday)) {
+                                polekwota.setText("");
+                                Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        if (extras.containsKey("Calendar")) {
+                            datadozapisuint = Integer.parseInt(datadozapisu);
+                            if (bazadanych.zaaktualizujtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
+                                polekwota.setText("");
+                                Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                     else {
@@ -206,10 +231,18 @@ public class CheatdayActivity extends AppCompatActivity {
         if(!kwotapole.isEmpty()) {
             kwota = Integer.parseInt(polekwota.getText().toString());
             String cheatday = "Yes";
-            Intent calendarz = getIntent();
-            String data = calendarz.getStringExtra("data");
-            if (bazadanych.dodajtekst5(data, wydatek, kwota, cheatday)) {
-                polekwota.setText("");
+            Intent i = getIntent();
+            Bundle extras = i.getExtras();
+            if(extras.containsKey("Main")) {
+                if (bazadanych.dodajtekst5(data_aktualnaint, wydatek, kwota, cheatday)) {
+                    polekwota.setText("");
+                }
+            }
+            if(extras.containsKey("Calendar")) {
+                datadozapisuint = Integer.parseInt(datadozapisu);
+                if (bazadanych.dodajtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
+                    polekwota.setText("");
+                }
             }
             Toast.makeText(getApplicationContext(), "Dodano!",Toast.LENGTH_SHORT).show();
         }

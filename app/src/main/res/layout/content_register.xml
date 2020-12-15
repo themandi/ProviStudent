@@ -41,7 +41,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="10px"
                 android:layout_marginLeft="10px"
-                android:text="Jak się nazywasz?"
+                android:text="Nazwa użytkownika *:"
                 android:textColor="@android:color/black"
                 android:textSize="18dp"
                 android:textStyle="bold|normal" />
@@ -90,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10px"
-                android:text="Dochód miesięczny:"
+                android:text="Miesięczny dochód: "
                 android:textColor="@android:color/black"
                 android:textSize="18dp"
                 android:textStyle="bold|normal"
@@ -185,13 +185,14 @@
                 android:layout_width="226dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10px"
-                android:text="Czy chcesz otrzymywać przypomnienia o zapłacie rachunków?"
+                android:text="Czy chcesz otrzymywać przypomnienia o terminie opłaty rachunków?"
                 android:textColor="@android:color/black"
                 android:textSize="18dp"
                 android:textStyle="bold|normal"
                 tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="200dp"
                 tools:layout_editor_absoluteY="90dp" />
+
 
             <View
                 android:layout_width="0dp"
@@ -263,6 +264,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_above="@id/przypominaczdzien" />
+
+                <TextView
+                    android:id="@+id/powiadomieniadzien2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/przypominaczdzien" />
+
 
                 <Button
                     android:id="@+id/przypominaczdzien"

@@ -37,8 +37,7 @@
             tools:layout_editor_absoluteX="0dp" />
         <View
             android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:layout_weight="1" />
+            android:layout_height="200dp"/>
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -52,7 +51,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="10px"
                 android:layout_marginLeft="10px"
-                android:text="Zasoby:"
+                android:text="Zasoby (gotówka):"
                 android:textColor="@android:color/black"
                 android:textSize="18dp"
                 android:textStyle="bold|normal" />
@@ -79,22 +78,27 @@
             </LinearLayout>
         </LinearLayout>
 
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            tools:ignore="MissingConstraints" />
+
         <LinearLayout
             android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
+            <EditText
                 android:id="@+id/gotowka"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="10px"
                 android:layout_marginLeft="10px"
-                android:text="Gotówka"
                 android:textColor="@android:color/black"
                 android:textSize="18dp"
-                android:textStyle="bold|normal" />
+                android:textStyle="bold|normal"
+                android:hint="Wpisz nazwę"/>
 
 
             <View

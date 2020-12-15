@@ -32,10 +32,12 @@ public class ProfileActivity extends AppCompatActivity {
         TextView cojakiczas;
         TextView oszczednosciprofil;
         TextView powiadomieniagodzinaprofil;
+        TextView powiadomieniadzienczas;
         int sumaoszczednosci;
         int sumawydatkowstalych;
         int sumadochodu;
         String powiadomieniadzien;
+        String powiadomieniadzientime;
         String coilepowiad;
         String powiadomieniagodz;
 
@@ -61,6 +63,12 @@ public class ProfileActivity extends AppCompatActivity {
         while(cursor2.moveToNext()) {
             powiadomieniadzien = cursor2.getString(cursor2.getColumnIndex("kiedypow"));
             powiadomieniadzienprofil.setText(powiadomieniadzien);
+        }
+
+        powiadomieniadzienczas = findViewById(R.id.powiadomieniadzienczas);
+        while(cursor2.moveToNext()) {
+            powiadomieniadzientime = cursor2.getString(cursor2.getColumnIndex("kiedypowczas"));
+            powiadomieniadzienczas.setText(powiadomieniadzientime);
         }
 
         cojakiczas = findViewById(R.id.cojakiczas);

@@ -1,7 +1,10 @@
 package com.example.provistudent;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -33,6 +36,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,6 +64,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     int sumadochodaktualny;
     int sumakartabankowa;
     int sumagotowka;
+    int data_aktualnaint;
+    int sumawydatkow;
+    String data;
+    String datadozapisu;
+    String dzienimiesiac;
 
     private DrawerLayout drawer;
     private static final String TAG = "MainActivity";
@@ -72,21 +81,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         bazadanych = new Bazadanych(MainActivity.this);
 
         miesiac = findViewById(R.id.miesiac);
-        Calendar cal=Calendar.getInstance();
+        Calendar cal = Calendar.getInstance();
+        sumadochodu = bazadanych.sumadochodu();
+        SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
+        String data_aktualnastring =  data_aktualna.format(cal.getTime());
+        data_aktualnaint = Integer.parseInt(data_aktualnastring);
         SimpleDateFormat nazwa_miesiaca= new SimpleDateFormat("LLLL", new Locale("pl", "PL"));
         String miesiacwybrane=nazwa_miesiaca.format(cal.getTime());
         miesiac.setText(miesiacwybrane.toUpperCase());
+
 
         dochod = findViewById(R.id.dochod);
         sumadochodu = bazadanych.sumadochodu();
         dochod.setText("Dochód początkowy: " + Integer.toString(sumadochodu) + " zł");
 
         wydatki = findViewById(R.id.wydatki);
-        sumawydatkowstalych = bazadanych.sumawydatkowstalych();
-        wydatki.setText("Wydatki: " + Integer.toString(sumawydatkowstalych) + " zł");
+//        sumawydatkowstalych = bazadanych.sumawydatkowstalych();
+        sumawydatkow = bazadanych.sumawydatkow();
+        wydatki.setText("Wydatki: " + Integer.toString(sumawydatkow) + " zł");
 
         dochodaktualny = findViewById(R.id.dochodaktualny);
         sumadochodaktualny = sumadochodu - sumawydatkowstalych;
@@ -104,12 +120,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sumagotowka = bazadanych.sumagotowka();
         gotowka.setText("Gotówka: " + Integer.toString(sumagotowka) + " zł");
 
+        try {
+            sprawdzdata();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         zobaczwydatki = (TextView) findViewById(R.id.zobaczwydatki);
         zobaczwydatki.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 cursor = bazadanych.odczytajtekst5();
                 if (cursor.getCount() == 0) {
-                    wyswietlwiadomosc("Error", "Brak zapisanych zasobów!");
+                    wyswietlwiadomosc2("Error", "Brak zapisanych zasobów!");
                     return;
                 }
                 StringBuffer buffer = new StringBuffer();
@@ -119,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     buffer.append("Wydatek: " + cursor.getString(2) + "\n");
                     buffer.append("Kwota: " + cursor.getString(3) + "\n");
                 }
-                wyswietlwiadomosc("Zapisane wydatki: ", buffer.toString());
+                wyswietlwiadomosc2("Zapisane wydatki: ", buffer.toString());
                 cursor.close();
             }
         });
@@ -130,9 +152,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 cursor = bazadanych.odczytajtekst();
                 StringBuffer buffer = new StringBuffer();
                     buffer.append("Posiadasz: " + sumaoszczednosci + " zł oszczędności"+ "\n");
-                    buffer.append("Na co chcesz wykorzystać swoje oszczędności?" + "\n");
-                    buffer.append("- Na nic" + "\n");
-                    buffer.append("A to sorry że pytam" + "\n");
+                    buffer.append("Czy wykorzystać swoje oszczędności?" + "\n");
                 wyswietlwiadomosc("Wykorzystaj oszczędności", buffer.toString());
             }
         });
@@ -142,52 +162,63 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                String data = dayOfMonth + "/" + month + "/" + year;
+                month = month + 1;
+                String monthstring = ""+month;
+                String daystring = ""+dayOfMonth;
+                if(month < 10) {
+                    monthstring = "0" + monthstring;
+                }
+                if(dayOfMonth < 10) {
+                    daystring = "0" + daystring;
+                }
+                data = daystring + "/" + monthstring + "/" + year;
+                datadozapisu = year + "" + monthstring + "" + daystring;
                 Log.d(TAG, "onSelectDayChange: data:" + data);
 
                 String miesiac = "";
-                if(month == 0) {
+                if(month == 1) {
                     miesiac = "stycznia";
                 }
-                if(month == 1) {
+                if(month == 2) {
                     miesiac = "lutego";
                 }
-                if(month == 2) {
+                if(month == 3) {
                     miesiac = "marca";
                 }
-                if(month == 3) {
+                if(month == 4) {
                     miesiac = "kwietnia";
                 }
-                if(month == 4) {
+                if(month == 5) {
                     miesiac = "maja";
                 }
-                if(month == 5) {
+                if(month == 6) {
                     miesiac = "czerwca";
                 }
-                if(month == 6) {
+                if(month == 7) {
                     miesiac = "lipca";
                 }
-                if(month == 7) {
+                if(month == 8) {
                     miesiac = "sierpnia";
                 }
-                if(month == 8) {
+                if(month == 9) {
                     miesiac = "września";
                 }
-                if(month == 9) {
+                if(month == 10) {
                     miesiac = "października";
                 }
-                if(month == 10) {
+                if(month == 11) {
                     miesiac = "listopada";
                 }
-                if(month == 11) {
+                if(month == 12) {
                     miesiac = "grudnia";
                 }
-                String dzienimiesiac = dayOfMonth + " " + miesiac;
+                dzienimiesiac = daystring + " " + miesiac;
                 Log.d(TAG, "onSelectDayChange: data:" + dzienimiesiac);
 
                 Intent intent = new Intent(MainActivity.this, DayofcalendarActivity.class);
                 intent.putExtra("data",data);
                 intent.putExtra("data2",dzienimiesiac);
+                intent.putExtra("datadozapisu",datadozapisu);
                 startActivity(intent);
             }
         });
@@ -196,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cheatday.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, CheatdayActivity.class);
+                intent.putExtra("Main", "MainActivity");
                 startActivity(intent);
             }
         });
@@ -229,11 +261,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
+        TextView uzytkowniknazwa = (TextView) headerView.findViewById(R.id.uzytkowniknazwa);
+        cursor = bazadanych.odczytajtekst();
+        while(cursor.moveToNext()) {
+            String zapisaneimie = cursor.getString(cursor.getColumnIndex("nazwa_uzytkownika"));
+            uzytkowniknazwa.setText("Witaj, " + zapisaneimie + "!");
+        }
+
+
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+    }
+
+    private void sprawdzdata() throws ParseException {
+        int maxid = bazadanych.odczytajmaxdate();
+        Calendar cal = Calendar.getInstance();
+        int days = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        int kwotawydaj = sumadochodu/days;
+        String wydatek = "Wydatek automatyczny";
+        String cheatday = "No";
+        SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
+        String data_aktualnastring =  data_aktualna.format(cal.getTime());
+        int data_aktualnaint = Integer.parseInt(data_aktualnastring);
+        if(data_aktualnaint > maxid) {
+            bazadanych.dodajtekst5(data_aktualnaint, wydatek, kwotawydaj, cheatday);
+            zwiekszdate(data_aktualnaint);
+        }
+    }
+
+    private int zwiekszdate(int data_aktualnaint) throws ParseException {
+        SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
+        Calendar cal = Calendar.getInstance();
+        String data_aktualnastring =  data_aktualna.format(cal.getTime());
+        cal.setTime(data_aktualna.parse(data_aktualnastring));
+        cal.add(Calendar.DATE, 1);
+        String zmiendate=data_aktualna.format(cal.getTime());
+        int zmianadatyint = Integer.parseInt(zmiendate);
+        data_aktualnaint = zmianadatyint;
+        return data_aktualnaint;
     }
 
     @Override
@@ -279,11 +348,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+    public void wyswietlwiadomosc2(String tytul, String wiadomosc) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(tytul);
+        builder.setMessage(wiadomosc);
+        builder.show();
+    }
     public void wyswietlwiadomosc(String tytul, String wiadomosc){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
         builder.setTitle(tytul);
         builder.setMessage(wiadomosc);
+        builder.setNegativeButton("Tak", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int kwota = bazadanych.sumaoszczednosci();
+                if (kwota != 0) {
+                    String cheatday = "No";
+                    String wydatek = "Oszczędności";
+                    if (bazadanych.dodajtekst5(data_aktualnaint, wydatek, kwota, cheatday)) {
+                        cursor = bazadanych.odczytajtekst();
+                        int oszczednosci = 0;
+                        while(cursor.moveToNext())
+                        {
+                            bazadanych.zaaktualizujtekst(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), oszczednosci);
+                        }
+                        cursor.close();
+                    }
+                    Toast.makeText(getApplicationContext(), "Wydano oszczędności!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Nie masz do wykorzystania oszczędności!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        builder.setNeutralButton("Nie", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
         builder.show();
     }
 }

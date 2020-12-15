@@ -28,14 +28,18 @@ public class EditCashActivity extends AppCompatActivity {
     Cursor cursor;
     TextView polekwota;
     EditText wydanoedycja;
-    String data;
+    String datadozapisu;
+    int datadozapisuint;
     int kwota;
+    String data;
+    String dzienimiesiac;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_cash);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -43,8 +47,10 @@ public class EditCashActivity extends AppCompatActivity {
         cursor = bazadanych.odczytajtekst5();
 
         Intent calendarz = getIntent();
+        dzienimiesiac = calendarz.getStringExtra("data2");
         data = calendarz.getStringExtra("data");
-
+        datadozapisu = calendarz.getStringExtra("datadozapisu");
+        datadozapisuint = Integer.parseInt(datadozapisu);
         wydanoedycja = findViewById(R.id.wydanoedycja);
         polekwota = findViewById(R.id.polekwota);
         przyciskcofnij = (Button) findViewById(R.id.cofnij);
@@ -81,7 +87,7 @@ public class EditCashActivity extends AppCompatActivity {
                 else if (cursor.getCount() > 0) {
                     if(!kwotapole.isEmpty()) {
                         kwota = Integer.parseInt(polekwota.getText().toString());
-                        if (bazadanych.zaaktualizujtekst5(data, wydatek, kwota, cheatday)) {
+                        if (bazadanych.zaaktualizujtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
                             polekwota.setText("");
                             Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
                         }
@@ -143,6 +149,9 @@ public class EditCashActivity extends AppCompatActivity {
         else if(cursor.getCount()>0) {
             Toast.makeText(getApplicationContext(), "Zapisano!",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(EditCashActivity.this, DayofcalendarActivity.class);
+            intent.putExtra("data",data);
+            intent.putExtra("data2",dzienimiesiac);
+            intent.putExtra("datadozapisu",datadozapisu);
             startActivity(intent);
         }
         cursor.close();
@@ -152,10 +161,24 @@ public class EditCashActivity extends AppCompatActivity {
         String kwotapole = polekwota.getText().toString();
         String wydatek = wydanoedycja.getText().toString();
         String cheatday = "No";
-
+        cursor = bazadanych.odczytajtekst5();
+        while (cursor.moveToNext()) {
+            String datawbazie = cursor.getString(1);
+            if (datawbazie == datadozapisu) {
+                if (!kwotapole.isEmpty()) {
+                    kwota = Integer.parseInt(polekwota.getText().toString());
+                    if (bazadanych.zaaktualizujtekstcash(datadozapisuint, wydatek, kwota, cheatday)) {
+                        polekwota.setText("");
+                    }
+                    Toast.makeText(getApplicationContext(), "Dodano!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Błąd! Dane nie zostały wprowadzone.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
         if(!kwotapole.isEmpty()) {
             kwota = Integer.parseInt(polekwota.getText().toString());
-            if (bazadanych.dodajtekst5(data, wydatek, kwota, cheatday)) {
+            if (bazadanych.dodajtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
                 polekwota.setText("");
             }
             Toast.makeText(getApplicationContext(), "Dodano!",Toast.LENGTH_SHORT).show();

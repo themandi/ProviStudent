@@ -68,12 +68,13 @@ public class NewCheatdayActivity extends AppCompatActivity {
                 String wydatek = polewydatek.getText().toString();
                 String cheatday = "Yes";
                 calendarz = getIntent();
-                String data = calendarz.getStringExtra("data");
+                String datadozapisu = calendarz.getStringExtra("datadozapisu");
+                int datadozapisuint = Integer.parseInt(datadozapisu);
                 if (cursor.getCount() == 0) {
                     Toast.makeText(getApplicationContext(), "Nie można zaaktualizować!", Toast.LENGTH_SHORT).show();
                 } else if (cursor.getCount() > 0) {
                     if (!kwotapole.isEmpty()) {
-                        if (bazadanych.zaaktualizujtekst5(data, wydatek, kwota, cheatday)) {
+                        if (bazadanych.zaaktualizujtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
                             polekwota.setText("");
                             Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
                         }
@@ -96,7 +97,7 @@ public class NewCheatdayActivity extends AppCompatActivity {
                 StringBuffer buffer = new StringBuffer();
                 while (cursor.moveToNext()) {
                     buffer.append("ID: " + cursor.getString(0) + "\n");
-                    buffer.append("Data: " + cursor.getString(1) + " (cheatday)" + "\n");
+                    buffer.append("Data: " + cursor.getString(1) + "\n");
                     buffer.append("Wydatek: " + cursor.getString(2) + "\n");
                     buffer.append("Kwota: " + cursor.getString(3) + "\n");
                 }
@@ -142,9 +143,10 @@ public class NewCheatdayActivity extends AppCompatActivity {
         String wydatek = polewydatek.getText().toString();
         String cheatday = "Yes";
         calendarz = getIntent();
-        String data = calendarz.getStringExtra("data");
+        String datadozapisu = calendarz.getStringExtra("datadozapisu");
+        int datadozapisuint = Integer.parseInt(datadozapisu);
         if (!kwotapole.isEmpty()) {
-            if (bazadanych.dodajtekst5(data, wydatek, kwota, cheatday)) {
+            if (bazadanych.dodajtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
                 polekwota.setText("");
                 polewydatek.setText("");
             }

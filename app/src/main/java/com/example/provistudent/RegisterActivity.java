@@ -1,14 +1,26 @@
 package com.example.provistudent;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.DialogFragment;
+
+import android.text.TextUtils;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.CompoundButton;
 
@@ -42,6 +54,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     TextView poleoszczednosci;
     TextView powiadomieniagodzina;
     TextView powiadomieniadzien;
+    TextView powiadomieniadzien2;
     String czestotliwoscopcje;
     String wybrano = "No";
     String wybrano2 = "No";
@@ -49,11 +62,24 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     String wybrano4 = "No";
     String data;
     String godzina;
+    String godzina2;
+    DialogFragment timePicker;
+    DialogFragment timePicker2;
+    DatePickerDialog datepicker;
+    String time;
+    String time2;
+    String date;
+    Calendar c;
+    String timezmienna = "";
+    private NotificationManagerCompat notificationManager;
+    public static final String CHANNEL_1_ID = "kanal1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        notificationManager = NotificationManagerCompat.from(this);
 
         poleimie = findViewById(R.id.poleimie);
         przyciskzapisz = findViewById(R.id.zapisz);
@@ -222,8 +248,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         przypominaczgodzina.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment timePicker = new TimePicker();
+                timePicker = new TimePicker();
+                timezmienna = "picker1";
                 timePicker.show(getSupportFragmentManager(), "time picker");
+//                dodajpowiadomienie();
             }
         });
 //      przypominacz czasu
@@ -233,28 +261,72 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onClick(View v) {
                 showDatePickerDialog();
+                showTimePickerDialog();
             }
         });
     }
+    private void showDatePickerDialog() {
+        datepicker = new DatePickerDialog(this,this, Calendar.getInstance().get(Calendar.YEAR),Calendar.getInstance().get(Calendar.MONTH),Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        );
+        datepicker.show();
+    }
+    private void showTimePickerDialog() {
+        timePicker2 = new TimePicker();
+        timezmienna = "picker2";
+        timePicker2.show(getSupportFragmentManager(), "time picker");
+//        stworzkanalpowiadomienia();
+//        dodajpowiadomienie();
+    }
 
-            private void showDatePickerDialog() {
-                DatePickerDialog datepicker = new DatePickerDialog(this,this, Calendar.getInstance().get(Calendar.YEAR),Calendar.getInstance().get(Calendar.MONTH),Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-                );
-                datepicker.show();
-            }
+    private void stworzkanalpowiadomienia() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel kanal = new NotificationChannel(CHANNEL_1_ID, "Kanal", NotificationManager.IMPORTANCE_HIGH);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(kanal);
+        }
+    }
+
+    private void dodajpowiadomienie() {
+        String message = "blabla";
+        Intent activity = new Intent(this, MainActivity.class);
+        PendingIntent content = PendingIntent.getActivity(this,
+                0, activity, 0);
+        Intent broadcastIntent = new Intent(this, NotificationReceiver.class);
+        broadcastIntent.putExtra("Opłać wszystkie", message);
+        broadcastIntent.putExtra("czas", time);
+        broadcastIntent.putExtra("data", date);
+        PendingIntent actionIntent = PendingIntent.getBroadcast(this,
+                0, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification powiadomienie = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setContentTitle("Zapłać za opłaty stałe!")
+                .setContentText("Kliknij i opłać opłaty stałe!")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setColor(Color.GREEN)
+                .setContentIntent(content)
+                .setAutoCancel(true)
+                .setOnlyAlertOnce(true)
+                .addAction(R.mipmap.ic_launcher, "Opłać wszystkie", actionIntent)
+                .addAction(R.mipmap.ic_launcher, "Odłóż", actionIntent)
+                .build();
+        notificationManager.notify(1, powiadomienie);
+    }
 
     //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onZapisz() {
         String imie = poleimie.getText().toString();
         int oszczednosci = 0;
         if(wybrano2 == "Yes") {
-            data = powiadomieniadzien.getText().toString();
+            data = date;
+            godzina2 = time2;
         }
         if(wybrano3 == "Yes") {
             oszczednosci = Integer.parseInt(poleoszczednosci.getText().toString());
         }
         if(wybrano4 == "Yes") {
-            godzina = powiadomieniagodzina.getText().toString();
+            godzina = time;
         }
         if(!imie.isEmpty()) {
             if (cursor.getCount() == 0) {
@@ -271,31 +343,33 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             }
             if(wybrano2 == "Yes" & wybrano4 == "Yes") {
                 if(cursor2.getCount() == 0) {
-                    bazadanych.dodajtekst4(data, czestotliwoscopcje, godzina);
+                    bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina);
                 }
                 else {
-                    bazadanych.zaaktualizujtekst4(data, czestotliwoscopcje, godzina);
+                    bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina);
                 }
             }
             else if(wybrano2 == "Yes") {
                 godzina = "";
                 if(cursor2.getCount() == 0) {
-                    bazadanych.dodajtekst4(data, czestotliwoscopcje, godzina);
+                    bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina);
                 }
                 else {
-                    bazadanych.zaaktualizujtekst4(data, czestotliwoscopcje, godzina);
+                    bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina);
                 }
             }
             else if(wybrano4 == "Yes") {
                 data = "";
+                godzina2 = "";
                 if(cursor2.getCount() == 0) {
-                    bazadanych.dodajtekst4(data, czestotliwoscopcje, godzina);
+                    bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina);
                 }
                 else {
-                    bazadanych.zaaktualizujtekst4(data, czestotliwoscopcje, godzina);
+                    bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina);
                 }
             }
             Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+            finish();
             startActivity(intent);
         }
         else {
@@ -307,14 +381,43 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
     @Override
     public void onTimeSet(android.widget.TimePicker view, int hourOfDay, int minute) {
-        powiadomieniagodzina = (TextView) findViewById(R.id.powiadomieniagodzina);
-        powiadomieniagodzina.setText("Czas: " + hourOfDay + ":" + minute);
+        String minutestring = "" + minute;
+        String hourstring = "" + hourOfDay;
+        if(hourOfDay < 10) {
+            hourstring = "0" + hourstring;
+        }
+        if(minute < 10) {
+            minutestring = "0" + minutestring;
+        }
+        if (TextUtils.isEmpty(timezmienna))
+            return;
+        if (timezmienna.equalsIgnoreCase("picker1")){
+            powiadomieniagodzina = (TextView) findViewById(R.id.powiadomieniagodzina);
+            powiadomieniagodzina.setText("Czas: " + hourstring + ":" + minutestring);
+            time = hourstring + "" + minutestring;
+        }
+        else if (timezmienna.equalsIgnoreCase("picker2")){
+            powiadomieniadzien2 = (TextView) findViewById(R.id.powiadomieniadzien2);
+            powiadomieniadzien2.setText("Czas: " + hourstring + ":" + minutestring);
+            time2 = hourstring + "" + minutestring;
+        }
+        timezmienna = "";
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        month = month + 1;
+        String monthstring = ""+month;
+        String daystring = ""+dayOfMonth;
+        if(month < 10) {
+            monthstring = "0" + monthstring;
+        }
+        if(dayOfMonth < 10) {
+            daystring = "0" + daystring;
+        }
         powiadomieniadzien = (TextView) findViewById(R.id.powiadomieniadzien);
-        powiadomieniadzien.setText("Data: "+ dayOfMonth + "/" + month + "/" + year);
+        powiadomieniadzien.setText("Data: " + daystring + "/" + monthstring + "/" + year);
+        date = year + "" + monthstring + "" + daystring;
     }
 
     @Override

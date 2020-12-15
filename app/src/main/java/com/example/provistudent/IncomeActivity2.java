@@ -25,6 +25,7 @@ public class IncomeActivity2 extends AppCompatActivity {
     EditText polekwota2;
     String zasob;
     int kwota;
+    EditText polekarta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class IncomeActivity2 extends AppCompatActivity {
         bazadanych = new Bazadanych(IncomeActivity2.this);
         cursor = bazadanych.odczytajtekst2();
 
+        polekarta = findViewById(R.id.karta);
         polekwota2 = findViewById(R.id.polekwota2);
         przyciskcofnij = (Button) findViewById(R.id.cofnij);
         przyciskcofnij.setOnClickListener(new View.OnClickListener() {
@@ -66,13 +68,14 @@ public class IncomeActivity2 extends AppCompatActivity {
             public void onClick(View v) {
                 String kwotapole = polekwota2.getText().toString();
                 zasob = "Karta płatnicza";
+                String kartapole = polekarta.getText().toString();
                 if (cursor.getCount() == 0) {
                     Toast.makeText(getApplicationContext(), "Nie można zaaktualizować!",Toast.LENGTH_SHORT).show();
                 }
                 else if (cursor.getCount() > 0) {
                     if (!kwotapole.isEmpty()) {
                         kwota = Integer.parseInt(polekwota2.getText().toString());
-                        if (bazadanych.zaaktualizujtekst2(zasob, kwota)) {
+                        if (bazadanych.zaaktualizujtekst2(zasob, kwota, kartapole)) {
                             polekwota2.setText("");
                             Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
                         }
@@ -97,6 +100,7 @@ public class IncomeActivity2 extends AppCompatActivity {
                 while (cursor.moveToNext()) {
                     buffer.append("ID: " + cursor.getString(0) + "\n");
                     buffer.append("Zasób: " + cursor.getString(1) + "\n");
+                    buffer.append("Nazwa: " + cursor.getString(3) + "\n");
                     buffer.append("Kwota: " + cursor.getString(2) + "\n");
                 }
                 wyswietlwiadomosc("Zapisane zasoby: ", buffer.toString());
@@ -141,12 +145,13 @@ public class IncomeActivity2 extends AppCompatActivity {
     //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onDodaj() {
         String kwotapole = polekwota2.getText().toString();
+        String kartapole = polekarta.getText().toString();
         if(!kwotapole.isEmpty()) {
             kwota = Integer.parseInt(polekwota2.getText().toString());
         }
-        String zasob = "Karta płatnicza";
+        zasob = "Karta płatnicza";
         if(!kwotapole.isEmpty()) {
-            if (bazadanych.dodajtekst2(zasob, kwota)) {
+            if (bazadanych.dodajtekst2(zasob, kwota, kartapole)) {
                 polekwota2.setText("");
             }
             Toast.makeText(getApplicationContext(), "Dodano!",Toast.LENGTH_SHORT).show();

@@ -42,9 +42,8 @@ public class DayofcalendarActivity extends AppCompatActivity{
     int kwotawydana;
     int sumaprzekroczono;
     int sumacheatday;
-    boolean klikniete=false;
-    Intent calendarz;
     String data;
+    int datadozapisuint;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -59,11 +58,13 @@ public class DayofcalendarActivity extends AppCompatActivity{
         bazadanych = new Bazadanych(DayofcalendarActivity.this);
         cursor = bazadanych.odczytajtekst5();
 
-        calendarz = getIntent();
-        String date = calendarz.getStringExtra("data2");
+        Intent calendarz = getIntent();
+        String dzienimiesiac = calendarz.getStringExtra("data2");
         data = calendarz.getStringExtra("data");
+        String datadozapisu = calendarz.getStringExtra("datadozapisu");
+        datadozapisuint = Integer.parseInt(datadozapisu);
         TextView tekstdata = (TextView) findViewById(R.id.jakidzien);
-        tekstdata.setText(date);
+        tekstdata.setText(dzienimiesiac);
 
         Calendar cal=Calendar.getInstance();
         int days = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -80,12 +81,7 @@ public class DayofcalendarActivity extends AppCompatActivity{
         kwotadowydania.setText("Sugerowany wydatek na dziś: " + Integer.toString(kwotawydaj) + " zł");
 
         wydanokwota = findViewById(R.id.wydanokwota);
-//        if(klikniete == false) {
-//            kwotawydana = kwotawydaj;
-//            onDodaj();
-//        }
         kwotawydana = bazadanych.kwotawydana();
-        onDodaj();
         wydanokwota.setText("Kwota wydatków dzisiejszych: " + Integer.toString(kwotawydana) + " zł");
 
         przekroczono = findViewById(R.id.przekroczono);
@@ -109,8 +105,10 @@ public class DayofcalendarActivity extends AppCompatActivity{
         przyciskedytuj.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
             {
-                klikniete = true;
                 Intent intent = new Intent(DayofcalendarActivity.this, EditCashActivity.class);
+                intent.putExtra("data",data);
+                intent.putExtra("data2",dzienimiesiac);
+                intent.putExtra("datadozapisu",datadozapisu);
                 startActivity(intent);
             }
         });
@@ -120,6 +118,10 @@ public class DayofcalendarActivity extends AppCompatActivity{
             public void onClick(View view)
             {
                 Intent intent = new Intent(DayofcalendarActivity.this, CheatdayActivity.class);
+                intent.putExtra("Calendar", "DayofcalendarActivity");
+                intent.putExtra("data",data);
+                intent.putExtra("data2",dzienimiesiac);
+                intent.putExtra("datadozapisu",datadozapisu);
                 startActivity(intent);
             }
         });
@@ -142,15 +144,5 @@ public class DayofcalendarActivity extends AppCompatActivity{
         Intent intent = new Intent(DayofcalendarActivity.this, MainActivity.class);
         startActivity(intent);
         //Metoda do zapisywania
-    }
-    //Metoda wykorzystywana podczas wywołania przycisku "Dodaj"
-    void onDodaj() {
-        String wydatek = "Wydatek";
-        int kwota = kwotawydaj;
-        String cheatday = "No";
-        bazadanych.dodajtekst5(data, wydatek, kwota, cheatday);
-        while(cursor.moveToNext()) {
-            Toast.makeText(getApplicationContext(),cursor.getString(3),Toast.LENGTH_SHORT).show();
-        }
     }
 }
