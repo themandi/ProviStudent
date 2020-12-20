@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Bazadanych bazadanych;
     Button cheatday;
     TextView miesiac;
-    TextView dochod;
+    TextView przychod;
     TextView dochodaktualny;
     TextView wydatki;
     TextView oszczednosci;
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView zobaczwydatki;
     TextView wydajoszczednosci;
     Cursor cursor;
-    int sumadochodu;
+    int sumaprzychodu;
     int sumawydatkowstalych;
     int sumaoszczednosci;
     int sumadochodaktualny;
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         miesiac = findViewById(R.id.miesiac);
         Calendar cal = Calendar.getInstance();
-        sumadochodu = bazadanych.sumadochodu();
+        sumaprzychodu = bazadanych.sumaprzychodu();
         SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
         String data_aktualnastring =  data_aktualna.format(cal.getTime());
         data_aktualnaint = Integer.parseInt(data_aktualnastring);
@@ -93,33 +93,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String miesiacwybrane=nazwa_miesiaca.format(cal.getTime());
         miesiac.setText(miesiacwybrane.toUpperCase());
         if(dzien_aktualnyint == 01) {
-            sumadochodu = bazadanych.sumadochodu();
+            sumaprzychodu = bazadanych.sumaprzychodu();
             sumawydatkow = bazadanych.sumawydatkow();
             sumaoszczednosci = bazadanych.sumaoszczednosci();
-            bazadanych.dodajtekst6(miesiac_aktualnyint, sumadochodu, sumawydatkow, sumaoszczednosci);
+            bazadanych.dodajtekst6(miesiac_aktualnyint, sumaprzychodu, sumawydatkow, sumaoszczednosci);
             bazadanych.usunwszystko5();
             cursor = bazadanych.odczytajtekst();
-            int oszczednosci = (sumadochodu-sumawydatkow)+sumaoszczednosci;
+            int oszczednosci = (sumaprzychodu-sumawydatkow)+sumaoszczednosci;
             while(cursor.moveToNext())
             {
                 bazadanych.zaaktualizujtekst(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), oszczednosci);
             }
             cursor.close();
         }
-        cursor = bazadanych.odczytajtekst6();
-        while(cursor.moveToNext())
-        {
-            Toast.makeText(getApplicationContext(), "1: "+cursor.getString(1),Toast.LENGTH_SHORT).show();
-            Toast.makeText(getApplicationContext(), "2: "+cursor.getString(2),Toast.LENGTH_SHORT).show();
-            Toast.makeText(getApplicationContext(), "3: "+cursor.getString(3),Toast.LENGTH_SHORT).show();
-            Toast.makeText(getApplicationContext(), "4: "+cursor.getString(4),Toast.LENGTH_SHORT).show();
-        }
-        cursor.close();
 
-        dochod = findViewById(R.id.dochod);
-        findViewById(R.id.dochod).invalidate();
-        sumadochodu = bazadanych.sumadochodu();
-        dochod.setText("Dochód początkowy: " + Integer.toString(sumadochodu) + " zł");
+//DO USUNIĘCIA PRZED ODDANIEM APLIKACJI. JEŚLI BĘDZIESZ POTRZEBOWAĆ DO STATYSTYK UZUPEŁNIENIA DO PRACY LOFKI
+            int dochodbla = 2000;
+            int wydatekbla = 1700;
+            int oszczednoscbla = 300;
+            int dochodbla2 = 2200;
+            int wydatekbla2 = 1890;
+            int oszczednoscbla2 = 410;
+            int dochodbla3 = 1800;
+            int wydatekbla3 = 1567;
+            int oszczednoscbla3 = 643;
+            String miesiac = "01";
+            String miesiac2 = "02";
+            String miesiac3 = "03";
+            bazadanych.dodajtekst6(miesiac, dochodbla, wydatekbla, oszczednoscbla);
+            bazadanych.dodajtekst6(miesiac2, dochodbla2, wydatekbla2, oszczednoscbla2);
+            bazadanych.dodajtekst6(miesiac3, dochodbla3, wydatekbla3, oszczednoscbla3);
+
+//
+//        cursor = bazadanych.odczytajtekst6();
+//        while(cursor.moveToNext())
+//        {
+//            Toast.makeText(getApplicationContext(), "1: "+cursor.getString(1),Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "2: "+cursor.getString(2),Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "3: "+cursor.getString(3),Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "4: "+cursor.getString(4),Toast.LENGTH_SHORT).show();
+//        }
+//        cursor.close();
+
+
+
+        przychod = findViewById(R.id.przychod);
+        findViewById(R.id.przychod).invalidate();
+        sumaprzychodu = bazadanych.sumaprzychodu();
+        przychod.setText("Przychód: " + Integer.toString(sumaprzychodu) + " zł");
 
         wydatki = findViewById(R.id.wydatki);
         findViewById(R.id.wydatki).invalidate();
@@ -128,8 +149,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         dochodaktualny = findViewById(R.id.dochodaktualny);
         findViewById(R.id.dochodaktualny).invalidate();
-        sumadochodaktualny = sumadochodu - sumawydatkow;
-        dochodaktualny.setText("Dochód aktualny: " + Integer.toString(sumadochodaktualny) + " zł");
+        sumadochodaktualny = sumaprzychodu - sumawydatkow;
+        dochodaktualny.setText("Dochód: " + Integer.toString(sumadochodaktualny) + " zł");
 
         oszczednosci = findViewById(R.id.oszczednosci);
         findViewById(R.id.oszczednosci).invalidate();
@@ -269,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         wykreskolowy.setDrawEntryLabels(false);
 
         ArrayList<PieEntry> listawykres = new ArrayList<>();
-        listawykres.add(new PieEntry(sumadochodu, "Dochód"));
+        listawykres.add(new PieEntry(sumaprzychodu, "Przychód"));
         listawykres.add(new PieEntry(sumawydatkowstalych, "Wydatki"));
         listawykres.add(new PieEntry(sumaoszczednosci, "Oszczędności"));
 
@@ -306,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int maxid = bazadanych.odczytajmaxdate();
         Calendar cal = Calendar.getInstance();
         int days = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-        int kwotawydaj = sumadochodu/days;
+        int kwotawydaj = sumaprzychodu/days;
         String wydatek = "Automatyczny";
         String cheatday = "No";
         SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));

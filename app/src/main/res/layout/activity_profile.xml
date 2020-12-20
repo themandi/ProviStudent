@@ -86,11 +86,11 @@
             tools:ignore="MissingConstraints">
 
             <TextView
-                android:id="@+id/dochodmiech"
+                android:id="@+id/przychodmiech"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10px"
-                android:text="Dochód miesięczny:"
+                android:text="Przychód miesięczny:"
                 android:textColor="@android:color/black"
                 android:textSize="18dp"
                 android:textStyle="bold|normal"
@@ -109,11 +109,11 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/dochodprofil"
+                    android:id="@+id/przychodprofil"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
-                    android:text="Dochód"
+                    android:text="Przychód"
                     android:layout_marginRight="30px" />
             </LinearLayout>
         </LinearLayout>

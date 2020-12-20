@@ -171,22 +171,30 @@ public class EditCashActivity extends AppCompatActivity {
     }
 
     void onDodaj() {
+        // Odczytanie informacji z EditText
         String kwotapole = polekwota.getText().toString();
         kwota = Integer.parseInt(polekwota.getText().toString());
         String wydatek = wydanoedycja.getText().toString();
+        // Zmienne potrzebne do odczytania oraz zaaktualizowania bazy danych
         String cheatday = "No";
         String wydatekbaza;
         String databaza;
         String wydatekstring = "Automatyczny";
+        // Odczytanie informacji z bazy danych
         cursor = bazadanych.odczytajtekst5();
+        // Zabezpieczenie przed przedwczesnym wprowadzeniem danych o wydatkach
         if (datadozapisuint <= dataint) {
+            // Jeśli nie ma żadnych wydatków
             if (cursor.getCount() == 0) {
                 Toast.makeText(getApplicationContext(), "Brak wydatków!", Toast.LENGTH_SHORT).show();
             } else {
+                // Odczytywanie wydatków z bazy danych
                 while (cursor.moveToNext()) {
                     wydatekbaza = cursor.getString(cursor.getColumnIndex("wydatek"));
                     databaza = cursor.getString(cursor.getColumnIndex("data"));
+                    // Jeśli wydatek jest automatyczny i data odpowiada dacie zaznaczonej w kalendarzu
                     if (wydatekbaza.equals(wydatekstring) && databaza.equals(datadozapisu)) {
+                        // Zabezpieczenie przed wprowadzeniem pustej kwoty wydatku
                         if (!kwotapole.isEmpty()) {
                             if (bazadanych.zaaktualizujtekstcash(datadozapisuint, wydatek, kwota, cheatday)) {
                                 polekwota.setText("");
@@ -198,6 +206,7 @@ public class EditCashActivity extends AppCompatActivity {
                         }
                     }
                 }
+                // Jeśli nie znaleziono wydatku automatycznego wydatku, można dodać wydatek
                 if (licznik == 0) {
                     if (!kwotapole.isEmpty()) {
                         if (bazadanych.dodajtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
@@ -209,6 +218,7 @@ public class EditCashActivity extends AppCompatActivity {
                     }
                 }
             }
+            // Zamknięcie kursora
             cursor.close();
         } else {
             Toast.makeText(getApplicationContext(), "Nie możesz dodać wcześniej wydatków!", Toast.LENGTH_SHORT).show();

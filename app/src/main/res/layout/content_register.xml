@@ -90,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10px"
-                android:text="Miesięczny dochód: "
+                android:text="Miesięczny przychód: "
                 android:textColor="@android:color/black"
                 android:textSize="18dp"
                 android:textStyle="bold|normal"

@@ -20,6 +20,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.DialogFragment;
 
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.CompoundButton;
@@ -225,15 +226,19 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 switch (position) {
                     case 1:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co miesiąc", Toast.LENGTH_SHORT).show();
+                        scheduleNotification(getNotification("5 second delay"), 5000);
                         break;
                     case 2:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co trzy miesiące", Toast.LENGTH_SHORT).show();
+//                        scheduleNotification(getNotification("10 second delay"), 10000);
                         break;
                     case 3:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co pół roku", Toast.LENGTH_SHORT).show();
+//                        scheduleNotification(getNotification("30 second delay"), 30000);
                         break;
                     case 4:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co rok", Toast.LENGTH_SHORT).show();
+//                        scheduleNotification(getNotification("60 second delay"), 60000);
                         break;
                 }
             }
@@ -274,45 +279,86 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         timePicker2 = new TimePicker();
         timezmienna = "picker2";
         timePicker2.show(getSupportFragmentManager(), "time picker");
-//        stworzkanalpowiadomienia();
-//        dodajpowiadomienie();
     }
 
-    private void stworzkanalpowiadomienia() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel kanal = new NotificationChannel(CHANNEL_1_ID, "Kanal", NotificationManager.IMPORTANCE_HIGH);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(kanal);
-        }
+
+//    private void scheduleNotification(Notification notification) {
+//
+//        Intent notificationIntent = new Intent(this, NotificationReceiver.class);
+//        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, 1);
+//        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION, notification);
+//        int year = 2020;
+//        int month = 12;
+//        int day = 20;
+//        int hour = 19;
+//        int minute = 25;
+//        Calendar calendar =  Calendar.getInstance();
+//        calendar.set(year, month, day, hour, minute);
+//        calendar.set(Calendar.SECOND, 0);
+//        long kiedy = calendar.getTimeInMillis();
+//        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, 0);
+//        alarmManager.set(AlarmManager.RTC, kiedy, pendingIntent);
+//    }
+
+    private void scheduleNotification(Notification notification, int delay) {
+
+        Intent notificationIntent = new Intent(this, NotificationReceiver.class);
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.add(Calendar.SECOND, 3);
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
-    private void dodajpowiadomienie() {
-        String message = "blabla";
-        Intent activity = new Intent(this, MainActivity.class);
-        PendingIntent content = PendingIntent.getActivity(this,
-                0, activity, 0);
-        Intent broadcastIntent = new Intent(this, NotificationReceiver.class);
-        broadcastIntent.putExtra("Opłać wszystkie", message);
-        broadcastIntent.putExtra("czas", time);
-        broadcastIntent.putExtra("data", date);
-        PendingIntent actionIntent = PendingIntent.getBroadcast(this,
-                0, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Notification powiadomienie = new NotificationCompat.Builder(this, CHANNEL_1_ID)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentTitle("Zapłać za opłaty stałe!")
-                .setContentText("Kliknij i opłać opłaty stałe!")
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                .setColor(Color.GREEN)
-                .setContentIntent(content)
-                .setAutoCancel(true)
-                .setOnlyAlertOnce(true)
-                .addAction(R.mipmap.ic_launcher, "Opłać wszystkie", actionIntent)
-                .addAction(R.mipmap.ic_launcher, "Odłóż", actionIntent)
-                .build();
-        notificationManager.notify(1, powiadomienie);
+    private Notification getNotification(String content) {
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setContentTitle("Scheduled Notification");
+        builder.setContentText(content);
+        builder.setSmallIcon(R.mipmap.ic_launcher_round);
+        return builder.build();
     }
+
+//    private void stworzkanalpowiadomienia() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            NotificationChannel kanal = new NotificationChannel(CHANNEL_1_ID, "Kanal", NotificationManager.IMPORTANCE_HIGH);
+//            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+//            notificationManager.createNotificationChannel(kanal);
+//        }
+//    }
+//
+//    private void dodajpowiadomienie() {
+//        String message = "blabla";
+//        Intent activity = new Intent(this, MainActivity.class);
+//        PendingIntent content = PendingIntent.getActivity(this,
+//                0, activity, 0);
+//        Intent broadcastIntent = new Intent(this, NotificationReceiver.class);
+//        broadcastIntent.putExtra("Opłać wszystkie", message);
+//        broadcastIntent.putExtra("czas", time);
+//        broadcastIntent.putExtra("data", date);
+//        PendingIntent actionIntent = PendingIntent.getBroadcast(this,
+//                0, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        Notification powiadomienie = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+//                .setSmallIcon(R.mipmap.ic_launcher_round)
+//                .setContentTitle("Zapłać za opłaty stałe!")
+//                .setContentText("Kliknij i opłać opłaty stałe!")
+//                .setPriority(NotificationCompat.PRIORITY_HIGH)
+//                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+//                .setColor(Color.GREEN)
+//                .setContentIntent(content)
+//                .setAutoCancel(true)
+//                .setOnlyAlertOnce(true)
+//                .addAction(R.mipmap.ic_launcher, "Opłać wszystkie", actionIntent)
+//                .addAction(R.mipmap.ic_launcher, "Odłóż", actionIntent)
+//                .build();
+//        notificationManager.notify(1, powiadomienie);
+//    }
 
     //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onZapisz() {

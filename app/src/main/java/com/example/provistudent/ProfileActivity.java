@@ -30,7 +30,7 @@ public class ProfileActivity extends AppCompatActivity {
         Cursor cursor;
         Cursor cursor2;
         Bazadanych bazadanych;
-        TextView dochodprofil;
+        TextView przychodprofil;
         TextView oplatystale;
         TextView powiadomieniadzienprofil;
         TextView cojakiczas;
@@ -39,7 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
         TextView powiadomieniadzienczas;
         int sumaoszczednosci;
         int sumawydatkowstalych;
-        int sumadochodu;
+        int sumaprzychodu;
         String powiadomieniadzien;
         String powiadomieniadzientime;
         String coilepowiad;
@@ -54,9 +54,9 @@ public class ProfileActivity extends AppCompatActivity {
             imie.setText(zapisaneimie);
         }
 
-        dochodprofil = findViewById(R.id.dochodprofil);
-        sumadochodu = bazadanych.sumadochodu();
-        dochodprofil.setText(Integer.toString(sumadochodu) + " zł");
+        przychodprofil = findViewById(R.id.przychodprofil);
+        sumaprzychodu = bazadanych.sumaprzychodu();
+        przychodprofil.setText(Integer.toString(sumaprzychodu) + " zł");
 
         oplatystale = findViewById(R.id.oplatystale);
         sumawydatkowstalych = bazadanych.sumawydatkowstalych();

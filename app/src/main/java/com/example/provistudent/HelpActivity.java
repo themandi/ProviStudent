@@ -93,7 +93,7 @@ public class HelpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 StringBuffer buffer = new StringBuffer();
                 buffer.append("Oszczędności są to pieniądze odłożone w ciągu całego miesiąca. Na początku rejestracji wprowadzamy odłożone już oszczędności, " +
-                        "następnie jeśli w danym miesiącu nie zostanie wykorzystany cały dochód, pieniądze które zostały pod koniec miesiąca są odkładane " +
+                        "następnie jeśli w danym miesiącu nie zostanie wykorzystany cały przychód, pieniądze które zostały pod koniec miesiąca są odkładane " +
                         "do naszych oszczędności. Oszczędności można wydać klikając przycisk 'Wydaj oszczędności' w głównej aktywności.");
                 wyswietlwiadomosc("Jak działa system 'Oszczędności'", buffer.toString());
             }

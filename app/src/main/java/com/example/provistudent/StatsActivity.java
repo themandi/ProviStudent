@@ -47,14 +47,14 @@ public class StatsActivity extends AppCompatActivity {
 
         wykres = findViewById(R.id.wykres);
 
-        ArrayList<BarEntry> listadochodow = new ArrayList<>();
+        ArrayList<BarEntry> listaprzychodow = new ArrayList<>();
         cursor = bazadanych.odczytajtekst6();
         if(cursor != null && cursor.getCount() > 0) {
             while(cursor.moveToNext()) {
-                String dochod = cursor.getString(cursor.getColumnIndex("dochod"));
-                int dochodint = Integer.parseInt(dochod);
+                String przychod = cursor.getString(cursor.getColumnIndex("przychod"));
+                int przychodint = Integer.parseInt(przychod);
                 int x = 1;
-                listadochodow.add(new BarEntry(x, dochodint));
+                listaprzychodow.add(new BarEntry(x, przychodint));
                 x++;
             }
             cursor.close();
@@ -86,7 +86,7 @@ public class StatsActivity extends AppCompatActivity {
             cursor.close();
         }
 
-        BarDataSet barDataSet1 = new BarDataSet(listadochodow,"Dochód");
+        BarDataSet barDataSet1 = new BarDataSet(listaprzychodow,"Przychód");
         barDataSet1.setColor(Color.BLUE);
         BarDataSet barDataSet2 = new BarDataSet(listawydatkow,"Wydatki");
         barDataSet2.setColor(Color.RED);

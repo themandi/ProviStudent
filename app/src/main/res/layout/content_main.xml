@@ -63,10 +63,10 @@
                     tools:layout_editor_absoluteY="48dp" />
 
                 <TextView
-                    android:id="@+id/dochod"
+                    android:id="@+id/przychod"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/dochod"
+                    android:text="Przychod: 123 zł"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold|normal"
@@ -78,7 +78,7 @@
                     android:id="@+id/dochodaktualny"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Dochód aktualny: 123zł"
+                    android:text="Dochód: 123zł"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold|normal"

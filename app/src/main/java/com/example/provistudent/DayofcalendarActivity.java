@@ -35,7 +35,7 @@ public class DayofcalendarActivity extends AppCompatActivity{
     TextView wydanokwota;
     TextView przekroczono;
     TextView wydanocheatday;
-    int sumadochodu;
+    int sumaprzychodu;
     int sumawydatkow;
     int sumadochodaktualny;
     int kwotawydaj;
@@ -69,17 +69,17 @@ public class DayofcalendarActivity extends AppCompatActivity{
         Calendar cal=Calendar.getInstance();
         int days = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-        sumadochodu = bazadanych.sumadochodu();
+        sumaprzychodu = bazadanych.sumaprzychodu();
         sumawydatkow = bazadanych.sumawydatkowstalych();
 
         dochodaktualny = findViewById(R.id.dochodaktualny);
         findViewById(R.id.dochodaktualny).invalidate();
-        sumadochodaktualny = sumadochodu - sumawydatkow;
-        dochodaktualny.setText("Dochód aktualny: " + Integer.toString(sumadochodaktualny) + " zł");
+        sumadochodaktualny = sumaprzychodu - sumawydatkow;
+        dochodaktualny.setText("Dochód: " + Integer.toString(sumadochodaktualny) + " zł");
 
         kwotadowydania = findViewById(R.id.kwotadowydania);
         findViewById(R.id.kwotadowydania).invalidate();
-        kwotawydaj = sumadochodu/days;
+        kwotawydaj = sumaprzychodu/days;
         kwotadowydania.setText("Sugerowany wydatek na dziś: " + Integer.toString(kwotawydaj) + " zł");
 
         wydanokwota = findViewById(R.id.wydanokwota);
