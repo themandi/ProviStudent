@@ -1,5 +1,6 @@
 package com.example.provistudent;
 
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -13,14 +14,19 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class StatsActivity extends AppCompatActivity {
     BarChart wykres;
+    Cursor cursor;
+    Bazadanych bazadanych;
+    int liczbagrup = 0;
+    int rokint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,66 +35,152 @@ public class StatsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat rok = new SimpleDateFormat("yyyy", new Locale("pl", "PL"));
+        String rokstring =  rok.format(cal.getTime());
+        rokint = Integer.parseInt(rokstring);
+
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        bazadanych = new Bazadanych(StatsActivity.this);
 
         wykres = findViewById(R.id.wykres);
 
-            List<BarEntry> dochod = new ArrayList<>();
-            dochod.add(new BarEntry(1, 2000));
-            dochod.add(new BarEntry(2, 200));
-            dochod.add(new BarEntry(3, 2400));
-            dochod.add(new BarEntry(4, 2700));
-            dochod.add(new BarEntry(5, 4000));
-            dochod.add(new BarEntry(6, 3000));
-            dochod.add(new BarEntry(7, 1000));
+        ArrayList<BarEntry> listadochodow = new ArrayList<>();
+        cursor = bazadanych.odczytajtekst6();
+        if(cursor != null && cursor.getCount() > 0) {
+            while(cursor.moveToNext()) {
+                String dochod = cursor.getString(cursor.getColumnIndex("dochod"));
+                int dochodint = Integer.parseInt(dochod);
+                int x = 1;
+                listadochodow.add(new BarEntry(x, dochodint));
+                x++;
+            }
+            cursor.close();
+        }
 
-        List<BarEntry> wydatki = new ArrayList<>();
-        wydatki.add(new BarEntry(1, 2000));
-        wydatki.add(new BarEntry(2, 200));
-        wydatki.add(new BarEntry(3, 2400));
-        wydatki.add(new BarEntry(4, 2700));
-        wydatki.add(new BarEntry(5, 4000));
-        wydatki.add(new BarEntry(6, 3000));
-        wydatki.add(new BarEntry(7, 1000));
+        ArrayList<BarEntry> listawydatkow = new ArrayList<>();
+        cursor = bazadanych.odczytajtekst6();
+        if(cursor != null && cursor.getCount() > 0) {
+            while(cursor.moveToNext()) {
+                String wydatki = cursor.getString(cursor.getColumnIndex("wydatek"));
+                int wydatkiint = Integer.parseInt(wydatki);
+                int x = 1;
+                listawydatkow.add(new BarEntry(x, wydatkiint));
+                x++;
+            }
+            cursor.close();
+        }
 
-        List<BarEntry> oszczednosci = new ArrayList<>();
-        oszczednosci.add(new BarEntry(1, 2000));
-        oszczednosci.add(new BarEntry(2, 200));
-        oszczednosci.add(new BarEntry(3, 2400));
-        oszczednosci.add(new BarEntry(4, 2700));
-        oszczednosci.add(new BarEntry(5, 4000));
-        oszczednosci.add(new BarEntry(6, 3000));
-        oszczednosci.add(new BarEntry(7, 1000));
+        ArrayList<BarEntry> listaoszczednosci = new ArrayList<>();
+        cursor = bazadanych.odczytajtekst6();
+        if(cursor != null && cursor.getCount() > 0) {
+            while(cursor.moveToNext()) {
+                String oszczednosci = cursor.getString(cursor.getColumnIndex("oszczednosci"));
+                int oszczednosciint = Integer.parseInt(oszczednosci);
+                int x = 1;
+                listaoszczednosci.add(new BarEntry(x, oszczednosciint));
+                x++;
+            }
+            cursor.close();
+        }
 
-        BarDataSet barDataSet1 = new BarDataSet(dochod,"Dochód");
-        barDataSet1.setColor(Color.GREEN);
-        BarDataSet barDataSet2 = new BarDataSet(wydatki,"Wydatki");
+        BarDataSet barDataSet1 = new BarDataSet(listadochodow,"Dochód");
+        barDataSet1.setColor(Color.BLUE);
+        BarDataSet barDataSet2 = new BarDataSet(listawydatkow,"Wydatki");
         barDataSet2.setColor(Color.RED);
-        BarDataSet barDataSet3 = new BarDataSet(oszczednosci,"Oszczędności");
-        barDataSet3.setColor(Color.BLUE);
+        BarDataSet barDataSet3 = new BarDataSet(listaoszczednosci,"Oszczędności");
+        barDataSet3.setColor(Color.GREEN);
 
         BarData data = new BarData(barDataSet1,barDataSet2,barDataSet3);
         wykres.setData(data);
-//Dopisz później wszystkie i stwórz pętle żeby odczytywało które
-//        https://github.com/PhilJay/MPAndroidChart/blob/master/MPChartExample/src/main/java/com/xxmassdeveloper/mpchartexample/BarChartActivityMultiDataset.java
-        String[] months = new String[]{"Styczeń","Luty","Marzec","Kwiecień","Maj","Czerwiec","Lipiec"};
+        ArrayList<String> listamiesiecy = new ArrayList<String>();
+        cursor = bazadanych.odczytajtekst6();
+        if(cursor != null && cursor.getCount() > 0) {
+           while(cursor.moveToNext()) {
+                String miesiac = cursor.getString(cursor.getColumnIndex("miesiac"));
+                if(miesiac.equals("01"))
+                {
+                    liczbagrup++;
+                    listamiesiecy.add("Styczeń");
+                }
+               if(miesiac.equals("02"))
+               {
+                   liczbagrup++;
+                   listamiesiecy.add("Luty");
+               }
+               if(miesiac.equals("03"))
+               {
+                   liczbagrup++;
+                   listamiesiecy.add("Marzec");
+               }
+               if(miesiac.equals("04"))
+               {
+                   liczbagrup++;
+                   listamiesiecy.add("Kwiecień");
+               }
+               if(miesiac.equals("05"))
+               {
+                   liczbagrup++;
+                   listamiesiecy.add("Maj");
+               }
+               if(miesiac.equals("06"))
+               {
+                   liczbagrup++;
+                   listamiesiecy.add("Czerwiec");
+               }
+               if(miesiac.equals("07"))
+               {
+                   liczbagrup++;
+                   listamiesiecy.add("Lipiec");
+               }
+               if(miesiac.equals("08"))
+               {
+                   liczbagrup++;
+                   listamiesiecy.add("Sierpień");
+               }
+               if(miesiac.equals("09"))
+               {
+                   liczbagrup++;
+                   listamiesiecy.add("Wrzesień");
+               }
+               if(miesiac.equals("10"))
+               {
+                   liczbagrup++;
+                   listamiesiecy.add("Październik");
+               }
+               if(miesiac.equals("11"))
+               {
+                   liczbagrup++;
+                   listamiesiecy.add("Listopad");
+               }
+                if(miesiac.equals("12"))
+                {
+                    liczbagrup++;
+                    listamiesiecy.add("Grudzień");
+                }
+           }
+            cursor.close();
+        }
         XAxis xaxis = wykres.getXAxis();
-        xaxis.setValueFormatter(new IndexAxisValueFormatter(months));
+        xaxis.setValueFormatter(new IndexAxisValueFormatter(listamiesiecy));
         xaxis.setCenterAxisLabels(true);
         xaxis.setPosition(XAxis.XAxisPosition.TOP);
         xaxis.setGranularity(1);
         xaxis.setGranularityEnabled(true);
 
         wykres.setDragEnabled(true);
-        wykres.setVisibleXRangeMinimum(3);
-        wykres.getDescription().setEnabled(false);
+//        wykres.setVisibleXRangeMinimum(3);
+        wykres.getDescription().setText("Rok: " + rokint);
+//        wykres.getDescription().setEnabled(false);
 
-        float przestrzenwykresu = 0.01f;
-        float grupaprzestrzeni = 0.25f;
-        data.setBarWidth(0.24f);
+        float przestrzenwykresu = 0.07f;
+        float grupaprzestrzeni = 0.19f;
+        data.setBarWidth(0.20f);
 
         wykres.getXAxis().setAxisMinimum(0);
-        wykres.getXAxis().setAxisMaximum(0+wykres.getBarData().getGroupWidth(grupaprzestrzeni,przestrzenwykresu)*7);
+        wykres.getXAxis().setAxisMaximum(0+wykres.getBarData().getGroupWidth(grupaprzestrzeni,przestrzenwykresu)*liczbagrup);
         wykres.groupBars(0, grupaprzestrzeni, przestrzenwykresu);
         wykres.invalidate();
     }

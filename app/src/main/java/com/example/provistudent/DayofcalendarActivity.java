@@ -73,22 +73,27 @@ public class DayofcalendarActivity extends AppCompatActivity{
         sumawydatkow = bazadanych.sumawydatkowstalych();
 
         dochodaktualny = findViewById(R.id.dochodaktualny);
+        findViewById(R.id.dochodaktualny).invalidate();
         sumadochodaktualny = sumadochodu - sumawydatkow;
         dochodaktualny.setText("Dochód aktualny: " + Integer.toString(sumadochodaktualny) + " zł");
 
         kwotadowydania = findViewById(R.id.kwotadowydania);
+        findViewById(R.id.kwotadowydania).invalidate();
         kwotawydaj = sumadochodu/days;
         kwotadowydania.setText("Sugerowany wydatek na dziś: " + Integer.toString(kwotawydaj) + " zł");
 
         wydanokwota = findViewById(R.id.wydanokwota);
+        findViewById(R.id.wydanokwota).invalidate();
         kwotawydana = bazadanych.kwotawydana();
         wydanokwota.setText("Kwota wydatków dzisiejszych: " + Integer.toString(kwotawydana) + " zł");
 
         przekroczono = findViewById(R.id.przekroczono);
+        findViewById(R.id.przekroczono).invalidate();
         sumaprzekroczono = kwotawydana - kwotawydaj;
         przekroczono.setText("Przekroczono kwote o: " + Integer.toString(sumaprzekroczono) + " zł");
 
         wydanocheatday = findViewById(R.id.wydanocheatday);
+        findViewById(R.id.wydanocheatday).invalidate();
         sumacheatday = bazadanych.sumacheatday();
         wydanocheatday.setText("Wydano z cheatday: " + Integer.toString(sumacheatday) + " zł");
 

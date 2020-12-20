@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class EditCashActivity extends AppCompatActivity {
     Button przyciskzapisz;
@@ -33,6 +38,8 @@ public class EditCashActivity extends AppCompatActivity {
     int kwota;
     String data;
     String dzienimiesiac;
+    int licznik = 0;
+    int dataint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +52,11 @@ public class EditCashActivity extends AppCompatActivity {
 
         bazadanych = new Bazadanych(EditCashActivity.this);
         cursor = bazadanych.odczytajtekst5();
+
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
+        String data_aktualnastring =  data_aktualna.format(cal.getTime());
+        dataint = Integer.parseInt(data_aktualnastring);
 
         Intent calendarz = getIntent();
         dzienimiesiac = calendarz.getStringExtra("data2");
@@ -116,6 +128,7 @@ public class EditCashActivity extends AppCompatActivity {
                     buffer.append("Kwota: " + cursor.getString(3) + "\n");
                 }
                 wyswietlwiadomosc("Zapisane wydatki: ", buffer.toString());
+                cursor.close();
             }
         });
 
@@ -159,32 +172,46 @@ public class EditCashActivity extends AppCompatActivity {
 
     void onDodaj() {
         String kwotapole = polekwota.getText().toString();
+        kwota = Integer.parseInt(polekwota.getText().toString());
         String wydatek = wydanoedycja.getText().toString();
         String cheatday = "No";
+        String wydatekbaza;
+        String databaza;
+        String wydatekstring = "Automatyczny";
         cursor = bazadanych.odczytajtekst5();
-        while (cursor.moveToNext()) {
-            String datawbazie = cursor.getString(1);
-            if (datawbazie == datadozapisu) {
-                if (!kwotapole.isEmpty()) {
-                    kwota = Integer.parseInt(polekwota.getText().toString());
-                    if (bazadanych.zaaktualizujtekstcash(datadozapisuint, wydatek, kwota, cheatday)) {
-                        polekwota.setText("");
+        if (datadozapisuint <= dataint) {
+            if (cursor.getCount() == 0) {
+                Toast.makeText(getApplicationContext(), "Brak wydatków!", Toast.LENGTH_SHORT).show();
+            } else {
+                while (cursor.moveToNext()) {
+                    wydatekbaza = cursor.getString(cursor.getColumnIndex("wydatek"));
+                    databaza = cursor.getString(cursor.getColumnIndex("data"));
+                    if (wydatekbaza.equals(wydatekstring) && databaza.equals(datadozapisu)) {
+                        if (!kwotapole.isEmpty()) {
+                            if (bazadanych.zaaktualizujtekstcash(datadozapisuint, wydatek, kwota, cheatday)) {
+                                polekwota.setText("");
+                                licznik = 1;
+                            }
+                            Toast.makeText(getApplicationContext(), "Edytowano!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Błąd! Dane nie zostały wprowadzone.", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                    Toast.makeText(getApplicationContext(), "Dodano!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Błąd! Dane nie zostały wprowadzone.", Toast.LENGTH_SHORT).show();
+                }
+                if (licznik == 0) {
+                    if (!kwotapole.isEmpty()) {
+                        if (bazadanych.dodajtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
+                            polekwota.setText("");
+                        }
+                        Toast.makeText(getApplicationContext(), "Dodano!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Błąd! Dane nie zostały wprowadzone.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
-        }
-        if(!kwotapole.isEmpty()) {
-            kwota = Integer.parseInt(polekwota.getText().toString());
-            if (bazadanych.dodajtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
-                polekwota.setText("");
-            }
-            Toast.makeText(getApplicationContext(), "Dodano!",Toast.LENGTH_SHORT).show();
-        }
-        else {
-            Toast.makeText(getApplicationContext(), "Błąd! Dane nie zostały wprowadzone.",Toast.LENGTH_SHORT).show();
+            cursor.close();
+        } else {
+            Toast.makeText(getApplicationContext(), "Nie możesz dodać wcześniej wydatków!", Toast.LENGTH_SHORT).show();
         }
     }
 

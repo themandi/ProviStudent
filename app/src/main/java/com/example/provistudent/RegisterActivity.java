@@ -350,7 +350,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 }
             }
             else if(wybrano2 == "Yes") {
-                godzina = "";
+                godzina = null;
                 if(cursor2.getCount() == 0) {
                     bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina);
                 }
@@ -359,8 +359,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 }
             }
             else if(wybrano4 == "Yes") {
-                data = "";
-                godzina2 = "";
+                data = null;
+                godzina2 = null;
                 if(cursor2.getCount() == 0) {
                     bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina);
                 }

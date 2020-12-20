@@ -12,6 +12,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +47,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         bazadanych = new Bazadanych(ProfileActivity.this);
         cursor = bazadanych.odczytajtekst();
-        cursor2 = bazadanych.odczytajtekst4();
 
         TextView imie = (TextView) findViewById(R.id.imie);
         while(cursor.moveToNext()) {
@@ -60,28 +63,89 @@ public class ProfileActivity extends AppCompatActivity {
         oplatystale.setText(Integer.toString(sumawydatkowstalych) + " zł");
 
         powiadomieniadzienprofil = findViewById(R.id.powiadomieniadzienprofil);
-        while(cursor2.moveToNext()) {
-            powiadomieniadzien = cursor2.getString(cursor2.getColumnIndex("kiedypow"));
-            powiadomieniadzienprofil.setText(powiadomieniadzien);
+        cursor2 = bazadanych.odczytajtekst4();
+        if(cursor2 != null && cursor2.getCount() > 0) {
+            while (cursor2.moveToNext()) {
+                powiadomieniadzien = cursor2.getString(cursor2.getColumnIndex("kiedypow"));
+                if (powiadomieniadzien == null || powiadomieniadzien.equals("")) {
+                    powiadomieniadzienprofil.setText("Brak");
+                } else {
+                    SimpleDateFormat datebaza = new SimpleDateFormat("yyyyMMdd");
+                    SimpleDateFormat datestring = new SimpleDateFormat("dd/MM/yyyy");
+                    Date data = null;
+                    try {
+                        data = datebaza.parse(powiadomieniadzien);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    String dataformat = datestring.format(data);
+                    powiadomieniadzienprofil.setText(dataformat);
+                }
+            }
         }
+        cursor2.close();
 
         powiadomieniadzienczas = findViewById(R.id.powiadomieniadzienczas);
-        while(cursor2.moveToNext()) {
-            powiadomieniadzientime = cursor2.getString(cursor2.getColumnIndex("kiedypowczas"));
-            powiadomieniadzienczas.setText(powiadomieniadzientime);
+        cursor2 = bazadanych.odczytajtekst4();
+        if(cursor2 != null && cursor2.getCount() > 0) {
+            while (cursor2.moveToNext()) {
+                powiadomieniadzientime = cursor2.getString(cursor2.getColumnIndex("kiedypowczas"));
+                if (powiadomieniadzientime == null || powiadomieniadzientime.equals("")) {
+                    powiadomieniadzienczas.setText("Brak");
+                } else {
+                    SimpleDateFormat timebaza = new SimpleDateFormat("hhmm");
+                    SimpleDateFormat timestring = new SimpleDateFormat("hh:mm");
+                    Date time = null;
+                    try {
+                        time = timebaza.parse(powiadomieniadzientime);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    String timeformat = timestring.format(time);
+                    powiadomieniadzienczas.setText(timeformat);
+                }
+            }
         }
+        cursor2.close();
 
         cojakiczas = findViewById(R.id.cojakiczas);
-        while(cursor2.moveToNext()) {
-            coilepowiad = cursor2.getString(cursor2.getColumnIndex("czestotliwosc"));
-            cojakiczas.setText(coilepowiad);
+        cursor2 = bazadanych.odczytajtekst4();
+        if(cursor2 != null && cursor2.getCount() > 0) {
+            while (cursor2.moveToNext()) {
+                coilepowiad = cursor2.getString(cursor2.getColumnIndex("czestotliwosc"));
+                if (coilepowiad.equals("Wybierz")) {
+                    cojakiczas.setText("Brak");
+                } else {
+                    cojakiczas.setText(coilepowiad);
+                }
+            }
         }
+        cursor2.close();
 
         powiadomieniagodzinaprofil = findViewById(R.id.powiadomieniagodzinaprofil);
-        while(cursor2.moveToNext()) {
-            powiadomieniagodz = cursor2.getString(cursor2.getColumnIndex("kiedydane"));
-            powiadomieniagodzinaprofil.setText(powiadomieniagodz);
+        cursor2 = bazadanych.odczytajtekst4();
+        if(cursor2 != null && cursor2.getCount() > 0) {
+            while (cursor2.moveToNext()) {
+                powiadomieniagodz = cursor2.getString(cursor2.getColumnIndex("kiedydane"));
+                Toast.makeText(getApplicationContext(), ":" + powiadomieniagodz + ":", Toast.LENGTH_SHORT).show();
+                if (powiadomieniagodz == null || powiadomieniagodz.equals("")) {
+                    powiadomieniagodzinaprofil.setText("Brak");
+                } else {
+                    SimpleDateFormat timebaza = new SimpleDateFormat("hhmm");
+                    SimpleDateFormat timestring = new SimpleDateFormat("hh:mm");
+                    Date time = null;
+                    try {
+                        time = timebaza.parse(powiadomieniagodz);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    String timeformat = timestring.format(time);
+                    powiadomieniagodzinaprofil.setText(timeformat);
+                    powiadomieniagodzinaprofil.setText("Brak");
+                }
+            }
         }
+        cursor2.close();
 
         oszczednosciprofil = findViewById(R.id.oszczednosciprofil);
         sumaoszczednosci = bazadanych.sumaoszczednosci();

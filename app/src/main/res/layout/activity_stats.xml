@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StatsActivity">
+    tools:context=".StatsActivity"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,12 +51,12 @@
             android:layout_weight="1" />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="600dp"
+        android:layout_height="500dp"
         android:orientation="vertical">
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/wykres"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="400dp">
     </com.github.mikephil.charting.charts.BarChart>
     </LinearLayout>
     </LinearLayout>

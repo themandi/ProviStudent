@@ -1,23 +1,17 @@
 package com.example.provistudent;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,33 +84,65 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
         String data_aktualnastring =  data_aktualna.format(cal.getTime());
         data_aktualnaint = Integer.parseInt(data_aktualnastring);
+        SimpleDateFormat miesiac_aktualny = new SimpleDateFormat("MM", new Locale("pl", "PL"));
+        String miesiac_aktualnyint = miesiac_aktualny.format(cal.getTime());
+        SimpleDateFormat dzien_aktualny = new SimpleDateFormat("dd", new Locale("pl", "PL"));
+        String dzien_aktualnystring = dzien_aktualny.format(cal.getTime());
+        int dzien_aktualnyint = Integer.parseInt(dzien_aktualnystring);
         SimpleDateFormat nazwa_miesiaca= new SimpleDateFormat("LLLL", new Locale("pl", "PL"));
         String miesiacwybrane=nazwa_miesiaca.format(cal.getTime());
         miesiac.setText(miesiacwybrane.toUpperCase());
-
+        if(dzien_aktualnyint == 01) {
+            sumadochodu = bazadanych.sumadochodu();
+            sumawydatkow = bazadanych.sumawydatkow();
+            sumaoszczednosci = bazadanych.sumaoszczednosci();
+            bazadanych.dodajtekst6(miesiac_aktualnyint, sumadochodu, sumawydatkow, sumaoszczednosci);
+            bazadanych.usunwszystko5();
+            cursor = bazadanych.odczytajtekst();
+            int oszczednosci = (sumadochodu-sumawydatkow)+sumaoszczednosci;
+            while(cursor.moveToNext())
+            {
+                bazadanych.zaaktualizujtekst(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), oszczednosci);
+            }
+            cursor.close();
+        }
+        cursor = bazadanych.odczytajtekst6();
+        while(cursor.moveToNext())
+        {
+            Toast.makeText(getApplicationContext(), "1: "+cursor.getString(1),Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "2: "+cursor.getString(2),Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "3: "+cursor.getString(3),Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "4: "+cursor.getString(4),Toast.LENGTH_SHORT).show();
+        }
+        cursor.close();
 
         dochod = findViewById(R.id.dochod);
+        findViewById(R.id.dochod).invalidate();
         sumadochodu = bazadanych.sumadochodu();
         dochod.setText("Dochód początkowy: " + Integer.toString(sumadochodu) + " zł");
 
         wydatki = findViewById(R.id.wydatki);
-//        sumawydatkowstalych = bazadanych.sumawydatkowstalych();
+        findViewById(R.id.wydatki).invalidate();
         sumawydatkow = bazadanych.sumawydatkow();
         wydatki.setText("Wydatki: " + Integer.toString(sumawydatkow) + " zł");
 
         dochodaktualny = findViewById(R.id.dochodaktualny);
-        sumadochodaktualny = sumadochodu - sumawydatkowstalych;
+        findViewById(R.id.dochodaktualny).invalidate();
+        sumadochodaktualny = sumadochodu - sumawydatkow;
         dochodaktualny.setText("Dochód aktualny: " + Integer.toString(sumadochodaktualny) + " zł");
 
         oszczednosci = findViewById(R.id.oszczednosci);
+        findViewById(R.id.oszczednosci).invalidate();
         sumaoszczednosci = bazadanych.sumaoszczednosci();
         oszczednosci.setText("Oszczędności: " + Integer.toString(sumaoszczednosci) + " zł");
 
         kartabankowa = findViewById(R.id.zasob1);
+        findViewById(R.id.zasob1).invalidate();
         sumakartabankowa = bazadanych.sumakartabankowa();
         kartabankowa.setText("Karta bankowa: " + Integer.toString(sumakartabankowa) + " zł");
 
         gotowka = findViewById(R.id.zasob2);
+        findViewById(R.id.zasob2).invalidate();
         sumagotowka = bazadanych.sumagotowka();
         gotowka.setText("Gotówka: " + Integer.toString(sumagotowka) + " zł");
 
@@ -268,8 +294,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String zapisaneimie = cursor.getString(cursor.getColumnIndex("nazwa_uzytkownika"));
             uzytkowniknazwa.setText("Witaj, " + zapisaneimie + "!");
         }
-
-
+        cursor.close();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -282,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Calendar cal = Calendar.getInstance();
         int days = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         int kwotawydaj = sumadochodu/days;
-        String wydatek = "Wydatek automatyczny";
+        String wydatek = "Automatyczny";
         String cheatday = "No";
         SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
         String data_aktualnastring =  data_aktualna.format(cal.getTime());

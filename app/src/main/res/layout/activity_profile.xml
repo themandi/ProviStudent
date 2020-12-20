@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <!--    CTRL + ALT + L - ukladanie kodu-->
@@ -207,21 +208,25 @@
                     android:id="@+id/powiadomieniadzienprofil"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
+                    android:gravity="right"
+                    android:layout_marginRight="60px"
+                    android:text="Brak daty"
                     android:layout_above="@id/przypominaczdzien" />
                 <TextView
                     android:id="@+id/powiadomieniadzienczas"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="Brak"
+                    android:gravity="right"
+                    android:text="Brak godziny"
+                    android:layout_marginRight="60px"
                     android:layout_above="@id/przypominaczdzien" />
                 <TextView
                     android:id="@+id/cojakiczas"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="Brak"/>
+                    android:gravity="right"
+                    android:text="Brak częstotliwości"
+                    android:layout_marginRight="60px"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -315,8 +320,9 @@
                     android:id="@+id/powiadomieniagodzinaprofil"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="Brak"/>
+                    android:gravity="right"
+                    android:text="Brak godziny"
+                    android:layout_marginRight="60px" />
             </LinearLayout>
         </LinearLayout>
 

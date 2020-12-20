@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 public class Bazadanych extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "bazadanych";
     private static final String TABLE_NAME = "Uzytkownik";
@@ -42,6 +46,13 @@ public class Bazadanych extends SQLiteOpenHelper {
     private static final String COL5_4 = "kwota";
     private static final String COL5_5 = "cheatday";
 
+    private static final String TABLE_NAME6 = "Statystyki";
+    private static final String COL6_1 = "ID";
+    private static final String COL6_2 = "miesiac";
+    private static final String COL6_3 = "dochod";
+    private static final String COL6_4 = "wydatek";
+    private static final String COL6_5 = "oszczednosci";
+
     public Bazadanych(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
@@ -57,13 +68,16 @@ public class Bazadanych extends SQLiteOpenHelper {
         String stworztabele4 = "CREATE TABLE " + TABLE_NAME4 + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL4_2 + " TEXT, " + COL4_3 + " TEXT, " + COL4_4 + " TEXT, " + COL4_5 + " TEXT)";
         String stworztabele5 = "CREATE TABLE " + TABLE_NAME5 + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COL5_2 + " INTEGER, " + COL5_3 + " TEXT, " + COL5_4 + " TEXT, " + COL5_5 + " INTEGER)";
+                COL5_2 + " INTEGER, " + COL5_3 + " TEXT, " + COL5_4 + " INTEGER, " + COL5_5 + " TEXT)";
+        String stworztabele6 = "CREATE TABLE " + TABLE_NAME6 + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL6_2 + " TEXT, " + COL6_3 + " INTEGER, " + COL6_4 + " INTEGER, " + COL6_5 + " INTEGER)";
 
         db.execSQL(stworztabele);
         db.execSQL(stworztabele2);
         db.execSQL(stworztabele3);
         db.execSQL(stworztabele4);
         db.execSQL(stworztabele5);
+        db.execSQL(stworztabele6);
     }
 
     @Override
@@ -130,6 +144,17 @@ public class Bazadanych extends SQLiteOpenHelper {
         return true;
     }
 
+    public boolean dodajtekst6(String miesiac, Integer dochod, Integer wydatek, int oszczednosci) {
+        SQLiteDatabase sqLitebaza = this.getWritableDatabase();
+        ContentValues zawartosc6 = new ContentValues();
+        zawartosc6.put(COL6_2, miesiac);
+        zawartosc6.put(COL6_3, dochod);
+        zawartosc6.put(COL6_4, wydatek);
+        zawartosc6.put(COL6_5, oszczednosci);
+        sqLitebaza.insert(TABLE_NAME6, null, zawartosc6);
+        return true;
+    }
+
     public boolean zaaktualizujtekst(String nazwa_uzytkownika, String wybranocheckoplaty, String wybranocheckoplatykiedy, String wybranocheckoszczednosci, String wybranocheckdane, Integer oszczednosci) {
         SQLiteDatabase sqLitebaza = this.getWritableDatabase();
         ContentValues zawartosc = new ContentValues();
@@ -191,9 +216,19 @@ public class Bazadanych extends SQLiteOpenHelper {
         zawartosc5.put(COL5_3, wydatek);
         zawartosc5.put(COL5_4, kwota);
         zawartosc5.put(COL5_5, cheatday);
-        sqLitebaza.update(TABLE_NAME5, zawartosc5, COL5_3 + "=Wydatek automatyczny", null);
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
+        String data_aktualnastring =  data_aktualna.format(cal.getTime());
+        int data_aktualnaint = Integer.parseInt(data_aktualnastring);
+        sqLitebaza.update(TABLE_NAME5, zawartosc5, COL5_1 + " = ID", null);
         return true;
     }
+
+    public Integer usunwszystko5() {
+        SQLiteDatabase sqLitebaza = this.getReadableDatabase();
+        return sqLitebaza.delete(TABLE_NAME5, null, null);
+    }
+
 
     public Integer usuntekst2(String id) {
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
@@ -247,6 +282,14 @@ public class Bazadanych extends SQLiteOpenHelper {
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
         //tworzymy kursor aby zaznaczyc wszystkie wartosci
         Cursor cursor = sqLitebaza.rawQuery("SELECT * FROM " + TABLE_NAME5, null);
+        return cursor;
+    }
+
+    public Cursor odczytajtekst6() {
+        //uzyskujemy odczytywalna baze
+        SQLiteDatabase sqLitebaza = this.getReadableDatabase();
+        //tworzymy kursor aby zaznaczyc wszystkie wartosci
+        Cursor cursor = sqLitebaza.rawQuery("SELECT * FROM " + TABLE_NAME6, null);
         return cursor;
     }
 
@@ -308,7 +351,7 @@ public class Bazadanych extends SQLiteOpenHelper {
     public int kwotawydana() {
         int suma = 0;
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
-        Cursor cursor = sqLitebaza.rawQuery("SELECT kwota FROM Wydatki", null);
+        Cursor cursor = sqLitebaza.rawQuery("SELECT SUM(" + COL5_4 + ") FROM " + TABLE_NAME5, null);
         if (cursor.moveToFirst()) {
             suma = cursor.getInt(0);
         }
@@ -360,5 +403,11 @@ public class Bazadanych extends SQLiteOpenHelper {
         Cursor cursor = sqLitebaza.rawQuery("SELECT MAX(" + COL4_3 + ") FROM " + TABLE_NAME4, null);
         godzpowiad = (cursor.moveToFirst() ? cursor.getInt(0) : 0);
         return godzpowiad;
+    }
+
+    public Cursor editcash() {
+        SQLiteDatabase sqLitebaza = this.getReadableDatabase();
+        Cursor cursor = sqLitebaza.rawQuery("SELECT * FROM Wydatki WHERE wydatek = 'Automatyczny'", null);
+        return cursor;
     }
 }
