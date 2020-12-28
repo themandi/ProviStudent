@@ -4,5 +4,7 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:fontFamily">@font/archivo_narrow</item>
+        <item name="android:background">#ededed</item>
     </style>
 </resources>

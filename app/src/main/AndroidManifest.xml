@@ -6,9 +6,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo"
         android:label="ProviStud"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/logo_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
@@ -22,15 +22,6 @@
             android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <receiver
-            android:name=".NotificationReceiver"
-            android:label="BroadcastReceiverAux">
-            <intent-filter>
-                <action android:name="ALARM" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
         <activity
             android:name=".CheatdayActivity"
             android:label="ProviStud"
@@ -114,6 +105,12 @@
                          <category android:name="android.intent.category.LAUNCHER" />
                          </intent-filter>
         </activity>
+        <!-- Trzeba dodać Receivera -->
+        <receiver android:name=".NotificationReceiver" >
+        </receiver>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

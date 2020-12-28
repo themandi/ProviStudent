@@ -54,6 +54,7 @@
     <!--    Wykorzystywane do spinnera w cheatday-->
     <string-array name="wyborcheatday">
         <item>-Rozwiń-</item>
+        <item>Leki</item>
         <item>Alkohol</item>
         <item>Ciuchy</item>
         <item>Jedzenie</item>

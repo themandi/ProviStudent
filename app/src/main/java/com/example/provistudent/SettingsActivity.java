@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,9 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class SettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
-
     Bazadanych bazadanych;
-    EditText poleimie;
     Button przyciskzapisz;
     Button przypominaczgodzina;
     Button przypominaczdzien;
@@ -48,6 +47,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     TextView poleoszczednosci;
     TextView powiadomieniagodzina;
     TextView powiadomieniadzien;
+    TextView powiadomieniadzien2;
     String czestotliwoscopcje;
     String wybrano = "No";
     String wybrano2 = "No";
@@ -55,6 +55,16 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     String wybrano4 = "No";
     String data;
     String godzina;
+    String godzina2;
+    EditText poleimie;
+    DialogFragment timePicker;
+    DialogFragment timePicker2;
+    DatePickerDialog datepicker;
+    String time;
+    String time2;
+    String date;
+    Calendar c;
+    String timezmienna = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,50 +75,18 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        poleimie = findViewById(R.id.poleimie);
+        poleimie = (EditText) findViewById(R.id.poleimie);
         przyciskzapisz = findViewById(R.id.zapisz);
         checkoplaty = findViewById(R.id.checkoplaty);
-        checkoplatykiedy= findViewById(R.id.checkoplatykiedy);
+        checkoplatykiedy = findViewById(R.id.checkoplatykiedy);
         checkoszczednosci = findViewById(R.id.checkoszczednosci);
         checkdane = findViewById(R.id.checkdane);
         poleoszczednosci = findViewById(R.id.poleoszczednosci);
 
         bazadanych = new Bazadanych(SettingsActivity.this);
-        cursor = bazadanych.odczytajtekst();
-        cursor2 = bazadanych.odczytajtekst4();
-        if(cursor.getCount()==0){
-            Toast.makeText(getApplicationContext(), "No data",Toast.LENGTH_SHORT).show();
-        }
-        else {
-            while(cursor.moveToNext())
-            {
-                Toast.makeText(getApplicationContext(), "1: "+cursor.getString(1),Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "2: "+cursor.getString(2),Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "3: "+cursor.getString(3),Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "4: "+cursor.getString(4),Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "5: "+cursor.getString(5),Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "6: "+cursor.getString(6),Toast.LENGTH_SHORT).show();
-
-            }
-            cursor.close();
-        }
-
-        if(cursor2.getCount()==0){
-            Toast.makeText(getApplicationContext(), "No data",Toast.LENGTH_SHORT).show();
-        }
-        else {
-            while(cursor2.moveToNext())
-            {
-                Toast.makeText(getApplicationContext(), "1: "+cursor2.getString(1),Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "2: "+cursor2.getString(2),Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "3: "+cursor2.getString(3),Toast.LENGTH_SHORT).show();
-            }
-            cursor2.close();
-        }
 
         przyciskzapisz.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 onZapisz();
             }
         });
@@ -117,10 +95,9 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         checkoplaty.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean zaznaczone) {
-                if(zaznaczone){
+                if (zaznaczone) {
                     wybrano = "Yes";
-                }
-                else {
+                } else {
                     wybrano = "No";
                 }
             }
@@ -130,10 +107,9 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         checkoplatykiedy.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean zaznaczone) {
-                if(zaznaczone){
+                if (zaznaczone) {
                     wybrano2 = "Yes";
-                }
-                else {
+                } else {
                     wybrano2 = "No";
                 }
             }
@@ -143,10 +119,9 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         checkoszczednosci.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean zaznaczone) {
-                if(zaznaczone){
+                if (zaznaczone) {
                     wybrano3 = "Yes";
-                }
-                else {
+                } else {
                     wybrano3 = "No";
                 }
             }
@@ -156,10 +131,9 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         checkdane.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean zaznaczone) {
-                if(zaznaczone){
+                if (zaznaczone) {
                     wybrano4 = "Yes";
-                }
-                else {
+                } else {
                     wybrano4 = "No";
                 }
             }
@@ -178,17 +152,19 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 switch (position) {
                     case 1:
                         Intent intent = new Intent(SettingsActivity.this, IncomeActivity.class);
+                        finish();
                         startActivity(intent);
                         break;
                     case 2:
                         Intent intent2 = new Intent(SettingsActivity.this, IncomeActivity2.class);
+                        finish();
                         startActivity(intent2);
                         break;
                 }
             }
 
             @Override
-            public void onNothingSelected (AdapterView < ? > parent){
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
@@ -206,21 +182,25 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 switch (position) {
                     case 1:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co miesiąc", Toast.LENGTH_SHORT).show();
+//                        scheduleNotification(getNotification("5 second delay"), 5000);
                         break;
                     case 2:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co trzy miesiące", Toast.LENGTH_SHORT).show();
+//                        scheduleNotification(getNotification("10 second delay"), 10000);
                         break;
                     case 3:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co pół roku", Toast.LENGTH_SHORT).show();
+//                        scheduleNotification(getNotification("30 second delay"), 30000);
                         break;
                     case 4:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co rok", Toast.LENGTH_SHORT).show();
+//                        scheduleNotification(getNotification("60 second delay"), 60000);
                         break;
                 }
             }
 
             @Override
-            public void onNothingSelected (AdapterView < ? > parent){
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
@@ -229,7 +209,8 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         przypominaczgodzina.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment timePicker = new TimePicker();
+                timePicker = new TimePicker();
+                timezmienna = "picker1";
                 timePicker.show(getSupportFragmentManager(), "time picker");
             }
         });
@@ -240,88 +221,183 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onClick(View v) {
                 showDatePickerDialog();
+                showTimePickerDialog();
             }
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
+    }
+
     private void showDatePickerDialog() {
-        DatePickerDialog datepicker = new DatePickerDialog(this, (DatePickerDialog.OnDateSetListener) this, Calendar.getInstance().get(Calendar.YEAR),Calendar.getInstance().get(Calendar.MONTH),Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        datepicker = new DatePickerDialog(this, this, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
         );
         datepicker.show();
     }
 
+    private void showTimePickerDialog() {
+        timePicker2 = new TimePicker();
+        timezmienna = "picker2";
+        timePicker2.show(getSupportFragmentManager(), "time picker");
+    }
+
     //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onZapisz() {
+        cursor = bazadanych.odczytajtekst();
+        cursor2 = bazadanych.odczytajtekst4();
         String imie = poleimie.getText().toString();
+        if(imie.equals(null) || imie.equals("")) {
+            if (cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+                    imie = cursor.getString(cursor.getColumnIndex("nazwa_uzytkownika"));
+                    poleimie.setText(imie);
+                }
+            }
+        }
         int oszczednosci = 0;
-        if(wybrano2 == "Yes") {
-            data = powiadomieniadzien.getText().toString();
+
+        if (wybrano2.equals("Yes")) {
+            data = date;
+            godzina2 = time2;
+            if(czestotliwoscopcje.equals("")) {
+                if (cursor2.getCount() > 0) {
+                    while (cursor2.moveToNext()) {
+                        czestotliwoscopcje = cursor2.getString(cursor2.getColumnIndex("czestotliwosc"));
+                    }
+                }
+            }
+            if (data.equals("") || data.equals(null)) {
+                if (cursor2.getCount() > 0) {
+                    while (cursor2.moveToNext()) {
+                        data = cursor2.getString(cursor2.getColumnIndex("kiedypow"));
+                    }
+                }
+            }
+            else if (godzina2.equals("") || godzina2.equals(null)) {
+                if (cursor2.getCount() > 0) {
+                    while (cursor2.moveToNext()) {
+                        godzina2 = cursor2.getString(cursor2.getColumnIndex("kiedypowczas"));
+                    }
+                }
+            }
         }
-        if(wybrano3 == "Yes") {
+
+        if (wybrano3.equals("Yes")) {
             oszczednosci = Integer.parseInt(poleoszczednosci.getText().toString());
+            if (poleoszczednosci.equals(null) || poleoszczednosci.equals("")) {
+                if (cursor.getCount() > 0) {
+                    while (cursor.moveToNext()) {
+                        oszczednosci = cursor.getInt(cursor.getColumnIndex("oszczednosci"));
+                    }
+                }
+            }
         }
-        if(wybrano4 == "Yes") {
-            godzina = powiadomieniagodzina.getText().toString();
+        if (wybrano4.equals("Yes")) {
+            godzina = time;
+            if (godzina.equals(null) || godzina.equals("")) {
+                if (cursor2.getCount() > 0) {
+                    while (cursor2.moveToNext()) {
+                        godzina = cursor2.getString(cursor2.getColumnIndex("kiedydane"));
+                    }
+                }
+            }
         }
-        if(!imie.isEmpty()) {
-            if (cursor.getCount() == 0) {
-                if (bazadanych.dodajtekst(imie, wybrano, wybrano2, wybrano3, wybrano4, oszczednosci)) {
-                    poleimie.setText("");
-                    poleoszczednosci.setText("");
-                }
+        if (cursor.getCount() > 0) {
+            if (bazadanych.zaaktualizujtekst(imie, wybrano, wybrano2, wybrano3, wybrano4, oszczednosci)) {
+                poleimie.setText("");
+                poleoszczednosci.setText("");
             }
-            else if (cursor.getCount() > 0) {
-                if (bazadanych.zaaktualizujtekst(imie, wybrano, wybrano2, wybrano3, wybrano4, oszczednosci)) {
-                    poleimie.setText("");
-                    poleoszczednosci.setText("");
-                }
-            }
-            if(wybrano2 == "Yes" & wybrano4 == "Yes") {
-                if(cursor2.getCount() == 0) {
-                    bazadanych.dodajtekst4(data, godzina, czestotliwoscopcje, godzina);
-                }
-                else {
-                    bazadanych.zaaktualizujtekst4(data, godzina, czestotliwoscopcje, godzina);
-                }
-            }
-            else if(wybrano2 == "Yes") {
-                godzina = "";
-                if(cursor2.getCount() == 0) {
-                    bazadanych.dodajtekst4(data, godzina, czestotliwoscopcje, godzina);
-                }
-                else {
-                    bazadanych.zaaktualizujtekst4(data, godzina, czestotliwoscopcje, godzina);
-                }
-            }
-            else if(wybrano4 == "Yes") {
-                data = "";
-                if(cursor2.getCount() == 0) {
-                    bazadanych.dodajtekst4(data, godzina, czestotliwoscopcje, godzina);
-                }
-                else {
-                    bazadanych.zaaktualizujtekst4(data, godzina, czestotliwoscopcje, godzina);
-                }
-            }
-            Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
-            startActivity(intent);
         }
-        else {
-            Toast.makeText(getApplicationContext(), "Nic nie zostało zapisane!",Toast.LENGTH_SHORT).show();
+        if (wybrano2.equals("Yes") && wybrano4.equals("Yes")) {
+            if (cursor2.getCount() == 0) {
+                bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina);
+            } else {
+                bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina);
+            }
+        } else if (wybrano2.equals("Yes")) {
+            godzina = null;
+            if (cursor2.getCount() > 0) {
+                while (cursor2.moveToNext()) {
+                    godzina = cursor2.getString(cursor2.getColumnIndex("kiedydane"));
+                }
+            }
+            if (cursor2.getCount() == 0) {
+                bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina);
+            } else {
+                bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina);
+            }
+        } else if (wybrano4.equals("Yes")) {
+            data = null;
+            godzina2 = null;
+            czestotliwoscopcje = null;
+                if (cursor2.getCount() > 0) {
+                    while (cursor2.moveToNext()) {
+                        godzina2 = cursor2.getString(cursor2.getColumnIndex("kiedypowczas"));
+                    }
+                }
+                if (cursor2.getCount() > 0) {
+                    while (cursor2.moveToNext()) {
+                        data = cursor2.getString(cursor2.getColumnIndex("kiedypow"));
+                    }
+                }
+                if (cursor2.getCount() > 0) {
+                    while (cursor2.moveToNext()) {
+                    czestotliwoscopcje = cursor2.getString(cursor2.getColumnIndex("czestotliwosc"));
+                }
+            }
+            if (cursor2.getCount() == 0) {
+                bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina);
+            } else {
+                bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina);
+            }
         }
+        Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+        startActivity(intent);
         cursor.close();
         cursor2.close();
     }
 
     @Override
     public void onTimeSet(android.widget.TimePicker view, int hourOfDay, int minute) {
-        powiadomieniagodzina = (TextView) findViewById(R.id.powiadomieniagodzina);
-        powiadomieniagodzina.setText("Czas: " + hourOfDay + ":" + minute);
+        String minutestring = "" + minute;
+        String hourstring = "" + hourOfDay;
+        if (hourOfDay < 10) {
+            hourstring = "0" + hourstring;
+        }
+        if (minute < 10) {
+            minutestring = "0" + minutestring;
+        }
+        if (TextUtils.isEmpty(timezmienna))
+            return;
+        if (timezmienna.equalsIgnoreCase("picker1")) {
+            powiadomieniagodzina = (TextView) findViewById(R.id.powiadomieniagodzina);
+            powiadomieniagodzina.setText("Czas: " + hourstring + ":" + minutestring);
+            time = hourstring + "" + minutestring;
+        } else if (timezmienna.equalsIgnoreCase("picker2")) {
+            powiadomieniadzien2 = (TextView) findViewById(R.id.powiadomieniadzien2);
+            powiadomieniadzien2.setText("Czas: " + hourstring + ":" + minutestring);
+            time2 = hourstring + "" + minutestring;
+        }
+        timezmienna = "";
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        month = month + 1;
+        String monthstring = "" + month;
+        String daystring = "" + dayOfMonth;
+        if (month < 10) {
+            monthstring = "0" + monthstring;
+        }
+        if (dayOfMonth < 10) {
+            daystring = "0" + daystring;
+        }
         powiadomieniadzien = (TextView) findViewById(R.id.powiadomieniadzien);
-        powiadomieniadzien.setText("Data: "+ dayOfMonth + "/" + month + "/" + year);
+        powiadomieniadzien.setText("Data: " + daystring + "/" + monthstring + "/" + year);
+        date = year + "" + monthstring + "" + daystring;
     }
 
     @Override
@@ -335,18 +411,18 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     }
 
     public void onCheckboxClicked(View view) {
-        switch(view.getId()) {
+        switch (view.getId()) {
             case R.id.checkoplaty:
-                boolean zaznaczony =((CheckBox)view).isChecked();
-                if(zaznaczony == true)
-                {
+                boolean zaznaczony = ((CheckBox) view).isChecked();
+                if (zaznaczony == true) {
                     Intent intent = new Intent(SettingsActivity.this, CashActivity.class);
+                    finish();
                     startActivity(intent);
                 }
                 break;
             case R.id.checkoplatykiedy:
-                boolean zaznaczony2 =((CheckBox)view).isChecked();
-                if(zaznaczony2 == true) {
+                boolean zaznaczony2 = ((CheckBox) view).isChecked();
+                if (zaznaczony2 == true) {
                     LinearLayout linearlayout4 = findViewById(R.id.linearlayout4);
                     LinearLayout linearlayout5 = findViewById(R.id.linearlayout5);
                     View view1 = findViewById(R.id.view1);
@@ -359,8 +435,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                     view2.setVisibility(View.VISIBLE);
                     view3.setVisibility(View.VISIBLE);
                     view4.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     LinearLayout linearlayout4 = findViewById(R.id.linearlayout4);
                     LinearLayout linearlayout5 = findViewById(R.id.linearlayout5);
                     View view1 = findViewById(R.id.view1);
@@ -377,16 +452,15 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 break;
 
             case R.id.checkoszczednosci:
-                boolean zaznaczony3 =((CheckBox)view).isChecked();
-                if(zaznaczony3 == true) {
+                boolean zaznaczony3 = ((CheckBox) view).isChecked();
+                if (zaznaczony3 == true) {
                     LinearLayout linearlayout6 = findViewById(R.id.linearlayout6);
                     View view5 = findViewById(R.id.view5);
                     View view6 = findViewById(R.id.view6);
                     linearlayout6.setVisibility(View.VISIBLE);
                     view5.setVisibility(View.VISIBLE);
                     view6.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     LinearLayout linearlayout6 = findViewById(R.id.linearlayout6);
                     View view5 = findViewById(R.id.view5);
                     View view6 = findViewById(R.id.view6);
@@ -397,16 +471,15 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
                 break;
             case R.id.checkdane:
-                boolean zaznaczony4 =((CheckBox)view).isChecked();
-                if(zaznaczony4 == true) {
+                boolean zaznaczony4 = ((CheckBox) view).isChecked();
+                if (zaznaczony4 == true) {
                     LinearLayout linearlayout7 = findViewById(R.id.linearlayout7);
                     View view7 = findViewById(R.id.view7);
                     View view8 = findViewById(R.id.view8);
                     linearlayout7.setVisibility(View.VISIBLE);
                     view7.setVisibility(View.VISIBLE);
                     view8.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     LinearLayout linearlayout7 = findViewById(R.id.linearlayout7);
                     View view7 = findViewById(R.id.view7);
                     View view8 = findViewById(R.id.view8);
@@ -416,10 +489,5 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 }
                 break;
         }
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        onBackPressed();
-        return true;
     }
 }

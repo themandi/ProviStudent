@@ -27,7 +27,7 @@
             android:gravity="center"
             android:text="PROFIL UŻYTKOWNIKA"
             android:textColor="@android:color/white"
-            android:textSize="30sp"
+            android:textSize="35sp"
             android:textStyle="bold|normal"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="0dp" />
@@ -63,7 +63,7 @@
                     android:gravity="center"
                     android:text="Imię"
                     android:textColor="@android:color/black"
-                    android:textSize="22sp"
+                    android:textSize="26sp"
                     android:textStyle="bold|normal"
                     tools:ignore="MissingConstraints"
                     tools:layout_editor_absoluteX="259dp"
@@ -92,7 +92,7 @@
                 android:layout_marginLeft="10px"
                 android:text="Przychód miesięczny:"
                 android:textColor="@android:color/black"
-                android:textSize="18dp"
+                android:textSize="20dp"
                 android:textStyle="bold|normal"
                 tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="200dp"
@@ -113,6 +113,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
+                    android:textSize="18dp"
                     android:text="Przychód"
                     android:layout_marginRight="30px" />
             </LinearLayout>
@@ -140,7 +141,7 @@
                 android:layout_marginLeft="10px"
                 android:text="Opłaty stałe: "
                 android:textColor="@android:color/black"
-                android:textSize="18dp"
+                android:textSize="20dp"
                 android:textStyle="bold|normal"
                 tools:ignore="DuplicateIds,MissingConstraints"
                 tools:layout_editor_absoluteX="200dp"
@@ -161,6 +162,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Oplaty"
+                    android:textSize="18dp"
                     android:gravity="right"
                     android:layout_marginRight="30px" />
             </LinearLayout>
@@ -188,7 +190,7 @@
                 android:layout_marginLeft="10px"
                 android:text="Przypomnienia o zapłacie rachunków:"
                 android:textColor="@android:color/black"
-                android:textSize="18dp"
+                android:textSize="20dp"
                 android:textStyle="bold|normal"
                 tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="200dp"
@@ -209,6 +211,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
+                    android:textSize="15dp"
                     android:layout_marginRight="60px"
                     android:text="Brak daty"
                     android:layout_above="@id/przypominaczdzien" />
@@ -217,6 +220,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
+                    android:textSize="15dp"
                     android:text="Brak godziny"
                     android:layout_marginRight="60px"
                     android:layout_above="@id/przypominaczdzien" />
@@ -225,6 +229,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
+                    android:textSize="15dp"
                     android:text="Brak częstotliwości"
                     android:layout_marginRight="60px"/>
             </LinearLayout>
@@ -252,7 +257,7 @@
                 android:layout_marginLeft="10px"
                 android:text="Oszczędności:"
                 android:textColor="@android:color/black"
-                android:textSize="18dp"
+                android:textSize="20dp"
                 android:textStyle="bold|normal"
                 tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="200dp"
@@ -273,6 +278,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
+                    android:textSize="18dp"
                     android:text="Oszczedności"
                     android:layout_marginRight="30px" />
             </LinearLayout>
@@ -300,7 +306,7 @@
                 android:layout_marginLeft="10px"
                 android:text="Codzienne wpisywanie danych o wydatkach:"
                 android:textColor="@android:color/black"
-                android:textSize="18dp"
+                android:textSize="20dp"
                 android:textStyle="bold|normal"
                 tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="200dp"
@@ -321,6 +327,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
+                    android:textSize="18dp"
                     android:text="Brak godziny"
                     android:layout_marginRight="60px" />
             </LinearLayout>

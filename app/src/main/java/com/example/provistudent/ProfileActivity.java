@@ -127,7 +127,6 @@ public class ProfileActivity extends AppCompatActivity {
         if(cursor2 != null && cursor2.getCount() > 0) {
             while (cursor2.moveToNext()) {
                 powiadomieniagodz = cursor2.getString(cursor2.getColumnIndex("kiedydane"));
-                Toast.makeText(getApplicationContext(), ":" + powiadomieniagodz + ":", Toast.LENGTH_SHORT).show();
                 if (powiadomieniagodz == null || powiadomieniagodz.equals("")) {
                     powiadomieniagodzinaprofil.setText("Brak");
                 } else {

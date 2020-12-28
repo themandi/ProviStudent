@@ -92,7 +92,7 @@ public class CheatdayActivity extends AppCompatActivity {
                 else if (cursor.getCount() > 0) {
                     if (!kwotapole.isEmpty()) {
                         kwota = Integer.parseInt(polekwota.getText().toString());
-                        String cheatday = "Yes";
+                        String cheatday = "Tak";
                         Intent i = getIntent();
                         Bundle extras = i.getExtras();
                         if (extras.containsKey("Main")) {
@@ -120,7 +120,7 @@ public class CheatdayActivity extends AppCompatActivity {
         przyciskwyswietl = (Button) findViewById(R.id.wyswietl);
         przyciskwyswietl.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                cursor = bazadanych.odczytajtekst5();
+                cursor = bazadanych.odczytajtekstcheatday5();
                 if (cursor.getCount() == 0) {
                     wyswietlwiadomosc("Error", "Brak zapisanych zasobów!");
                     return;
@@ -132,7 +132,7 @@ public class CheatdayActivity extends AppCompatActivity {
                     buffer.append("Wydatek: " + cursor.getString(2) + "\n");
                     buffer.append("Kwota: " + cursor.getString(3) + "\n");
                 }
-                wyswietlwiadomosc("Zapisane wydatki: ", buffer.toString());
+                wyswietlwiadomosc("Wydatki za pomocą funkcji 'Cheatday': ", buffer.toString());
                 cursor.close();
             }
         });
@@ -155,7 +155,7 @@ public class CheatdayActivity extends AppCompatActivity {
 
         //Spinner wykorzystywany podczas pierwszej rejestracji użytkownika w oplatach stalych
         ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(this,
-                R.array.wybordochodu, android.R.layout.simple_spinner_item);
+                R.array.wyborcheatday, android.R.layout.simple_spinner_item);
         adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner3.setAdapter(adapter3);
         spinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -166,37 +166,7 @@ public class CheatdayActivity extends AppCompatActivity {
                     case 0:
                         Toast.makeText(parent.getContext(), "Prosze wybrać jedną z opcji!", Toast.LENGTH_SHORT).show();
                         break;
-//                    case 1:
-//                        Toast.makeText(parent.getContext(), "Spinner item 1!", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 2:
-//                        Toast.makeText(parent.getContext(), "Spinner item 2!", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 3:
-//                        Toast.makeText(parent.getContext(), "Spinner item3!", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 4:
-//                        Toast.makeText(parent.getContext(), "Spinner item 4!", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 5:
-//                        Toast.makeText(parent.getContext(), "Spinner item 5!", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 6:
-//                        Toast.makeText(parent.getContext(), "Spinner item 6!", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 7:
-//                        Toast.makeText(parent.getContext(), "Spinner item 7!", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 8:
-//                        Toast.makeText(parent.getContext(), "Spinner item 8!", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 9:
-//                        Toast.makeText(parent.getContext(), "Spinner item 9!", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 10:
-//                        Toast.makeText(parent.getContext(), "Spinner item 10!", Toast.LENGTH_SHORT).show();
-//                        break;
-                    case 11:
+                    case 6:
                         Intent intent = new Intent(CheatdayActivity.this, NewCheatdayActivity.class);
                         startActivity(intent);
                         break;
@@ -230,7 +200,7 @@ public class CheatdayActivity extends AppCompatActivity {
         String kwotapole = polekwota.getText().toString();
         if(!kwotapole.isEmpty()) {
             kwota = Integer.parseInt(polekwota.getText().toString());
-            String cheatday = "Yes";
+            String cheatday = "Tak";
             Intent i = getIntent();
             Bundle extras = i.getExtras();
             if(extras.containsKey("Main")) {

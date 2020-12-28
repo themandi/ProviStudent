@@ -30,10 +30,6 @@
             android:textStyle="bold|normal"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="0dp" />
-        <!--        <View-->
-        <!--            android:layout_width="1dp"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:layout_weight="1" />-->
 
         <LinearLayout
             android:id="@+id/linearLayout1"
@@ -47,7 +43,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="10px"
                 android:layout_marginLeft="10px"
-                android:text="Nazwa użytkownika:"
+                android:text="Nazwa użytkownika *:"
                 android:textColor="@android:color/black"
                 android:textSize="18dp"
                 android:textStyle="bold|normal" />
@@ -66,13 +62,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"></com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
+                <EditText
                     android:id="@+id/poleimie"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="30px"
-                    android:gravity="center"
                     android:hint="@string/wpisz_swoje_imie" />
+                    android:gravity="center"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -96,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10px"
-                android:text="Miesięczny dochód:"
+                android:text="Miesięczny przychód: "
                 android:textColor="@android:color/black"
                 android:textSize="18dp"
                 android:textStyle="bold|normal"
@@ -199,6 +195,7 @@
                 tools:layout_editor_absoluteX="200dp"
                 tools:layout_editor_absoluteY="90dp" />
 
+
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
@@ -269,6 +266,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_above="@id/przypominaczdzien" />
+
+                <TextView
+                    android:id="@+id/powiadomieniadzien2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/przypominaczdzien" />
+
 
                 <Button
                     android:id="@+id/przypominaczdzien"
@@ -543,17 +547,15 @@
                     android:text="@string/wybierz" />
             </LinearLayout>
         </LinearLayout>
-
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
-
         <Button
             android:id="@+id/zapisz"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/zapisz" />
+            android:text="EDYTUJ" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

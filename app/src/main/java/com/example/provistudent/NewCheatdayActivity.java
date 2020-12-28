@@ -66,7 +66,7 @@ public class NewCheatdayActivity extends AppCompatActivity {
                 String kwotapole = polekwota.getText().toString();
                 int kwota = Integer.parseInt(polekwota.getText().toString());
                 String wydatek = polewydatek.getText().toString();
-                String cheatday = "Yes";
+                String cheatday = "Tak";
                 calendarz = getIntent();
                 String datadozapisu = calendarz.getStringExtra("datadozapisu");
                 int datadozapisuint = Integer.parseInt(datadozapisu);
@@ -141,7 +141,7 @@ public class NewCheatdayActivity extends AppCompatActivity {
         String kwotapole = polekwota.getText().toString();
         int kwota = Integer.parseInt(polekwota.getText().toString());
         String wydatek = polewydatek.getText().toString();
-        String cheatday = "Yes";
+        String cheatday = "Tak";
         calendarz = getIntent();
         String datadozapisu = calendarz.getStringExtra("datadozapisu");
         int datadozapisuint = Integer.parseInt(datadozapisu);

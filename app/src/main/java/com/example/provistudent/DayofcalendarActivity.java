@@ -30,6 +30,7 @@ public class DayofcalendarActivity extends AppCompatActivity{
     Button przyciskcheat;
     Bazadanych bazadanych;
     Cursor cursor;
+    TextView przychod;
     TextView dochodaktualny;
     TextView kwotadowydania;
     TextView wydanokwota;
@@ -70,7 +71,11 @@ public class DayofcalendarActivity extends AppCompatActivity{
         int days = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         sumaprzychodu = bazadanych.sumaprzychodu();
-        sumawydatkow = bazadanych.sumawydatkowstalych();
+        sumawydatkow = bazadanych.sumawydatkow();
+
+        przychod = findViewById(R.id.przychod);
+        findViewById(R.id.przychod).invalidate();
+        przychod.setText("Przychód: " + Integer.toString(sumaprzychodu) + " zł");
 
         dochodaktualny = findViewById(R.id.dochodaktualny);
         findViewById(R.id.dochodaktualny).invalidate();
@@ -84,18 +89,53 @@ public class DayofcalendarActivity extends AppCompatActivity{
 
         wydanokwota = findViewById(R.id.wydanokwota);
         findViewById(R.id.wydanokwota).invalidate();
-        kwotawydana = bazadanych.kwotawydana();
-        wydanokwota.setText("Kwota wydatków dzisiejszych: " + Integer.toString(kwotawydana) + " zł");
 
-        przekroczono = findViewById(R.id.przekroczono);
-        findViewById(R.id.przekroczono).invalidate();
-        sumaprzekroczono = kwotawydana - kwotawydaj;
-        przekroczono.setText("Przekroczono kwote o: " + Integer.toString(sumaprzekroczono) + " zł");
+        cursor = bazadanych.odczytajtekst5();
+        int kwotawydanadzis = 0;
+        if(cursor.getCount() == 0) {
+            wydanokwota.setText("Brak wydatków dzisiejszych");
+        }
+        else {
+            while(cursor.moveToNext()) {
+                String databaza = cursor.getString(cursor.getColumnIndex("data"));
+                if(databaza.equals(datadozapisu)) {
+                    int data = cursor.getInt(cursor.getColumnIndex("data"));
+                    kwotawydanadzis = bazadanych.sumawydatkowdzisiejszych(data);
+                }
+                wydanokwota.setText("Kwota wydatków dzisiejszych: " + Integer.toString(kwotawydanadzis) + " zł");
+            }
+        }
+        cursor.close();
 
         wydanocheatday = findViewById(R.id.wydanocheatday);
         findViewById(R.id.wydanocheatday).invalidate();
-        sumacheatday = bazadanych.sumacheatday();
-        wydanocheatday.setText("Wydano z cheatday: " + Integer.toString(sumacheatday) + " zł");
+        cursor = bazadanych.odczytajtekst5();
+        int sumacheatdaydzis = 0;
+        if(cursor.getCount() == 0) {
+            wydanocheatday.setText("Brak wykorzystanych wydatków z cheatday");
+        }
+        else {
+            while(cursor.moveToNext()) {
+                String databaza = cursor.getString(cursor.getColumnIndex("data"));
+                if(databaza.equals(datadozapisu)) {
+                    int data = cursor.getInt(cursor.getColumnIndex("data"));
+                    sumacheatdaydzis = bazadanych.sumacheatdaydzisiaj(data);
+                }
+                wydanocheatday.setText("Wydano dziś z cheatday: " + Integer.toString(sumacheatdaydzis) + " zł");
+            }
+        }
+        cursor.close();
+
+        przekroczono = findViewById(R.id.przekroczono);
+        findViewById(R.id.przekroczono).invalidate();
+        sumaprzekroczono = kwotawydanadzis + sumacheatdaydzis - kwotawydaj;
+        if(sumaprzekroczono > 0) {
+            przekroczono.setText("Przekroczono kwote o: " + Integer.toString(sumaprzekroczono) + " zł");
+        }
+        else {
+            sumaprzekroczono = sumaprzekroczono * (-1);
+            przekroczono.setText("Zaoszczędzono dzisiaj: " + Integer.toString(sumaprzekroczono) + " zł");
+        }
 
         przyciskcofnij = (Button) findViewById(R.id.cofnij);
         przyciskcofnij.setOnClickListener(new View.OnClickListener() {

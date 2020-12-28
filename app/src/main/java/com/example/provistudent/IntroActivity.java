@@ -74,7 +74,6 @@ public class IntroActivity extends AppCompatActivity {
                     screenpager.setCurrentItem(position);
                 }
                 if(position == mList.size()-1) {
-                    //Ostatni layout tam gdzie bedzie wyswietlony button REJESTRACJA i ukryj przycisk indigator i button next
                     zaladujostatniekran();
                 }
             }
@@ -91,10 +90,8 @@ public class IntroActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
-                startActivity(intent);
-                //zeby drugi raz nam sie to nie odpalilo
-                introzobaczone();
                 finish();
+                startActivity(intent);
             }
         });
 
@@ -122,13 +119,6 @@ public class IntroActivity extends AppCompatActivity {
         SharedPreferences preferencje = getApplicationContext().getSharedPreferences("mojepreferencje",MODE_PRIVATE);
         Boolean introotwarte = preferencje.getBoolean("introzobaczone", false);
         return introotwarte;
-    }
-
-    private void introzobaczone() {
-        SharedPreferences preferencje = getApplicationContext().getSharedPreferences("mojepreferencje",MODE_PRIVATE);
-        SharedPreferences.Editor edytor = preferencje.edit();
-        edytor.putBoolean("introzobaczone", true);
-        edytor.commit();
     }
 
     private void zaladujostatniekran() {

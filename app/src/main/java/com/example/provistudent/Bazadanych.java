@@ -2,13 +2,12 @@ package com.example.provistudent;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
+import androidx.core.app.NotificationCompat;
 
 public class Bazadanych extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "bazadanych";
@@ -52,6 +51,9 @@ public class Bazadanych extends SQLiteOpenHelper {
     private static final String COL6_3 = "przychod";
     private static final String COL6_4 = "wydatek";
     private static final String COL6_5 = "oszczednosci";
+
+    public static final String CZY_WLACZONE = "Powiadomienia czy włączone";
+    public static final String INTERWAL = "Powiadomienia interwał";
 
     public Bazadanych(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -209,18 +211,14 @@ public class Bazadanych extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean zaaktualizujtekstcash(Integer data, String wydatek, Integer kwota, String cheatday) {
+    public boolean zaaktualizujtekstcash(Integer ID, Integer data, String wydatek, Integer kwota, String cheatday) {
         SQLiteDatabase sqLitebaza = this.getWritableDatabase();
         ContentValues zawartosc5 = new ContentValues();
         zawartosc5.put(COL5_2, data);
         zawartosc5.put(COL5_3, wydatek);
         zawartosc5.put(COL5_4, kwota);
         zawartosc5.put(COL5_5, cheatday);
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
-        String data_aktualnastring =  data_aktualna.format(cal.getTime());
-        int data_aktualnaint = Integer.parseInt(data_aktualnastring);
-        sqLitebaza.update(TABLE_NAME5, zawartosc5, COL5_1 + " = ID", null);
+        sqLitebaza.update(TABLE_NAME5, zawartosc5, COL5_1 + " = ?", new String[] {ID.toString()});
         return true;
     }
 
@@ -238,6 +236,11 @@ public class Bazadanych extends SQLiteOpenHelper {
     public Integer usuntekst3(String id) {
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
         return sqLitebaza.delete(TABLE_NAME3, COL3_1 + " = (SELECT max(" + COL3_1 + ") FROM " + TABLE_NAME3 + ")", null);
+    }
+
+    public Integer usuntekst4(String id) {
+        SQLiteDatabase sqLitebaza = this.getReadableDatabase();
+        return sqLitebaza.delete(TABLE_NAME4, COL4_1 + " = (SELECT max(" + COL4_1 + ") FROM " + TABLE_NAME4 + ")", null);
     }
 
     public Integer usuntekst5(String id) {
@@ -282,6 +285,14 @@ public class Bazadanych extends SQLiteOpenHelper {
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
         //tworzymy kursor aby zaznaczyc wszystkie wartosci
         Cursor cursor = sqLitebaza.rawQuery("SELECT * FROM " + TABLE_NAME5, null);
+        return cursor;
+    }
+
+    public Cursor odczytajtekstcheatday5() {
+        //uzyskujemy odczytywalna baze
+        SQLiteDatabase sqLitebaza = this.getReadableDatabase();
+        //tworzymy kursor aby zaznaczyc wszystkie wartosci
+        Cursor cursor = sqLitebaza.rawQuery("SELECT * FROM " + TABLE_NAME5 + " WHERE cheatday = 'Tak'", null);
         return cursor;
     }
 
@@ -348,17 +359,6 @@ public class Bazadanych extends SQLiteOpenHelper {
         return suma;
     }
 
-    public int kwotawydana() {
-        int suma = 0;
-        SQLiteDatabase sqLitebaza = this.getReadableDatabase();
-        Cursor cursor = sqLitebaza.rawQuery("SELECT SUM(" + COL5_4 + ") FROM " + TABLE_NAME5, null);
-        if (cursor.moveToFirst()) {
-            suma = cursor.getInt(0);
-        }
-        cursor.close();
-        return suma;
-    }
-
     public int sumawydatkow() {
         int suma = 0;
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
@@ -370,10 +370,32 @@ public class Bazadanych extends SQLiteOpenHelper {
         return suma;
     }
 
+    public int sumawydatkowdzisiejszych(Integer date) {
+        int suma = 0;
+        SQLiteDatabase sqLitebaza = this.getReadableDatabase();
+        Cursor cursor = sqLitebaza.rawQuery("SELECT SUM(" + COL5_4 + ") FROM " + TABLE_NAME5 + " WHERE " + COL5_2 + " = ?",  new String[] {date.toString()});
+        if (cursor.moveToFirst()) {
+            suma = cursor.getInt(0);
+        }
+        cursor.close();
+        return suma;
+    }
+
     public int sumacheatday() {
         int suma = 0;
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
-        Cursor cursor = sqLitebaza.rawQuery("SELECT SUM(" + COL5_4 + ") FROM Wydatki WHERE cheatday = 'Yes'", null);
+        Cursor cursor = sqLitebaza.rawQuery("SELECT SUM(" + COL5_4 + ") FROM Wydatki WHERE cheatday = 'Tak'", null);
+        if (cursor.moveToFirst()) {
+            suma = cursor.getInt(0);
+        }
+        cursor.close();
+        return suma;
+    }
+
+    public int sumacheatdaydzisiaj(Integer date) {
+        int suma = 0;
+        SQLiteDatabase sqLitebaza = this.getReadableDatabase();
+        Cursor cursor = sqLitebaza.rawQuery("SELECT SUM(" + COL5_4 + ") FROM Wydatki WHERE cheatday = 'Tak' AND " + COL5_2 + "= ?", new String[] {date.toString()});
         if (cursor.moveToFirst()) {
             suma = cursor.getInt(0);
         }
@@ -388,6 +410,23 @@ public class Bazadanych extends SQLiteOpenHelper {
         maxid = (cursor.moveToFirst() ? cursor.getInt(0) : 0);
         return maxid;
     }
+
+//    // Implementacja metody zapisującej dane o powiadomieniu
+//    // W moim przykładzie jest to po prostu jeden boolean
+//    public void zapisz(NotificationModel powiadomienia){
+//        //Na potrzeby pokazu korzystam z SharedPreferences
+//        SharedPreferences.Editor editor = preferences.edit();
+//        editor.putBoolean(CZY_WLACZONE, powiadomienia.czyWlaczone);
+//        editor.apply();
+//    }
+//
+//    // Implementcja metodu odczytującej z bazy info o powiadomoniach
+//    public NotificationModel odczytaj(){
+//        NotificationModel powiadomienia = new NotificationModel();
+//        powiadomienia.czyWlaczone = preferences.getBoolean(CZY_WLACZONE, false);
+//        powiadomienia.interwal = preferences.getInt(INTERWAL, 30);
+//        return powiadomienia;
+//    }
 
     public int datapowiadomienia() {
         int datapow = 0;

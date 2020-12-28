@@ -139,36 +139,6 @@ public class CashActivity extends AppCompatActivity {
                     case 0:
                         Toast.makeText(parent.getContext(), "Prosze wybrać jedną z opcji!", Toast.LENGTH_SHORT).show();
                         break;
-//                    case 1:
-//                        Toast.makeText(parent.getContext(), "Spinner item 1!", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 2:
-//                        Toast.makeText(parent.getContext(), "Spinner item 2!", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 3:
-//                        Toast.makeText(parent.getContext(), "Spinner item3!", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 4:
-//                        Toast.makeText(parent.getContext(), "Spinner item 4!", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 5:
-//                        Toast.makeText(parent.getContext(), "Spinner item 5!", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 6:
-//                        Toast.makeText(parent.getContext(), "Spinner item 6!", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 7:
-//                        Toast.makeText(parent.getContext(), "Spinner item 7!", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 8:
-//                        Toast.makeText(parent.getContext(), "Spinner item 8!", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 9:
-//                        Toast.makeText(parent.getContext(), "Spinner item 9!", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 10:
-//                        Toast.makeText(parent.getContext(), "Spinner item 10!", Toast.LENGTH_SHORT).show();
-//                        break;
                     case 11:
                         Intent intent = new Intent(CashActivity.this, NewCashActivity.class);
                         startActivity(intent);
@@ -194,6 +164,7 @@ public class CashActivity extends AppCompatActivity {
         else if(cursor.getCount()>0) {
             Toast.makeText(getApplicationContext(), "Zapisano!",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(CashActivity.this, RegisterActivity.class);
+            finish();
             startActivity(intent);
         }
         cursor.close();

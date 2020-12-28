@@ -38,7 +38,6 @@ public class EditCashActivity extends AppCompatActivity {
     int kwota;
     String data;
     String dzienimiesiac;
-    int licznik = 0;
     int dataint;
 
     @Override
@@ -92,7 +91,7 @@ public class EditCashActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String kwotapole = polekwota.getText().toString();
                 String wydatek = wydanoedycja.getText().toString();
-                String cheatday = "No";
+                String cheatday = "Nie";
                 if (cursor.getCount() == 0) {
                     Toast.makeText(getApplicationContext(), "Nie można zaaktualizować!",Toast.LENGTH_SHORT).show();
                 }
@@ -176,10 +175,12 @@ public class EditCashActivity extends AppCompatActivity {
         kwota = Integer.parseInt(polekwota.getText().toString());
         String wydatek = wydanoedycja.getText().toString();
         // Zmienne potrzebne do odczytania oraz zaaktualizowania bazy danych
-        String cheatday = "No";
+        String cheatday = "Nie";
         String wydatekbaza;
         String databaza;
+        int licznik = 0;
         String wydatekstring = "Automatyczny";
+        Integer ID;
         // Odczytanie informacji z bazy danych
         cursor = bazadanych.odczytajtekst5();
         // Zabezpieczenie przed przedwczesnym wprowadzeniem danych o wydatkach
@@ -194,9 +195,10 @@ public class EditCashActivity extends AppCompatActivity {
                     databaza = cursor.getString(cursor.getColumnIndex("data"));
                     // Jeśli wydatek jest automatyczny i data odpowiada dacie zaznaczonej w kalendarzu
                     if (wydatekbaza.equals(wydatekstring) && databaza.equals(datadozapisu)) {
+                        ID = cursor.getInt(cursor.getColumnIndex("ID"));
                         // Zabezpieczenie przed wprowadzeniem pustej kwoty wydatku
                         if (!kwotapole.isEmpty()) {
-                            if (bazadanych.zaaktualizujtekstcash(datadozapisuint, wydatek, kwota, cheatday)) {
+                            if (bazadanych.zaaktualizujtekstcash(ID, datadozapisuint, wydatek, kwota, cheatday)) {
                                 polekwota.setText("");
                                 licznik = 1;
                             }

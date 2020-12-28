@@ -2,25 +2,17 @@ package com.example.provistudent;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.DialogFragment;
 
-import android.os.SystemClock;
 import android.text.TextUtils;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.CompoundButton;
@@ -40,6 +32,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
+    private Notifications powiadomienia;
     Bazadanych bazadanych;
     EditText poleimie;
     Button przyciskzapisz;
@@ -71,16 +64,12 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     String time2;
     String date;
     Calendar c;
+    String czestotliwosc;
     String timezmienna = "";
-    private NotificationManagerCompat notificationManager;
-    public static final String CHANNEL_1_ID = "kanal1";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
-        notificationManager = NotificationManagerCompat.from(this);
 
         poleimie = findViewById(R.id.poleimie);
         przyciskzapisz = findViewById(R.id.zapisz);
@@ -94,37 +83,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         setSupportActionBar(toolbar);
 
         bazadanych = new Bazadanych(RegisterActivity.this);
-        cursor = bazadanych.odczytajtekst();
-        cursor2 = bazadanych.odczytajtekst4();
-        if(cursor.getCount()==0){
-            Toast.makeText(getApplicationContext(), "No data",Toast.LENGTH_SHORT).show();
-        }
-        else {
-            while(cursor.moveToNext())
-            {
-                Toast.makeText(getApplicationContext(), "1: "+cursor.getString(1),Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "2: "+cursor.getString(2),Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "3: "+cursor.getString(3),Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "4: "+cursor.getString(4),Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "5: "+cursor.getString(5),Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "6: "+cursor.getString(6),Toast.LENGTH_SHORT).show();
-
-            }
-            cursor.close();
-        }
-
-        if(cursor2.getCount()==0){
-            Toast.makeText(getApplicationContext(), "No data",Toast.LENGTH_SHORT).show();
-        }
-        else {
-            while(cursor2.moveToNext())
-            {
-                Toast.makeText(getApplicationContext(), "1: "+cursor2.getString(1),Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "2: "+cursor2.getString(2),Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "3: "+cursor2.getString(3),Toast.LENGTH_SHORT).show();
-            }
-            cursor2.close();
-        }
+        powiadomienia = new Notifications(bazadanych, (AlarmManager)getSystemService(Context.ALARM_SERVICE), getApplicationContext());
 
         przyciskzapisz.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
@@ -198,10 +157,12 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 switch (position) {
                     case 1:
                         Intent intent = new Intent(RegisterActivity.this, IncomeActivity.class);
+                        finish();
                         startActivity(intent);
                         break;
                     case 2:
                         Intent intent2 = new Intent(RegisterActivity.this, IncomeActivity2.class);
+                        finish();
                         startActivity(intent2);
                         break;
                 }
@@ -226,19 +187,19 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 switch (position) {
                     case 1:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co miesiąc", Toast.LENGTH_SHORT).show();
-                        scheduleNotification(getNotification("5 second delay"), 5000);
+                        czestotliwosc = "43200";
                         break;
                     case 2:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co trzy miesiące", Toast.LENGTH_SHORT).show();
-//                        scheduleNotification(getNotification("10 second delay"), 10000);
+                        czestotliwosc = "129600";
                         break;
                     case 3:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co pół roku", Toast.LENGTH_SHORT).show();
-//                        scheduleNotification(getNotification("30 second delay"), 30000);
+                        czestotliwosc = "259200";
                         break;
                     case 4:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co rok", Toast.LENGTH_SHORT).show();
-//                        scheduleNotification(getNotification("60 second delay"), 60000);
+                        czestotliwosc = "518400";
                         break;
                 }
             }
@@ -256,7 +217,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 timePicker = new TimePicker();
                 timezmienna = "picker1";
                 timePicker.show(getSupportFragmentManager(), "time picker");
-//                dodajpowiadomienie();
             }
         });
 //      przypominacz czasu
@@ -281,87 +241,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         timePicker2.show(getSupportFragmentManager(), "time picker");
     }
 
-
-//    private void scheduleNotification(Notification notification) {
-//
-//        Intent notificationIntent = new Intent(this, NotificationReceiver.class);
-//        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, 1);
-//        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION, notification);
-//        int year = 2020;
-//        int month = 12;
-//        int day = 20;
-//        int hour = 19;
-//        int minute = 25;
-//        Calendar calendar =  Calendar.getInstance();
-//        calendar.set(year, month, day, hour, minute);
-//        calendar.set(Calendar.SECOND, 0);
-//        long kiedy = calendar.getTimeInMillis();
-//        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, 0);
-//        alarmManager.set(AlarmManager.RTC, kiedy, pendingIntent);
-//    }
-
-    private void scheduleNotification(Notification notification, int delay) {
-
-        Intent notificationIntent = new Intent(this, NotificationReceiver.class);
-        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, 1);
-        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION, notification);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.SECOND, 3);
-        long futureInMillis = SystemClock.elapsedRealtime() + delay;
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
-    }
-
-    private Notification getNotification(String content) {
-        Notification.Builder builder = new Notification.Builder(this);
-        builder.setContentTitle("Scheduled Notification");
-        builder.setContentText(content);
-        builder.setSmallIcon(R.mipmap.ic_launcher_round);
-        return builder.build();
-    }
-
-//    private void stworzkanalpowiadomienia() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            NotificationChannel kanal = new NotificationChannel(CHANNEL_1_ID, "Kanal", NotificationManager.IMPORTANCE_HIGH);
-//            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-//            notificationManager.createNotificationChannel(kanal);
-//        }
-//    }
-//
-//    private void dodajpowiadomienie() {
-//        String message = "blabla";
-//        Intent activity = new Intent(this, MainActivity.class);
-//        PendingIntent content = PendingIntent.getActivity(this,
-//                0, activity, 0);
-//        Intent broadcastIntent = new Intent(this, NotificationReceiver.class);
-//        broadcastIntent.putExtra("Opłać wszystkie", message);
-//        broadcastIntent.putExtra("czas", time);
-//        broadcastIntent.putExtra("data", date);
-//        PendingIntent actionIntent = PendingIntent.getBroadcast(this,
-//                0, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//        Notification powiadomienie = new NotificationCompat.Builder(this, CHANNEL_1_ID)
-//                .setSmallIcon(R.mipmap.ic_launcher_round)
-//                .setContentTitle("Zapłać za opłaty stałe!")
-//                .setContentText("Kliknij i opłać opłaty stałe!")
-//                .setPriority(NotificationCompat.PRIORITY_HIGH)
-//                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-//                .setColor(Color.GREEN)
-//                .setContentIntent(content)
-//                .setAutoCancel(true)
-//                .setOnlyAlertOnce(true)
-//                .addAction(R.mipmap.ic_launcher, "Opłać wszystkie", actionIntent)
-//                .addAction(R.mipmap.ic_launcher, "Odłóż", actionIntent)
-//                .build();
-//        notificationManager.notify(1, powiadomienie);
-//    }
-
     //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onZapisz() {
+        cursor = bazadanych.odczytajtekst();
+        cursor2 = bazadanych.odczytajtekst4();
         String imie = poleimie.getText().toString();
         int oszczednosci = 0;
         if(wybrano2 == "Yes") {
@@ -417,9 +300,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
             finish();
             startActivity(intent);
+            introzobaczone();
         }
         else {
-            Toast.makeText(getApplicationContext(), "Nic nie zostało zapisane!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Nic nie zostało zapisane! Sprawdź czy zaznaczyłeś obowiązkowe punkty w rejestracji",Toast.LENGTH_SHORT).show();
         }
         cursor.close();
         cursor2.close();
@@ -483,6 +367,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 if(zaznaczony == true)
                 {
                     Intent intent = new Intent(RegisterActivity.this, CashActivity.class);
+                    finish();
                     startActivity(intent);
                 }
                 break;
@@ -559,4 +444,22 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 break;
         }
     }
+    private void introzobaczone() {
+        SharedPreferences preferencje = getApplicationContext().getSharedPreferences("mojepreferencje",MODE_PRIVATE);
+        SharedPreferences.Editor edytor = preferencje.edit();
+        edytor.putBoolean("introzobaczone", true);
+        edytor.commit();
+    }
+    public void onWlacz(View view){
+        try {
+            powiadomienia.ustaw(Integer.parseInt(czestotliwosc) * 1000 * 60);
+        } catch (Exception e){
+            System.out.println("Błąd");
+        }
+        powiadomienia.wlacz(true);
+    }
+    public void onWylacz(View view){
+        powiadomienia.wlacz(false);
+    }
+
 }

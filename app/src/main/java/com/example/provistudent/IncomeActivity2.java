@@ -77,6 +77,7 @@ public class IncomeActivity2 extends AppCompatActivity {
                         kwota = Integer.parseInt(polekwota2.getText().toString());
                         if (bazadanych.zaaktualizujtekst2(zasob, kwota, kartapole)) {
                             polekwota2.setText("");
+                            polekarta.setText("");
                             Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -137,6 +138,7 @@ public class IncomeActivity2 extends AppCompatActivity {
         else if(cursor.getCount()>0) {
             Toast.makeText(getApplicationContext(), "Zapisano!",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(IncomeActivity2.this, RegisterActivity.class);
+            finish();
             startActivity(intent);
         }
         cursor.close();
@@ -153,6 +155,7 @@ public class IncomeActivity2 extends AppCompatActivity {
         if(!kwotapole.isEmpty()) {
             if (bazadanych.dodajtekst2(zasob, kwota, kartapole)) {
                 polekwota2.setText("");
+                polekarta.setText("");
             }
             Toast.makeText(getApplicationContext(), "Dodano!",Toast.LENGTH_SHORT).show();
         }
