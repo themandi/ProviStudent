@@ -113,9 +113,10 @@ public class ProfileActivity extends AppCompatActivity {
         if(cursor2 != null && cursor2.getCount() > 0) {
             while (cursor2.moveToNext()) {
                 coilepowiad = cursor2.getString(cursor2.getColumnIndex("czestotliwosc"));
-                if (coilepowiad.equals("Wybierz")) {
+                if(coilepowiad.equals("Wybierz")) {
                     cojakiczas.setText("Brak");
-                } else {
+                }
+                else {
                     cojakiczas.setText(coilepowiad);
                 }
             }
@@ -140,7 +141,6 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                     String timeformat = timestring.format(time);
                     powiadomieniagodzinaprofil.setText(timeformat);
-                    powiadomieniagodzinaprofil.setText("Brak");
                 }
             }
         }

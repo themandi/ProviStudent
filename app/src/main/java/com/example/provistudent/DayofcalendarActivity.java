@@ -63,7 +63,13 @@ public class DayofcalendarActivity extends AppCompatActivity{
         String dzienimiesiac = calendarz.getStringExtra("data2");
         data = calendarz.getStringExtra("data");
         String datadozapisu = calendarz.getStringExtra("datadozapisu");
-        datadozapisuint = Integer.parseInt(datadozapisu);
+        try
+        {
+            datadozapisuint = Integer.parseInt(datadozapisu);
+        }catch(Throwable t)
+        {
+            Toast.makeText(getApplicationContext(), "Error: Błąd zapisu daty z kalendarza!", Toast.LENGTH_SHORT).show();
+        }
         TextView tekstdata = (TextView) findViewById(R.id.jakidzien);
         tekstdata.setText(dzienimiesiac);
 

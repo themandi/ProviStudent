@@ -76,6 +76,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         bazadanych = new Bazadanych(MainActivity.this);
 
+        cursor = bazadanych.odczytajtekst4();
+        if(cursor != null && cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex("czywlaczone")), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex("interwal")), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex("tekstpow")), Toast.LENGTH_SHORT).show();
+            }
+        }
+        cursor.close();
         miesiac = findViewById(R.id.miesiac);
         Calendar cal = Calendar.getInstance();
         sumaprzychodu = bazadanych.sumaprzychodu();
@@ -276,8 +285,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         wykreskolowy.setDrawEntryLabels(false);
 
         ArrayList<PieEntry> listawykres = new ArrayList<>();
-        listawykres.add(new PieEntry(sumadochodaktualny, "Dochód"));
-        listawykres.add(new PieEntry(sumawydatkowstalych, "Wydatki"));
+        listawykres.add(new PieEntry(sumaprzychodu, "Przychód"));
+        listawykres.add(new PieEntry(sumawydatkow, "Wydatki"));
         listawykres.add(new PieEntry(sumaoszczednosci, "Oszczędności"));
 
         PieDataSet dataSet = new PieDataSet(listawykres, "");
@@ -311,6 +320,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void sprawdzdata() throws ParseException {
         int maxid = bazadanych.odczytajmaxdate();
+        String maxidString = String.valueOf(maxid);
         Calendar cal = Calendar.getInstance();
         int days = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         int kwotawydaj = sumaprzychodu/days;
@@ -319,23 +329,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
         String data_aktualnastring =  data_aktualna.format(cal.getTime());
         int data_aktualnaint = Integer.parseInt(data_aktualnastring);
-        if(data_aktualnaint > maxid) {
+        while(data_aktualnaint > maxid) {
             bazadanych.dodajtekst5(data_aktualnaint, wydatek, kwotawydaj, cheatday);
-            zwiekszdate(data_aktualnaint);
+            cal.setTime(data_aktualna.parse(maxidString));
+            cal.add(Calendar.DATE, 1);
+            maxidString = data_aktualna.format(cal.getTime());
+            maxid = Integer.parseInt(maxidString);
         }
     }
 
-    private int zwiekszdate(int data_aktualnaint) throws ParseException {
-        SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
-        Calendar cal = Calendar.getInstance();
-        String data_aktualnastring =  data_aktualna.format(cal.getTime());
-        cal.setTime(data_aktualna.parse(data_aktualnastring));
-        cal.add(Calendar.DATE, 1);
-        String zmiendate=data_aktualna.format(cal.getTime());
-        int zmianadatyint = Integer.parseInt(zmiendate);
-        data_aktualnaint = zmianadatyint;
-        return data_aktualnaint;
-    }
+//    private int zwiekszdate(String maxidString) throws ParseException {
+//        SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTime(data_aktualna.parse(maxidString));
+//        cal.add(Calendar.DATE, 1);
+//        maxidString = data_aktualna.format(cal.getTime());
+//        int maxid = Integer.parseInt(maxidString);
+//        return maxid;
+//    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

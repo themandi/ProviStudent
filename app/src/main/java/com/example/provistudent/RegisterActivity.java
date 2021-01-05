@@ -32,7 +32,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
-    private Notifications powiadomienia;
+    Notifications powiadomienia;
     Bazadanych bazadanych;
     EditText poleimie;
     Button przyciskzapisz;
@@ -89,6 +89,14 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             public void onClick(View view)
             {
                 onZapisz();
+            }
+        });
+
+        Button rejestracja;
+        rejestracja = findViewById(R.id.rejestracja);
+        rejestracja.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Aby przeprowadzić poprawnie rejestracje należy wypełnić dane o które jesteśmy zapytani. Jeśli zaznaczymy pole wyboru, musimy wprowadzić wszystkie dane, o które zostaniemy poproszeni. Zaznaczenie pytań dotyczących przypomnień powoduje włączenie powiadomień aplikacji.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -157,11 +165,13 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 switch (position) {
                     case 1:
                         Intent intent = new Intent(RegisterActivity.this, IncomeActivity.class);
+                        intent.putExtra("Register", "RegisterActivity");
                         finish();
                         startActivity(intent);
                         break;
                     case 2:
                         Intent intent2 = new Intent(RegisterActivity.this, IncomeActivity2.class);
+                        intent2.putExtra("Register", "RegisterActivity");
                         finish();
                         startActivity(intent2);
                         break;
@@ -247,15 +257,38 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         cursor2 = bazadanych.odczytajtekst4();
         String imie = poleimie.getText().toString();
         int oszczednosci = 0;
-        if(wybrano2 == "Yes") {
+        String czywlaczone = "No";
+        String czywlaczone2 = "No";
+        int interwal = 1000 * 60;
+//        int interwal = 1000 * 60 * 60 * 24 * 30;
+        String tekstpow = "Domyslny tekst";
+        String tekstpow2 = "Domyslny tekst2";
+        if(wybrano2.equals("Yes")) {
             data = date;
             godzina2 = time2;
+            czywlaczone = "Yes";
         }
-        if(wybrano3 == "Yes") {
-            oszczednosci = Integer.parseInt(poleoszczednosci.getText().toString());
+        else if(wybrano2.equals("No")) {
+            date = null;
+            godzina2 = null;
+            czywlaczone = "No";
         }
-        if(wybrano4 == "Yes") {
+        if(wybrano3.equals("Yes")) {
+            try
+            {
+                oszczednosci = Integer.parseInt(poleoszczednosci.getText().toString());
+            }catch(NumberFormatException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        if(wybrano4.equals("Yes")) {
             godzina = time;
+            czywlaczone2 = "Yes";
+        }
+        else if(wybrano4.equals("No")) {
+            godzina = null;
+            czywlaczone2 = "No";
         }
         if(!imie.isEmpty()) {
             if (cursor.getCount() == 0) {
@@ -263,44 +296,65 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                     poleimie.setText("");
                     poleoszczednosci.setText("");
                 }
-            }
-            else if (cursor.getCount() > 0) {
+            } else if (cursor.getCount() > 0) {
                 if (bazadanych.zaaktualizujtekst(imie, wybrano, wybrano2, wybrano3, wybrano4, oszczednosci)) {
                     poleimie.setText("");
                     poleoszczednosci.setText("");
                 }
             }
-            if(wybrano2 == "Yes" & wybrano4 == "Yes") {
-                if(cursor2.getCount() == 0) {
-                    bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina);
-                }
-                else {
-                    bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina);
+            if (wybrano2.equals("Yes") & wybrano4.equals("Yes")) {
+                if (godzina2 != null && data != null && godzina != null && !czestotliwoscopcje.equals("Wybierz")) {
+                    if (cursor2.getCount() == 0) {
+                        bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+                    } else if (cursor2.getCount() > 0) {
+                        bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+                    }
+                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                    finish();
+                    startActivity(intent);
+                    introzobaczone();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Nie zostały wypełnione wszystkie pola powiadomień o opłatach i/lub danych", Toast.LENGTH_SHORT).show();
                 }
             }
-            else if(wybrano2 == "Yes") {
+                else if (wybrano2.equals("Yes")) {
                 godzina = null;
-                if(cursor2.getCount() == 0) {
-                    bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina);
+                if (data != null && godzina2 != null && !czestotliwoscopcje.equals("Wybierz")) {
+                    if (cursor2.getCount() == 0) {
+                        bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+                    } else {
+                        bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+                    }
+                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                    finish();
+                    startActivity(intent);
+                    introzobaczone();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Nie zostały wypełnione wszystkie pola powiadomień o opłatach", Toast.LENGTH_SHORT).show();
                 }
-                else {
-                    bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina);
-                }
-            }
-            else if(wybrano4 == "Yes") {
+            } else if (wybrano4.equals("Yes")) {
                 data = null;
                 godzina2 = null;
-                if(cursor2.getCount() == 0) {
-                    bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina);
-                }
-                else {
-                    bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina);
+                if (godzina != null) {
+                    if (cursor2.getCount() == 0) {
+                        bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+                    } else {
+                        bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+                    }
+                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                    finish();
+                    startActivity(intent);
+                    introzobaczone();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Nie zostały wypełnione wszystkie pola przypomnień o wprowadzeniu danych", Toast.LENGTH_SHORT).show();
                 }
             }
-            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-            finish();
-            startActivity(intent);
-            introzobaczone();
+                if(wybrano2.equals("No") && wybrano4.equals("No")) {
+                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                    finish();
+                    startActivity(intent);
+                    introzobaczone();
+                }
         }
         else {
             Toast.makeText(getApplicationContext(), "Nic nie zostało zapisane! Sprawdź czy zaznaczyłeś obowiązkowe punkty w rejestracji",Toast.LENGTH_SHORT).show();
@@ -367,6 +421,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 if(zaznaczony == true)
                 {
                     Intent intent = new Intent(RegisterActivity.this, CashActivity.class);
+                    intent.putExtra("Register", "RegisterActivity");
                     finish();
                     startActivity(intent);
                 }
@@ -450,16 +505,4 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         edytor.putBoolean("introzobaczone", true);
         edytor.commit();
     }
-    public void onWlacz(View view){
-        try {
-            powiadomienia.ustaw(Integer.parseInt(czestotliwosc) * 1000 * 60);
-        } catch (Exception e){
-            System.out.println("Błąd");
-        }
-        powiadomienia.wlacz(true);
-    }
-    public void onWylacz(View view){
-        powiadomienia.wlacz(false);
-    }
-
 }

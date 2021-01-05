@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="#ededed"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <!--    CTRL + ALT + L - ukladanie kodu-->
@@ -18,12 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <TextView
+        <Button
             android:id="@+id/ustawienia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#0b5225"
             android:gravity="center"
+            android:drawableLeft="@drawable/ic_baseline_info_24"
+            android:drawableTint="@android:color/white"
             android:text="USTAWIENIA UŻYTKOWNIKA"
             android:textColor="@android:color/white"
             android:textSize="30sp"

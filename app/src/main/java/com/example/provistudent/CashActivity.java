@@ -50,8 +50,18 @@ public class CashActivity extends AppCompatActivity {
         przyciskcofnij.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
             {
-                Intent intent = new Intent(CashActivity.this, RegisterActivity.class);
-                startActivity(intent);
+                Intent i = getIntent();
+                Bundle extras = i.getExtras();
+                if(extras.containsKey("Register")) {
+                    Intent intent = new Intent(CashActivity.this, RegisterActivity.class);
+                    finish();
+                    startActivity(intent);
+                }
+                if(extras.containsKey("Settings")) {
+                    Intent intent = new Intent(CashActivity.this, SettingsActivity.class);
+                    finish();
+                    startActivity(intent);
+                }
             }
         });
 
@@ -77,7 +87,13 @@ public class CashActivity extends AppCompatActivity {
                 }
                 else if (cursor.getCount() > 0) {
                     if (!kwotapole.isEmpty()) {
-                        kwota = Integer.parseInt(polekwota.getText().toString());
+                        try
+                        {
+                            kwota = Integer.parseInt(polekwota.getText().toString());
+                        }catch(Throwable t)
+                        {
+                            Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zaaktualizowane dane, prosimy spróbować ponownie!", Toast.LENGTH_SHORT).show();
+                        }
                         if (bazadanych.zaaktualizujtekst3(wydatek, kwota)) {
                             polekwota.setText("");
                             Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
@@ -163,9 +179,18 @@ public class CashActivity extends AppCompatActivity {
         }
         else if(cursor.getCount()>0) {
             Toast.makeText(getApplicationContext(), "Zapisano!",Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(CashActivity.this, RegisterActivity.class);
-            finish();
-            startActivity(intent);
+            Intent i = getIntent();
+            Bundle extras = i.getExtras();
+            if(extras.containsKey("Register")) {
+                Intent intent = new Intent(CashActivity.this, RegisterActivity.class);
+                finish();
+                startActivity(intent);
+            }
+            if(extras.containsKey("Settings")) {
+                Intent intent = new Intent(CashActivity.this, SettingsActivity.class);
+                finish();
+                startActivity(intent);
+            }
         }
         cursor.close();
     }
@@ -173,7 +198,13 @@ public class CashActivity extends AppCompatActivity {
     void onDodaj() {
         String kwotapole = polekwota.getText().toString();
         if(!kwotapole.isEmpty()) {
-            kwota = Integer.parseInt(polekwota.getText().toString());
+            try
+            {
+                kwota = Integer.parseInt(polekwota.getText().toString());
+            }catch(Throwable t)
+            {
+                Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisane dane, prosimy edytować bądź usunąć wydatek", Toast.LENGTH_SHORT).show();
+            }
             if (bazadanych.dodajtekst3(wydatek, kwota)) {
                 polekwota.setText("");
             }

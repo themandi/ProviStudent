@@ -20,7 +20,6 @@ public class NotificationReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // Konfiguracja zależnosci
         bazadanych = new Bazadanych(context);
-        Notifications powiadomienia = new Notifications(bazadanych, (AlarmManager)context.getSystemService(Context.ALARM_SERVICE), context);
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         //Patrz niżej metodę
@@ -30,7 +29,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.mipmap.logo_round)
                 .setContentTitle("Zapłać za opłaty stałe!")
-                .setContentText("Kliknij i opłać opłaty stałe!")
+                .setContentText("Bla")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setColor(Color.GREEN)

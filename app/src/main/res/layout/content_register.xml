@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:background="#ededed">
     <!--    CTRL + ALT + L - ukladanie kodu-->
 
     <LinearLayout
@@ -12,12 +13,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
+        <Button
             android:id="@+id/rejestracja"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#0b5225"
             android:gravity="center"
+            android:drawableLeft="@drawable/ic_baseline_info_24"
+            android:drawableTint="@android:color/white"
             android:text="@string/rejestracja_u_ytkownika"
             android:textColor="@android:color/white"
             android:textSize="30sp"

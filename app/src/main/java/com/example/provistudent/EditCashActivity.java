@@ -97,7 +97,13 @@ public class EditCashActivity extends AppCompatActivity {
                 }
                 else if (cursor.getCount() > 0) {
                     if(!kwotapole.isEmpty()) {
-                        kwota = Integer.parseInt(polekwota.getText().toString());
+                        try
+                        {
+                            kwota = Integer.parseInt(polekwota.getText().toString());
+                        }catch(Throwable t)
+                        {
+                            Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zaaktualizowane dane, prosimy spróbować ponownie!", Toast.LENGTH_SHORT).show();
+                        }
                         if (bazadanych.zaaktualizujtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
                             polekwota.setText("");
                             Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
@@ -172,7 +178,13 @@ public class EditCashActivity extends AppCompatActivity {
     void onDodaj() {
         // Odczytanie informacji z EditText
         String kwotapole = polekwota.getText().toString();
-        kwota = Integer.parseInt(polekwota.getText().toString());
+        try
+        {
+            kwota = Integer.parseInt(polekwota.getText().toString());
+        }catch(Throwable t)
+        {
+            Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisane dane, prosimy edytować bądź usunąć wydatek", Toast.LENGTH_SHORT).show();
+        }
         String wydatek = wydanoedycja.getText().toString();
         // Zmienne potrzebne do odczytania oraz zaaktualizowania bazy danych
         String cheatday = "Nie";

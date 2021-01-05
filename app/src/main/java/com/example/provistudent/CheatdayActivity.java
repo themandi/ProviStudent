@@ -62,10 +62,17 @@ public class CheatdayActivity extends AppCompatActivity {
         polekwota = findViewById(R.id.polekwota);
         przyciskcofnij = (Button) findViewById(R.id.cofnij);
         przyciskcofnij.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view)
-            {
-                Intent intent = new Intent(CheatdayActivity.this, MainActivity.class);
-                startActivity(intent);
+            public void onClick(View view) {
+                Intent i = getIntent();
+                Bundle extras = i.getExtras();
+                if (extras.containsKey("Main")) {
+                    Intent intent = new Intent(CheatdayActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+                if (extras.containsKey("Calendar")) {
+                    Intent intent = new Intent(CheatdayActivity.this, DayofcalendarActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -91,7 +98,13 @@ public class CheatdayActivity extends AppCompatActivity {
                 }
                 else if (cursor.getCount() > 0) {
                     if (!kwotapole.isEmpty()) {
-                        kwota = Integer.parseInt(polekwota.getText().toString());
+                        try
+                        {
+                            kwota = Integer.parseInt(polekwota.getText().toString());
+                        }catch(Throwable t)
+                        {
+                            Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisane dane, prosimy spróbować ponownie!", Toast.LENGTH_SHORT).show();
+                        }
                         String cheatday = "Tak";
                         Intent i = getIntent();
                         Bundle extras = i.getExtras();
@@ -199,7 +212,13 @@ public class CheatdayActivity extends AppCompatActivity {
     void onDodaj() {
         String kwotapole = polekwota.getText().toString();
         if(!kwotapole.isEmpty()) {
-            kwota = Integer.parseInt(polekwota.getText().toString());
+            try
+            {
+                kwota = Integer.parseInt(polekwota.getText().toString());
+            }catch(Throwable t)
+            {
+                Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisane dane, prosimy edytować bądź usunąć wydatek", Toast.LENGTH_SHORT).show();
+            }
             String cheatday = "Tak";
             Intent i = getIntent();
             Bundle extras = i.getExtras();
@@ -209,7 +228,13 @@ public class CheatdayActivity extends AppCompatActivity {
                 }
             }
             if(extras.containsKey("Calendar")) {
-                datadozapisuint = Integer.parseInt(datadozapisu);
+                try
+                {
+                    datadozapisuint = Integer.parseInt(datadozapisu);
+                }catch(Throwable t)
+                {
+                    Toast.makeText(getApplicationContext(), "Error: Błąd zapisu daty z kalendarza!", Toast.LENGTH_SHORT).show();
+                }
                 if (bazadanych.dodajtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
                     polekwota.setText("");
                 }

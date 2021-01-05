@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/app_bar_main">
+    tools:showIn="@layout/app_bar_main"
+    android:background="#ededed">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,8 +47,7 @@
                     android:id="@+id/miesiac"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="15dp"
                     android:layout_gravity="center"
                     android:text="@string/miesiac"
                     android:textColor="@android:color/black"

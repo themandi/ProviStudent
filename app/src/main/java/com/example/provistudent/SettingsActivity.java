@@ -33,10 +33,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class SettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
+    private Notifications powiadomienia;
     Bazadanych bazadanych;
     Button przyciskzapisz;
     Button przypominaczgodzina;
     Button przypominaczdzien;
+    String czestotliwosc;
     Cursor cursor;
     Cursor cursor2;
     CheckBox checkoplaty;
@@ -48,22 +50,18 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     TextView powiadomieniagodzina;
     TextView powiadomieniadzien;
     TextView powiadomieniadzien2;
-    String czestotliwoscopcje;
     String wybrano = "No";
     String wybrano2 = "No";
     String wybrano3 = "No";
     String wybrano4 = "No";
-    String data;
-    String godzina;
-    String godzina2;
     EditText poleimie;
     DialogFragment timePicker;
     DialogFragment timePicker2;
     DatePickerDialog datepicker;
-    String time;
-    String time2;
-    String date;
-    Calendar c;
+    String czestotliwoscopcje;
+    String time = "";
+    String time2 = "";
+    String date = "";
     String timezmienna = "";
 
     @Override
@@ -88,6 +86,14 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         przyciskzapisz.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 onZapisz();
+            }
+        });
+
+        Button ustawienia;
+        ustawienia = findViewById(R.id.ustawienia);
+        ustawienia.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Aby zmienić ustawienia aplikacji należy edytować tylko to pole, które nas interesuje. Pozostałe twoje dane nie będą mieć wprowadzonych zmian!", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -152,11 +158,13 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 switch (position) {
                     case 1:
                         Intent intent = new Intent(SettingsActivity.this, IncomeActivity.class);
+                        intent.putExtra("Settings", "SettingsActivity");
                         finish();
                         startActivity(intent);
                         break;
                     case 2:
                         Intent intent2 = new Intent(SettingsActivity.this, IncomeActivity2.class);
+                        intent2.putExtra("Settings", "SettingsActivity");
                         finish();
                         startActivity(intent2);
                         break;
@@ -182,19 +190,19 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 switch (position) {
                     case 1:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co miesiąc", Toast.LENGTH_SHORT).show();
-//                        scheduleNotification(getNotification("5 second delay"), 5000);
+                        czestotliwosc = "43200";
                         break;
                     case 2:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co trzy miesiące", Toast.LENGTH_SHORT).show();
-//                        scheduleNotification(getNotification("10 second delay"), 10000);
+                        czestotliwosc = "129600";
                         break;
                     case 3:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co pół roku", Toast.LENGTH_SHORT).show();
-//                        scheduleNotification(getNotification("30 second delay"), 30000);
+                        czestotliwosc = "259200";
                         break;
                     case 4:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co rok", Toast.LENGTH_SHORT).show();
-//                        scheduleNotification(getNotification("60 second delay"), 60000);
+                        czestotliwosc = "518400";
                         break;
                 }
             }
@@ -246,10 +254,13 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
     //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onZapisz() {
-        cursor = bazadanych.odczytajtekst();
-        cursor2 = bazadanych.odczytajtekst4();
         String imie = poleimie.getText().toString();
-        if(imie.equals(null) || imie.equals("")) {
+        String czywlaczone = "No";
+        String czywlaczone2 = "No";
+        int interwal = 1000 * 60;
+        String tekstpow = "Domyslny tekst";
+        cursor = bazadanych.odczytajtekst();
+        if(imie == null || imie.equals("")) {
             if (cursor.getCount() > 0) {
                 while (cursor.moveToNext()) {
                     imie = cursor.getString(cursor.getColumnIndex("nazwa_uzytkownika"));
@@ -257,37 +268,67 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 }
             }
         }
+        cursor.close();
         int oszczednosci = 0;
 
-        if (wybrano2.equals("Yes")) {
-            data = date;
-            godzina2 = time2;
-            if(czestotliwoscopcje.equals("")) {
+        if (wybrano2.equals("Yes") && wybrano4.equals("No")) {
+            String data = date;
+            String godzina2 = time2;
+            String godzina = null;
+            cursor2 = bazadanych.odczytajtekst4();
+            if(czestotliwoscopcje.equals("Wybierz") || czestotliwoscopcje.equals("")) {
                 if (cursor2.getCount() > 0) {
                     while (cursor2.moveToNext()) {
                         czestotliwoscopcje = cursor2.getString(cursor2.getColumnIndex("czestotliwosc"));
                     }
                 }
             }
-            if (data.equals("") || data.equals(null)) {
+            cursor2.close();
+
+            cursor2 = bazadanych.odczytajtekst4();
+            if (data.equals("") || data == null) {
                 if (cursor2.getCount() > 0) {
                     while (cursor2.moveToNext()) {
                         data = cursor2.getString(cursor2.getColumnIndex("kiedypow"));
                     }
                 }
             }
-            else if (godzina2.equals("") || godzina2.equals(null)) {
+            cursor2.close();
+
+            cursor2 = bazadanych.odczytajtekst4();
+            if (godzina2 == null || godzina2.equals("")) {
                 if (cursor2.getCount() > 0) {
                     while (cursor2.moveToNext()) {
                         godzina2 = cursor2.getString(cursor2.getColumnIndex("kiedypowczas"));
                     }
                 }
             }
+            cursor2.close();
+
+            cursor2 = bazadanych.odczytajtekst4();
+            if (cursor2.getCount() > 0) {
+                while (cursor2.moveToNext()) {
+                    godzina = cursor2.getString(cursor2.getColumnIndex("kiedydane"));
+                }
+            }
+            if (cursor2.getCount() == 0) {
+                bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+            } else {
+                bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+            }
+            cursor2.close();
         }
 
+        cursor = bazadanych.odczytajtekst();
         if (wybrano3.equals("Yes")) {
-            oszczednosci = Integer.parseInt(poleoszczednosci.getText().toString());
-            if (poleoszczednosci.equals(null) || poleoszczednosci.equals("")) {
+            try
+            {
+                oszczednosci = Integer.parseInt(poleoszczednosci.getText().toString());
+            }catch(NumberFormatException e)
+            {
+                e.printStackTrace();
+            }
+            if (poleoszczednosci == null || poleoszczednosci.equals("")) {
                 if (cursor.getCount() > 0) {
                     while (cursor.moveToNext()) {
                         oszczednosci = cursor.getInt(cursor.getColumnIndex("oszczednosci"));
@@ -295,69 +336,129 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 }
             }
         }
-        if (wybrano4.equals("Yes")) {
-            godzina = time;
-            if (godzina.equals(null) || godzina.equals("")) {
+        cursor.close();
+
+        if (wybrano4.equals("Yes") && wybrano2.equals("No")) {
+            String godzina = time;
+            String data = null;
+            String godzina2 = null;
+            cursor2 = bazadanych.odczytajtekst4();
+            if (godzina == null || godzina.equals("")) {
                 if (cursor2.getCount() > 0) {
                     while (cursor2.moveToNext()) {
                         godzina = cursor2.getString(cursor2.getColumnIndex("kiedydane"));
                     }
                 }
             }
+            cursor2.close();
+
+            cursor2 = bazadanych.odczytajtekst4();
+            if (cursor2.getCount() > 0) {
+                while (cursor2.moveToNext()) {
+                    czestotliwoscopcje = cursor2.getString(cursor2.getColumnIndex("czestotliwosc"));
+                }
+            }
+            cursor2.close();
+
+            cursor2 = bazadanych.odczytajtekst4();
+            if (cursor2.getCount() > 0) {
+                while (cursor2.moveToNext()) {
+                    data = cursor2.getString(cursor2.getColumnIndex("kiedypow"));
+                }
+            }
+            cursor2.close();
+
+            cursor2 = bazadanych.odczytajtekst4();
+            if (cursor2.getCount() > 0) {
+                while (cursor2.moveToNext()) {
+                    godzina2 = cursor2.getString(cursor2.getColumnIndex("kiedypowczas"));
+                }
+            }
+            cursor2.close();
+
+            cursor2 = bazadanych.odczytajtekst4();
+            if (cursor2.getCount() == 0) {
+                bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+            } else {
+                bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+            }
+            cursor2.close();
         }
+
+        cursor = bazadanych.odczytajtekst();
+        if(oszczednosci == 0) {
+            if (cursor.getCount() > 0) {
+                if(cursor.moveToNext()) {
+                    oszczednosci = cursor.getInt(cursor.getColumnIndex("oszczednosci"));
+                }
+            }
+        }
+        cursor.close();
+
+        cursor = bazadanych.odczytajtekst();
         if (cursor.getCount() > 0) {
             if (bazadanych.zaaktualizujtekst(imie, wybrano, wybrano2, wybrano3, wybrano4, oszczednosci)) {
                 poleimie.setText("");
                 poleoszczednosci.setText("");
             }
         }
+        cursor.close();
+
         if (wybrano2.equals("Yes") && wybrano4.equals("Yes")) {
-            if (cursor2.getCount() == 0) {
-                bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina);
-            } else {
-                bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina);
-            }
-        } else if (wybrano2.equals("Yes")) {
-            godzina = null;
-            if (cursor2.getCount() > 0) {
-                while (cursor2.moveToNext()) {
-                    godzina = cursor2.getString(cursor2.getColumnIndex("kiedydane"));
-                }
-            }
-            if (cursor2.getCount() == 0) {
-                bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina);
-            } else {
-                bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina);
-            }
-        } else if (wybrano4.equals("Yes")) {
-            data = null;
-            godzina2 = null;
-            czestotliwoscopcje = null;
+            String data = date;
+            String godzina2 = time2;
+            String godzina = time;
+            cursor2 = bazadanych.odczytajtekst4();
+            if(czestotliwoscopcje.equals("") || czestotliwoscopcje == null || czestotliwoscopcje.equals("Wybierz")) {
                 if (cursor2.getCount() > 0) {
                     while (cursor2.moveToNext()) {
-                        godzina2 = cursor2.getString(cursor2.getColumnIndex("kiedypowczas"));
+                        czestotliwoscopcje = cursor2.getString(cursor2.getColumnIndex("czestotliwosc"));
                     }
                 }
+            }
+            cursor2.close();
+
+            cursor2 = bazadanych.odczytajtekst4();
+            if (data == null || data.equals("")) {
                 if (cursor2.getCount() > 0) {
                     while (cursor2.moveToNext()) {
                         data = cursor2.getString(cursor2.getColumnIndex("kiedypow"));
                     }
                 }
+            }
+            cursor2.close();
+
+            cursor2 = bazadanych.odczytajtekst4();
+            if (godzina2 == null || godzina2.equals("")) {
                 if (cursor2.getCount() > 0) {
                     while (cursor2.moveToNext()) {
-                    czestotliwoscopcje = cursor2.getString(cursor2.getColumnIndex("czestotliwosc"));
+                        godzina2 = cursor2.getString(cursor2.getColumnIndex("kiedypowczas"));
+                    }
                 }
             }
-            if (cursor2.getCount() == 0) {
-                bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina);
-            } else {
-                bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina);
+            cursor2.close();
+
+            cursor2 = bazadanych.odczytajtekst4();
+            if (godzina == null || godzina.equals("")) {
+                if (cursor2.getCount() > 0) {
+                    while (cursor2.moveToNext()) {
+                        godzina = cursor2.getString(cursor2.getColumnIndex("kiedydane"));
+                    }
+                }
             }
+            cursor2.close();
+
+            cursor2 = bazadanych.odczytajtekst4();
+            if (cursor2.getCount() == 0) {
+                bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+            } else {
+                bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+            }
+            cursor2.close();
         }
+
         Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
         startActivity(intent);
-        cursor.close();
-        cursor2.close();
     }
 
     @Override
@@ -416,6 +517,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 boolean zaznaczony = ((CheckBox) view).isChecked();
                 if (zaznaczony == true) {
                     Intent intent = new Intent(SettingsActivity.this, CashActivity.class);
+                    intent.putExtra("Settings", "SettingsActivity");
                     finish();
                     startActivity(intent);
                 }

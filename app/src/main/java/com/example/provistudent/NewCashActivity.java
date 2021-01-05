@@ -66,8 +66,15 @@ public class NewCashActivity extends AppCompatActivity {
         przyciskedytuj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int kwota = 0;
                 String kwotapole = polekwota.getText().toString();
-                int kwota = Integer.parseInt(polekwota.getText().toString());
+                try
+                {
+                    kwota = Integer.parseInt(polekwota.getText().toString());
+                }catch(Throwable t)
+                {
+                    Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zaaktualizowane dane, prosimy spróbować ponownie!", Toast.LENGTH_SHORT).show();
+                }
                 String oplata = poleoplata.getText().toString();
                 if (cursor.getCount() == 0) {
                     Toast.makeText(getApplicationContext(), "Nie można zaaktualizować!", Toast.LENGTH_SHORT).show();
@@ -137,7 +144,15 @@ public class NewCashActivity extends AppCompatActivity {
 
     void onDodaj() {
         String kwotapole = polekwota.getText().toString();
-        int kwota = Integer.parseInt(polekwota.getText().toString());
+        int kwota = 0;
+        try
+        {
+            kwota = Integer.parseInt(polekwota.getText().toString());
+        }
+        catch(Throwable t)
+        {
+            Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisane dane, prosimy edytować bądź usunąć wydatek", Toast.LENGTH_SHORT).show();
+        }
         String oplata = poleoplata.getText().toString();
 
 

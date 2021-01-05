@@ -64,12 +64,28 @@ public class NewCheatdayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String kwotapole = polekwota.getText().toString();
-                int kwota = Integer.parseInt(polekwota.getText().toString());
+                int kwota = 0;
+                try
+                {
+                    kwota = Integer.parseInt(polekwota.getText().toString());
+                }
+                catch(Throwable t)
+                {
+                    Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zaaktualizowane dane, prosimy spróbować ponownie!", Toast.LENGTH_SHORT).show();
+                }
                 String wydatek = polewydatek.getText().toString();
                 String cheatday = "Tak";
                 calendarz = getIntent();
                 String datadozapisu = calendarz.getStringExtra("datadozapisu");
-                int datadozapisuint = Integer.parseInt(datadozapisu);
+                int datadozapisuint = 0;
+                try
+                {
+                    datadozapisuint = Integer.parseInt(datadozapisu);
+                }
+                catch(Throwable t)
+                {
+                    Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisana data!", Toast.LENGTH_SHORT).show();
+                }
                 if (cursor.getCount() == 0) {
                     Toast.makeText(getApplicationContext(), "Nie można zaaktualizować!", Toast.LENGTH_SHORT).show();
                 } else if (cursor.getCount() > 0) {
@@ -139,12 +155,28 @@ public class NewCheatdayActivity extends AppCompatActivity {
 
     void onDodaj() {
         String kwotapole = polekwota.getText().toString();
-        int kwota = Integer.parseInt(polekwota.getText().toString());
+        int kwota = 0;
+        try
+        {
+            kwota = Integer.parseInt(polekwota.getText().toString());
+        }
+        catch(Throwable t)
+        {
+            Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisane dane, prosimy edytować bądź usunąć wydatek", Toast.LENGTH_SHORT).show();
+        }
         String wydatek = polewydatek.getText().toString();
         String cheatday = "Tak";
         calendarz = getIntent();
         String datadozapisu = calendarz.getStringExtra("datadozapisu");
-        int datadozapisuint = Integer.parseInt(datadozapisu);
+        int datadozapisuint = 0;
+        try
+        {
+            datadozapisuint = Integer.parseInt(datadozapisu);
+        }
+        catch(Throwable t)
+        {
+            Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisana data", Toast.LENGTH_SHORT).show();
+        }
         if (!kwotapole.isEmpty()) {
             if (bazadanych.dodajtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
                 polekwota.setText("");

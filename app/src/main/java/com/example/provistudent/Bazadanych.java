@@ -2,12 +2,9 @@ package com.example.provistudent;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import androidx.core.app.NotificationCompat;
 
 public class Bazadanych extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "bazadanych";
@@ -37,6 +34,10 @@ public class Bazadanych extends SQLiteOpenHelper {
     private static final String COL4_3 = "kiedypowczas";
     private static final String COL4_4 = "czestotliwosc";
     private static final String COL4_5 = "kiedydane";
+    private static final String COL4_6 = "czywlaczone";
+    private static final String COL4_7 = "interwal";
+    private static final String COL4_8 = "tekstpow";
+    private static final String COL4_9 = "czywlaczone2";
 
     private static final String TABLE_NAME5 = "Wydatki";
     private static final String COL5_1 = "ID";
@@ -52,9 +53,6 @@ public class Bazadanych extends SQLiteOpenHelper {
     private static final String COL6_4 = "wydatek";
     private static final String COL6_5 = "oszczednosci";
 
-    public static final String CZY_WLACZONE = "Powiadomienia czy włączone";
-    public static final String INTERWAL = "Powiadomienia interwał";
-
     public Bazadanych(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
@@ -68,7 +66,7 @@ public class Bazadanych extends SQLiteOpenHelper {
         String stworztabele3 = "CREATE TABLE " + TABLE_NAME3 + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL3_2 + " TEXT, " + COL3_3 + " INTEGER)";
         String stworztabele4 = "CREATE TABLE " + TABLE_NAME4 + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COL4_2 + " TEXT, " + COL4_3 + " TEXT, " + COL4_4 + " TEXT, " + COL4_5 + " TEXT)";
+                COL4_2 + " TEXT, " + COL4_3 + " TEXT, " + COL4_4 + " TEXT, " + COL4_5 + " TEXT, " +  COL4_6 + " TEXT, " + COL4_7 + " INTEGER, " +  COL4_8 + " TEXT, " + COL4_9 + " TEXT)";
         String stworztabele5 = "CREATE TABLE " + TABLE_NAME5 + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL5_2 + " INTEGER, " + COL5_3 + " TEXT, " + COL5_4 + " INTEGER, " + COL5_5 + " TEXT)";
         String stworztabele6 = "CREATE TABLE " + TABLE_NAME6 + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -124,13 +122,17 @@ public class Bazadanych extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean dodajtekst4(String kiedypow, String kiedypowczas, String czestotliwosc, String kiedydane) {
+    public boolean dodajtekst4(String kiedypow, String kiedypowczas, String czestotliwosc, String kiedydane, String czywlaczone, Integer interwal, String tekstpow, String czywlaczone2) {
         SQLiteDatabase sqLitebaza = this.getWritableDatabase();
         ContentValues zawartosc4 = new ContentValues();
         zawartosc4.put(COL4_2, kiedypow);
         zawartosc4.put(COL4_3, kiedypowczas);
         zawartosc4.put(COL4_4, czestotliwosc);
         zawartosc4.put(COL4_5, kiedydane);
+        zawartosc4.put(COL4_6, czywlaczone);
+        zawartosc4.put(COL4_7, interwal);
+        zawartosc4.put(COL4_8, tekstpow);
+        zawartosc4.put(COL4_9, czywlaczone2);
         sqLitebaza.insert(TABLE_NAME4, null, zawartosc4);
         return true;
     }
@@ -189,13 +191,17 @@ public class Bazadanych extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean zaaktualizujtekst4(String kiedypow, String kiedypowczas, String czestotliwosc, String kiedydane) {
+    public boolean zaaktualizujtekst4(String kiedypow, String kiedypowczas, String czestotliwosc, String kiedydane, String czywlaczone, Integer interwal, String tekstpow, String czywlaczone2) {
         SQLiteDatabase sqLitebaza = this.getWritableDatabase();
         ContentValues zawartosc4 = new ContentValues();
         zawartosc4.put(COL4_2, kiedypow);
         zawartosc4.put(COL4_3, kiedypowczas);
         zawartosc4.put(COL4_4, czestotliwosc);
         zawartosc4.put(COL4_5, kiedydane);
+        zawartosc4.put(COL4_6, czywlaczone);
+        zawartosc4.put(COL4_7, interwal);
+        zawartosc4.put(COL4_8, tekstpow);
+        zawartosc4.put(COL4_9, czywlaczone2);
         sqLitebaza.update(TABLE_NAME4, zawartosc4, COL4_1 + "=ID", null);
         return true;
     }
@@ -410,23 +416,6 @@ public class Bazadanych extends SQLiteOpenHelper {
         maxid = (cursor.moveToFirst() ? cursor.getInt(0) : 0);
         return maxid;
     }
-
-//    // Implementacja metody zapisującej dane o powiadomieniu
-//    // W moim przykładzie jest to po prostu jeden boolean
-//    public void zapisz(NotificationModel powiadomienia){
-//        //Na potrzeby pokazu korzystam z SharedPreferences
-//        SharedPreferences.Editor editor = preferences.edit();
-//        editor.putBoolean(CZY_WLACZONE, powiadomienia.czyWlaczone);
-//        editor.apply();
-//    }
-//
-//    // Implementcja metodu odczytującej z bazy info o powiadomoniach
-//    public NotificationModel odczytaj(){
-//        NotificationModel powiadomienia = new NotificationModel();
-//        powiadomienia.czyWlaczone = preferences.getBoolean(CZY_WLACZONE, false);
-//        powiadomienia.interwal = preferences.getInt(INTERWAL, 30);
-//        return powiadomienia;
-//    }
 
     public int datapowiadomienia() {
         int datapow = 0;
