@@ -37,6 +37,8 @@ public class ProfileActivity extends AppCompatActivity {
         TextView oszczednosciprofil;
         TextView powiadomieniagodzinaprofil;
         TextView powiadomieniadzienczas;
+        TextView stanpowiadomien;
+        TextView stanpowiadomien2;
         int sumaoszczednosci;
         int sumawydatkowstalych;
         int sumaprzychodu;
@@ -44,6 +46,8 @@ public class ProfileActivity extends AppCompatActivity {
         String powiadomieniadzientime;
         String coilepowiad;
         String powiadomieniagodz;
+        String stanpowiadomienstring;
+        String stanpowiadomienstring2;
 
         bazadanych = new Bazadanych(ProfileActivity.this);
         cursor = bazadanych.odczytajtekst();
@@ -80,6 +84,42 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                     String dataformat = datestring.format(data);
                     powiadomieniadzienprofil.setText(dataformat);
+                }
+            }
+        }
+        cursor2.close();
+
+        stanpowiadomien = findViewById(R.id.stanpowiadomien);
+        cursor2 = bazadanych.odczytajtekst4();
+        if(cursor2 != null && cursor2.getCount() > 0) {
+            while (cursor2.moveToNext()) {
+                stanpowiadomienstring = cursor2.getString(cursor2.getColumnIndex("czywlaczone"));
+                if (stanpowiadomienstring == null || stanpowiadomienstring.equals("")) {
+                    stanpowiadomien.setText("Stan powiadomienia: Wyłączone");
+                } else {
+                    if (stanpowiadomienstring.equals("Yes")) {
+                        stanpowiadomien.setText("Stan powiadomienia: Włączone");
+                    } else if (stanpowiadomienstring.equals("No")) {
+                        stanpowiadomien.setText("Stan powiadomienia: Wyłączone");
+                    }
+                }
+            }
+        }
+        cursor2.close();
+
+        stanpowiadomien2 = findViewById(R.id.stanpowiadomien2);
+        cursor2 = bazadanych.odczytajtekst4();
+        if(cursor2 != null && cursor2.getCount() > 0) {
+            while (cursor2.moveToNext()) {
+                stanpowiadomienstring2 = cursor2.getString(cursor2.getColumnIndex("czywlaczone2"));
+                if (stanpowiadomienstring2 == null || stanpowiadomienstring2.equals("")) {
+                    stanpowiadomien2.setText("Stan powiadomienia: Wyłączone");
+                } else {
+                    if (stanpowiadomienstring2.equals("Yes")) {
+                        stanpowiadomien2.setText("Stan powiadomienia: Włączone");
+                    } else if (stanpowiadomienstring2.equals("No")) {
+                        stanpowiadomien2.setText("Stan powiadomienia: Wyłączone");
+                    }
                 }
             }
         }

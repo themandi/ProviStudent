@@ -63,8 +63,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     String time;
     String time2;
     String date;
-    Calendar c;
-    String czestotliwosc;
+    long interwal;
     String timezmienna = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,19 +196,19 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 switch (position) {
                     case 1:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co miesiąc", Toast.LENGTH_SHORT).show();
-                        czestotliwosc = "43200";
+                        interwal = 2592000000L;
                         break;
                     case 2:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co trzy miesiące", Toast.LENGTH_SHORT).show();
-                        czestotliwosc = "129600";
+                        interwal = 7776000000L;
                         break;
                     case 3:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co pół roku", Toast.LENGTH_SHORT).show();
-                        czestotliwosc = "259200";
+                        interwal = 15552000000L;
                         break;
                     case 4:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co rok", Toast.LENGTH_SHORT).show();
-                        czestotliwosc = "518400";
+                        interwal = 31104000000L;
                         break;
                 }
             }
@@ -259,19 +258,17 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         int oszczednosci = 0;
         String czywlaczone = "No";
         String czywlaczone2 = "No";
-        int interwal = 1000 * 60;
-//        int interwal = 1000 * 60 * 60 * 24 * 30;
-        String tekstpow = "Domyslny tekst";
-        String tekstpow2 = "Domyslny tekst2";
+
         if(wybrano2.equals("Yes")) {
             data = date;
             godzina2 = time2;
             czywlaczone = "Yes";
         }
-        else if(wybrano2.equals("No")) {
+        if(wybrano2.equals("No")) {
             date = null;
             godzina2 = null;
             czywlaczone = "No";
+            powiadomienia.usunPowiadomieniaZAlarmManager1();
         }
         if(wybrano3.equals("Yes")) {
             try
@@ -286,9 +283,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             godzina = time;
             czywlaczone2 = "Yes";
         }
-        else if(wybrano4.equals("No")) {
+        if(wybrano4.equals("No")) {
             godzina = null;
             czywlaczone2 = "No";
+            powiadomienia.usunPowiadomieniaZAlarmManager2();
         }
         if(!imie.isEmpty()) {
             if (cursor.getCount() == 0) {
@@ -305,10 +303,13 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             if (wybrano2.equals("Yes") & wybrano4.equals("Yes")) {
                 if (godzina2 != null && data != null && godzina != null && !czestotliwoscopcje.equals("Wybierz")) {
                     if (cursor2.getCount() == 0) {
-                        bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
-                    } else if (cursor2.getCount() > 0) {
-                        bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+                        bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
                     }
+                    else if (cursor2.getCount() > 0) {
+                        bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
+                    }
+                    powiadomienia.ustawNowePowiadomieniaWAlarmManager1();
+                    powiadomienia.ustawNowePowiadomieniaWAlarmManager2();
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                     finish();
                     startActivity(intent);
@@ -321,10 +322,11 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 godzina = null;
                 if (data != null && godzina2 != null && !czestotliwoscopcje.equals("Wybierz")) {
                     if (cursor2.getCount() == 0) {
-                        bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+                        bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
                     } else {
-                        bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+                        bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
                     }
+                    powiadomienia.ustawNowePowiadomieniaWAlarmManager1();
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                     finish();
                     startActivity(intent);
@@ -337,10 +339,11 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 godzina2 = null;
                 if (godzina != null) {
                     if (cursor2.getCount() == 0) {
-                        bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+                        bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
                     } else {
-                        bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+                        bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
                     }
+                    powiadomienia.ustawNowePowiadomieniaWAlarmManager2();
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                     finish();
                     startActivity(intent);
@@ -350,6 +353,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 }
             }
                 if(wybrano2.equals("No") && wybrano4.equals("No")) {
+                    powiadomienia.usunPowiadomieniaZAlarmManager1();
+                    powiadomienia.usunPowiadomieniaZAlarmManager2();
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                     finish();
                     startActivity(intent);

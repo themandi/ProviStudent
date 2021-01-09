@@ -79,9 +79,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cursor = bazadanych.odczytajtekst4();
         if(cursor != null && cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
+                long interwal = cursor.getLong(cursor.getColumnIndex("interwal"));
                 Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex("czywlaczone")), Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex("interwal")), Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex("tekstpow")), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), String.valueOf(interwal), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex("czywlaczone2")), Toast.LENGTH_SHORT).show();
             }
         }
         cursor.close();

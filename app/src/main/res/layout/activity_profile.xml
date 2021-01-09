@@ -212,7 +212,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
-                    android:textSize="15dp"
+                    android:textSize="18dp"
                     android:layout_marginRight="60px"
                     android:text="Brak daty"
                     android:layout_above="@id/przypominaczdzien" />
@@ -221,7 +221,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
-                    android:textSize="15dp"
+                    android:textSize="18dp"
                     android:text="Brak godziny"
                     android:layout_marginRight="60px"
                     android:layout_above="@id/przypominaczdzien" />
@@ -230,8 +230,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
-                    android:textSize="15dp"
+                    android:textSize="18dp"
                     android:text="Brak częstotliwości"
+                    android:layout_marginRight="60px"/>
+                <TextView
+                    android:id="@+id/stanpowiadomien"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:textSize="18dp"
+                    android:text="Stan powiadomienia: Wyłączone"
                     android:layout_marginRight="60px"/>
             </LinearLayout>
         </LinearLayout>
@@ -331,6 +339,14 @@
                     android:textSize="18dp"
                     android:text="Brak godziny"
                     android:layout_marginRight="60px" />
+                <TextView
+                    android:id="@+id/stanpowiadomien2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:textSize="18dp"
+                    android:text="Stan powiadomienia: Wyłączone"
+                    android:layout_marginRight="60px"/>
             </LinearLayout>
         </LinearLayout>
 

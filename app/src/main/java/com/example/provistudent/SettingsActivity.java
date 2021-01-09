@@ -257,8 +257,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         String imie = poleimie.getText().toString();
         String czywlaczone = "No";
         String czywlaczone2 = "No";
-        int interwal = 1000 * 60;
-        String tekstpow = "Domyslny tekst";
+        long interwal = 1000 * 60;
         cursor = bazadanych.odczytajtekst();
         if(imie == null || imie.equals("")) {
             if (cursor.getCount() > 0) {
@@ -312,9 +311,9 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 }
             }
             if (cursor2.getCount() == 0) {
-                bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+                bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
             } else {
-                bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+                bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
             }
             cursor2.close();
         }
@@ -378,9 +377,9 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
             cursor2 = bazadanych.odczytajtekst4();
             if (cursor2.getCount() == 0) {
-                bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+                bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
             } else {
-                bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+                bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
             }
             cursor2.close();
         }
@@ -450,9 +449,9 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
             cursor2 = bazadanych.odczytajtekst4();
             if (cursor2.getCount() == 0) {
-                bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+                bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
             } else {
-                bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, tekstpow, czywlaczone2);
+                bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
             }
             cursor2.close();
         }
