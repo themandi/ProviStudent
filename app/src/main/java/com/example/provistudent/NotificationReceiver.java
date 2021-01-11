@@ -10,62 +10,52 @@ import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
 
 public class NotificationReceiver extends BroadcastReceiver {
     public static final String CHANNEL_ID = "Kanal";
-    private static final String OPLACPOMIN_ACTION = "com.example.provistudent.OPLACPOMIN";
-    private static final String ODLOZ_ACTION = "com.example.provistudent.ODLOZ";
     Bazadanych bazadanych;
+    public static int currentId = 1;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         // Konfiguracja zależnosci
         bazadanych = new Bazadanych(context);
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        int id = currentId++;
         String tekstpow = intent.getExtras().getString("tekstpow");
         String titlepow = intent.getExtras().getString("titlepow");
+        String contentintent = intent.getExtras().getString("intent");
 
         stworzkanalpowiadomien(notificationManager);
 
-        PendingIntent mainactivity = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent activity = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
-        PendingIntent constantcashactivity = PendingIntent.getActivity(context, 0, new Intent(context, ConstantCashActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-
+        if(contentintent.equals("intent")) {
+            activity = PendingIntent.getActivity(context, 0, new Intent(context, ConstantCashActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+        else if(contentintent.equals("intent2")) {
+            activity = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        }
 
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        Intent oplaclubpomin = new Intent();
-        oplaclubpomin.setAction(OPLACPOMIN_ACTION);
-        PendingIntent pendingIntentoplaclubpomin = PendingIntent.getBroadcast(context, 1, oplaclubpomin, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent oplaclubpomin = new Intent(context, ActionReceiver.class);
+        oplaclubpomin.putExtra("action", "OPLACPOMIN_ACTION");
+        oplaclubpomin.putExtra("tekstpow",tekstpow);
+        oplaclubpomin.putExtra("titlepow",titlepow);
+        oplaclubpomin.putExtra("NotId", id);
 
-        Intent odloz = new Intent();
-        odloz.setAction(ODLOZ_ACTION);
-        PendingIntent pendingIntentodloz = PendingIntent.getBroadcast(context, 1, odloz, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntentoplaclubpomin = PendingIntent.getBroadcast(context, 2, oplaclubpomin, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        String action = intent.getAction();
-        if (OPLACPOMIN_ACTION.equals(action)) {
-            if (titlepow.equals("Opłać wszystkie")) {
-                context.startActivity(new Intent(context, MainActivity.class));
-            }
-            if (titlepow.equals("Pomiń")) {
-                context.startActivity(new Intent(context, ProfileActivity.class));
-//                powiadomienia.usunp2
-            }
-        }
-        else if (ODLOZ_ACTION.equals(action)) {
-            if(tekstpow.equals("Opłać opłaty stałe!")) {
-//                powiadomienia.odlozpowiadomienie1();
-            }
-            else if(tekstpow.equals("Wprowadź dane z dzisiejszego dnia!")){
-//                powiadomienia.odlozpowiadomienie2();
-            }
-        }
-
+        Intent odloz = new Intent(context, ActionReceiver.class);
+        odloz.putExtra("action", "ODLOZ_ACTION");
+        odloz.putExtra("tekstpow", tekstpow);
+        odloz.putExtra("titlepow", titlepow);
+        odloz.putExtra("NotId", id);
+        PendingIntent pendingIntentodloz = PendingIntent.getBroadcast(context, 3, odloz, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Wysłanie powiadomienia
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
@@ -77,14 +67,14 @@ public class NotificationReceiver extends BroadcastReceiver {
                 .setColor(Color.GREEN)
                 .setOnlyAlertOnce(true)
                 .setAutoCancel(true)
-                .setContentIntent(mainactivity)
+                .setContentIntent(activity)
                 .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
                 .setLights(Color.MAGENTA, 3000, 3000)
                 .setSound(uri)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .addAction(R.mipmap.logo, titlepow, pendingIntentoplaclubpomin)
-                .addAction(R.mipmap.logo, "Odłóż", constantcashactivity);
-        notificationManager.notify(0, builder.build());
+                .addAction(R.mipmap.logo, "Odłóż", pendingIntentodloz);
+        notificationManager.notify(id, builder.build());
     }
 
     private void stworzkanalpowiadomien(NotificationManager notificationManager) {

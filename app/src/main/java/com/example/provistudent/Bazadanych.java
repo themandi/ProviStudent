@@ -230,7 +230,6 @@ public class Bazadanych extends SQLiteOpenHelper {
         return sqLitebaza.delete(TABLE_NAME5, null, null);
     }
 
-
     public Integer usuntekst2(String id) {
         SQLiteDatabase sqLitebaza = this.getReadableDatabase();
         return sqLitebaza.delete(TABLE_NAME2, COL2_1 + " = (SELECT max(" + COL2_1 + ") FROM " + TABLE_NAME2 + ")", null);

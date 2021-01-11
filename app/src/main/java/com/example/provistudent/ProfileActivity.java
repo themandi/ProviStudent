@@ -151,16 +151,12 @@ public class ProfileActivity extends AppCompatActivity {
         cojakiczas = findViewById(R.id.cojakiczas);
         cursor2 = bazadanych.odczytajtekst4();
         if(cursor2 != null && cursor2.getCount() > 0) {
+            coilepowiad = "Brak";
             while (cursor2.moveToNext()) {
-                coilepowiad = cursor2.getString(cursor2.getColumnIndex("czestotliwosc"));
-                if(coilepowiad.equals("Wybierz")) {
-                    cojakiczas.setText("Brak");
+                    coilepowiad = cursor2.getString(cursor2.getColumnIndex("czestotliwosc"));
                 }
-                else {
                     cojakiczas.setText(coilepowiad);
-                }
             }
-        }
         cursor2.close();
 
         powiadomieniagodzinaprofil = findViewById(R.id.powiadomieniagodzinaprofil);

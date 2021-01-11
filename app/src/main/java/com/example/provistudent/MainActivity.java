@@ -114,23 +114,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             cursor.close();
         }
-//
-////DO USUNIĘCIA PRZED ODDANIEM APLIKACJI. JEŚLI BĘDZIESZ POTRZEBOWAĆ DO STATYSTYK UZUPEŁNIENIA DO PRACY LOFKI
-//            int dochodbla = 2000;
-//            int wydatekbla = 1700;
-//            int oszczednoscbla = 300;
-//            int dochodbla2 = 2200;
-//            int wydatekbla2 = 1890;
-//            int oszczednoscbla2 = 410;
-//            int dochodbla3 = 1800;
-//            int wydatekbla3 = 1567;
-//            int oszczednoscbla3 = 643;
-//            String miesiac = "01";
-//            String miesiac2 = "02";
-//            String miesiac3 = "03";
-//            bazadanych.dodajtekst6(miesiac, dochodbla, wydatekbla, oszczednoscbla);
-//            bazadanych.dodajtekst6(miesiac2, dochodbla2, wydatekbla2, oszczednoscbla2);
-//            bazadanych.dodajtekst6(miesiac3, dochodbla3, wydatekbla3, oszczednoscbla3);
 
         przychod = findViewById(R.id.przychod);
         findViewById(R.id.przychod).invalidate();

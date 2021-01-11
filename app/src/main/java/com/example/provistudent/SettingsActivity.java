@@ -1,7 +1,9 @@
 package com.example.provistudent;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -38,13 +40,14 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     Button przyciskzapisz;
     Button przypominaczgodzina;
     Button przypominaczdzien;
-    String czestotliwosc;
     Cursor cursor;
     Cursor cursor2;
     CheckBox checkoplaty;
     CheckBox checkoplatykiedy;
     CheckBox checkoszczednosci;
     CheckBox checkdane;
+    CheckBox usunpowiad;
+    CheckBox usunpowiadoplaty;
     Spinner spinnerdochod;
     TextView poleoszczednosci;
     TextView powiadomieniagodzina;
@@ -54,6 +57,8 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     String wybrano2 = "No";
     String wybrano3 = "No";
     String wybrano4 = "No";
+    String wybrano5 = "No";
+    String wybrano6 = "No";
     EditText poleimie;
     DialogFragment timePicker;
     DialogFragment timePicker2;
@@ -63,6 +68,9 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     String time2 = "";
     String date = "";
     String timezmienna = "";
+    long interwal = 0;
+    String czywlaczone = "No";
+    String czywlaczone2 = "No";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +87,12 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         checkoplatykiedy = findViewById(R.id.checkoplatykiedy);
         checkoszczednosci = findViewById(R.id.checkoszczednosci);
         checkdane = findViewById(R.id.checkdane);
+        usunpowiad = findViewById(R.id.usunpowiad);
+        usunpowiadoplaty = findViewById(R.id.usunpowiadoplaty);
         poleoszczednosci = findViewById(R.id.poleoszczednosci);
 
         bazadanych = new Bazadanych(SettingsActivity.this);
+        powiadomienia = new Notifications(bazadanych, (AlarmManager)getSystemService(Context.ALARM_SERVICE), getApplicationContext());
 
         przyciskzapisz.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -145,6 +156,31 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             }
         });
 
+        //Metoda wykorzystywana do pobierania wybranej opcji w checkboxie Opłat oraz zapisywaniu do bazy danych
+        usunpowiadoplaty.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean zaznaczone) {
+                if (zaznaczone) {
+                    wybrano5 = "Yes";
+                } else {
+                    wybrano5 = "No";
+                }
+            }
+        });
+
+        //Metoda wykorzystywana do pobierania wybranej opcji w checkboxie Opłat oraz zapisywaniu do bazy danych
+        usunpowiad.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean zaznaczone) {
+                if (zaznaczone) {
+                    wybrano6 = "Yes";
+                } else {
+                    wybrano6 = "No";
+                }
+            }
+        });
+
+
 
         //Spinner wykorzystywany podczas pierwszej rejestracji użytkownika w Dochodzie
         spinnerdochod = (Spinner) findViewById(R.id.spinner1);
@@ -190,19 +226,19 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 switch (position) {
                     case 1:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co miesiąc", Toast.LENGTH_SHORT).show();
-                        czestotliwosc = "43200";
+                        interwal = 2592000000L;
                         break;
                     case 2:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co trzy miesiące", Toast.LENGTH_SHORT).show();
-                        czestotliwosc = "129600";
+                        interwal = 7776000000L;
                         break;
                     case 3:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co pół roku", Toast.LENGTH_SHORT).show();
-                        czestotliwosc = "259200";
+                        interwal = 15552000000L;
                         break;
                     case 4:
                         Toast.makeText(parent.getContext(), "Wybrano opcje: Co rok", Toast.LENGTH_SHORT).show();
-                        czestotliwosc = "518400";
+                        interwal = 31104000000L;
                         break;
                 }
             }
@@ -255,9 +291,6 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onZapisz() {
         String imie = poleimie.getText().toString();
-        String czywlaczone = "No";
-        String czywlaczone2 = "No";
-        long interwal = 1000 * 60;
         cursor = bazadanych.odczytajtekst();
         if(imie == null || imie.equals("")) {
             if (cursor.getCount() > 0) {
@@ -270,15 +303,36 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         cursor.close();
         int oszczednosci = 0;
 
-        if (wybrano2.equals("Yes") && wybrano4.equals("No")) {
+        if (wybrano2.equals("Yes")) {
             String data = date;
             String godzina2 = time2;
             String godzina = null;
+            czywlaczone = "Yes";
             cursor2 = bazadanych.odczytajtekst4();
             if(czestotliwoscopcje.equals("Wybierz") || czestotliwoscopcje.equals("")) {
                 if (cursor2.getCount() > 0) {
                     while (cursor2.moveToNext()) {
                         czestotliwoscopcje = cursor2.getString(cursor2.getColumnIndex("czestotliwosc"));
+                    }
+                }
+            }
+            cursor2.close();
+
+            cursor2 = bazadanych.odczytajtekst4();
+            if(interwal == 0) {
+                if (cursor2.getCount() > 0) {
+                    while (cursor2.moveToNext()) {
+                        interwal = cursor2.getLong(cursor2.getColumnIndex("interwal"));
+                    }
+                }
+            }
+            cursor2.close();
+
+            cursor2 = bazadanych.odczytajtekst4();
+            if(czywlaczone2.equals("No")) {
+                if (cursor2.getCount() > 0) {
+                    while (cursor2.moveToNext()) {
+                        czywlaczone2 = cursor2.getString(cursor2.getColumnIndex("czywlaczone2"));
                     }
                 }
             }
@@ -316,6 +370,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
             }
             cursor2.close();
+            powiadomienia.ustawNowePowiadomieniaWAlarmManager1();
         }
 
         cursor = bazadanych.odczytajtekst();
@@ -337,10 +392,11 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         }
         cursor.close();
 
-        if (wybrano4.equals("Yes") && wybrano2.equals("No")) {
+        if (wybrano4.equals("Yes")) {
             String godzina = time;
             String data = null;
             String godzina2 = null;
+            czywlaczone2 = "Yes";
             cursor2 = bazadanych.odczytajtekst4();
             if (godzina == null || godzina.equals("")) {
                 if (cursor2.getCount() > 0) {
@@ -349,6 +405,24 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                     }
                 }
             }
+            cursor2.close();
+
+            cursor2 = bazadanych.odczytajtekst4();
+            if(czywlaczone.equals("No")) {
+                if (cursor2.getCount() > 0) {
+                    while (cursor2.moveToNext()) {
+                        czywlaczone = cursor2.getString(cursor2.getColumnIndex("czywlaczone"));
+                    }
+                }
+            }
+            cursor2.close();
+
+            cursor2 = bazadanych.odczytajtekst4();
+                if (cursor2.getCount() > 0) {
+                    while (cursor2.moveToNext()) {
+                        interwal = cursor2.getLong(cursor2.getColumnIndex("interwal"));
+                    }
+                }
             cursor2.close();
 
             cursor2 = bazadanych.odczytajtekst4();
@@ -382,6 +456,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
             }
             cursor2.close();
+            powiadomienia.ustawNowePowiadomieniaWAlarmManager2();
         }
 
         cursor = bazadanych.odczytajtekst();
@@ -407,11 +482,23 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             String data = date;
             String godzina2 = time2;
             String godzina = time;
+            czywlaczone = "Yes";
+            czywlaczone2 = "Yes";
             cursor2 = bazadanych.odczytajtekst4();
             if(czestotliwoscopcje.equals("") || czestotliwoscopcje == null || czestotliwoscopcje.equals("Wybierz")) {
                 if (cursor2.getCount() > 0) {
                     while (cursor2.moveToNext()) {
                         czestotliwoscopcje = cursor2.getString(cursor2.getColumnIndex("czestotliwosc"));
+                    }
+                }
+            }
+            cursor2.close();
+
+            cursor2 = bazadanych.odczytajtekst4();
+            if(interwal == 0) {
+                if (cursor2.getCount() > 0) {
+                    while (cursor2.moveToNext()) {
+                        interwal = cursor2.getLong(cursor2.getColumnIndex("interwal"));
                     }
                 }
             }
@@ -451,6 +538,85 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             if (cursor2.getCount() == 0) {
                 bazadanych.dodajtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
             } else {
+                bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
+            }
+            cursor2.close();
+            powiadomienia.ustawNowePowiadomieniaWAlarmManager1();
+            powiadomienia.ustawNowePowiadomieniaWAlarmManager2();
+        }
+
+        if(wybrano5.equals("Yes")) {
+            powiadomienia.usunPowiadomieniaZAlarmManager1();
+            czywlaczone = "No";
+            String data = null;
+            String godzina2 = null;
+            String godzina = null;
+            cursor2 = bazadanych.odczytajtekst4();
+            if (cursor2.getCount() > 0) {
+                while (cursor2.moveToNext()) {
+                    czywlaczone2 = cursor2.getString(cursor2.getColumnIndex("czywlaczone2"));
+                    godzina = cursor2.getString(cursor2.getColumnIndex("kiedydane"));
+                    godzina2 = cursor2.getString(cursor2.getColumnIndex("kiedypowczas"));
+                    data = cursor2.getString(cursor2.getColumnIndex("kiedypow"));
+                    interwal = cursor2.getLong(cursor2.getColumnIndex("interwal"));
+                }
+            }
+            else {
+                Toast.makeText(getApplicationContext(), "Alarm nie był ustawiony!",Toast.LENGTH_SHORT).show();
+            }
+            if (cursor2.getCount() > 0) {
+                bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
+            }
+            cursor2.close();
+        }
+
+        if(wybrano6.equals("Yes")) {
+            powiadomienia.usunPowiadomieniaZAlarmManager2();
+            czywlaczone2 = "No";
+            String data = null;
+            String godzina2 = null;
+            String godzina = null;
+            cursor2 = bazadanych.odczytajtekst4();
+            if (cursor2.getCount() > 0) {
+                while (cursor2.moveToNext()) {
+                    czywlaczone = cursor2.getString(cursor2.getColumnIndex("czywlaczone"));
+                    godzina = cursor2.getString(cursor2.getColumnIndex("kiedydane"));
+                    godzina2 = cursor2.getString(cursor2.getColumnIndex("kiedypowczas"));
+                    interwal = cursor2.getLong(cursor2.getColumnIndex("interwal"));
+                    czestotliwoscopcje = cursor2.getString(cursor2.getColumnIndex("czestotliwosc"));
+                    data = cursor2.getString(cursor2.getColumnIndex("kiedypow"));
+                }
+            }
+            else {
+                Toast.makeText(getApplicationContext(), "Alarm nie był ustawiony!",Toast.LENGTH_SHORT).show();
+            }
+            if (cursor2.getCount() > 0) {
+                bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
+            }
+            cursor2.close();
+        }
+        if(wybrano5.equals("Yes") && wybrano6.equals("Yes")) {
+            powiadomienia.usunPowiadomieniaZAlarmManager1();
+            powiadomienia.usunPowiadomieniaZAlarmManager2();
+            czywlaczone = "No";
+            czywlaczone2 = "No";
+            String data = null;
+            String godzina2 = null;
+            String godzina = null;
+            cursor2 = bazadanych.odczytajtekst4();
+            if (cursor2.getCount() > 0) {
+                while (cursor2.moveToNext()) {
+                    godzina = cursor2.getString(cursor2.getColumnIndex("kiedydane"));
+                    godzina2 = cursor2.getString(cursor2.getColumnIndex("kiedypowczas"));
+                    data = cursor2.getString(cursor2.getColumnIndex("kiedypow"));
+                    interwal = cursor2.getLong(cursor2.getColumnIndex("interwal"));
+                    czestotliwoscopcje = cursor2.getString(cursor2.getColumnIndex("czestotliwosc"));
+                }
+            }
+            else {
+                Toast.makeText(getApplicationContext(), "Alarm nie był ustawiony!",Toast.LENGTH_SHORT).show();
+            }
+            if (cursor2.getCount() > 0) {
                 bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
             }
             cursor2.close();
