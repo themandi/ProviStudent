@@ -313,24 +313,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
         String data_aktualnastring =  data_aktualna.format(cal.getTime());
         int data_aktualnaint = Integer.parseInt(data_aktualnastring);
-        while(data_aktualnaint > maxid) {
-            bazadanych.dodajtekst5(data_aktualnaint, wydatek, kwotawydaj, cheatday);
+        while(data_aktualnaint >= maxid) {
+            bazadanych.dodajtekst5(maxid, wydatek, kwotawydaj, cheatday);
             cal.setTime(data_aktualna.parse(maxidString));
             cal.add(Calendar.DATE, 1);
             maxidString = data_aktualna.format(cal.getTime());
             maxid = Integer.parseInt(maxidString);
         }
     }
-
-//    private int zwiekszdate(String maxidString) throws ParseException {
-//        SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
-//        Calendar cal = Calendar.getInstance();
-//        cal.setTime(data_aktualna.parse(maxidString));
-//        cal.add(Calendar.DATE, 1);
-//        maxidString = data_aktualna.format(cal.getTime());
-//        int maxid = Integer.parseInt(maxidString);
-//        return maxid;
-//    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
