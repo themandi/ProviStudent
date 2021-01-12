@@ -76,16 +76,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         bazadanych = new Bazadanych(MainActivity.this);
 
-        cursor = bazadanych.odczytajtekst4();
-        if(cursor != null && cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
-                long interwal = cursor.getLong(cursor.getColumnIndex("interwal"));
-                Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex("czywlaczone")), Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), String.valueOf(interwal), Toast.LENGTH_LONG).show();
-                Toast.makeText(getApplicationContext(), cursor.getString(cursor.getColumnIndex("czywlaczone2")), Toast.LENGTH_SHORT).show();
-            }
-        }
-        cursor.close();
         miesiac = findViewById(R.id.miesiac);
         Calendar cal = Calendar.getInstance();
         sumaprzychodu = bazadanych.sumaprzychodu();
@@ -314,7 +304,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String data_aktualnastring =  data_aktualna.format(cal.getTime());
         int data_aktualnaint = Integer.parseInt(data_aktualnastring);
         while(data_aktualnaint >= maxid) {
-            bazadanych.dodajtekst5(maxid, wydatek, kwotawydaj, cheatday);
+            if(maxid != 0) {
+                bazadanych.dodajtekst5(maxid, wydatek, kwotawydaj, cheatday);
+            }
+            else {
+                bazadanych.dodajtekst5(data_aktualnaint, wydatek, kwotawydaj, cheatday);
+            }
             cal.setTime(data_aktualna.parse(maxidString));
             cal.add(Calendar.DATE, 1);
             maxidString = data_aktualna.format(cal.getTime());
