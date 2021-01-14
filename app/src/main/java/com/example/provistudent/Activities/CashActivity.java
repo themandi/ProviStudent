@@ -1,4 +1,4 @@
-package com.example.provistudent;
+package com.example.provistudent.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -9,11 +9,17 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class IncomeActivity2 extends AppCompatActivity {
+import com.example.provistudent.Database.Bazadanych;
+import com.example.provistudent.R;
+
+public class CashActivity extends AppCompatActivity {
     Button przyciskzapisz;
     Button przyciskcofnij;
     Button przyciskdodaj;
@@ -22,25 +28,26 @@ public class IncomeActivity2 extends AppCompatActivity {
     Button przyciskedytuj;
     Bazadanych bazadanych;
     Cursor cursor;
-    EditText polekwota2;
-    String zasob;
+    Spinner spinner3;
+    TextView polekwota;
+    String wydatek;
     int kwota;
-    EditText polekarta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_income2);
+        setContentView(R.layout.activity_cash);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        bazadanych = new Bazadanych(IncomeActivity2.this);
-        cursor = bazadanych.odczytajtekst2();
+        bazadanych = new Bazadanych(CashActivity.this);
+        cursor = bazadanych.odczytajtekst3();
 
-        polekarta = findViewById(R.id.karta);
-        polekwota2 = findViewById(R.id.polekwota2);
+        spinner3 = findViewById(R.id.spinner3);
+        polekwota = findViewById(R.id.polekwota);
+
         przyciskcofnij = (Button) findViewById(R.id.cofnij);
         przyciskcofnij.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
@@ -48,12 +55,12 @@ public class IncomeActivity2 extends AppCompatActivity {
                 Intent i = getIntent();
                 Bundle extras = i.getExtras();
                 if(extras.containsKey("Register")) {
-                    Intent intent = new Intent(IncomeActivity2.this, RegisterActivity.class);
+                    Intent intent = new Intent(CashActivity.this, RegisterActivity.class);
                     finish();
                     startActivity(intent);
                 }
                 if(extras.containsKey("Settings")) {
-                    Intent intent = new Intent(IncomeActivity2.this, SettingsActivity.class);
+                    Intent intent = new Intent(CashActivity.this, SettingsActivity.class);
                     finish();
                     startActivity(intent);
                 }
@@ -64,7 +71,7 @@ public class IncomeActivity2 extends AppCompatActivity {
         przyciskusun.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
             {
-                Integer usunwiersz = bazadanych.usuntekst2(polekwota2.getText().toString());
+                Integer usunwiersz = bazadanych.usuntekst3(polekwota.getText().toString());
                 if(usunwiersz > 0)
                     Toast.makeText(getApplicationContext(), "Usunięto!",Toast.LENGTH_SHORT).show();
                 else
@@ -76,9 +83,7 @@ public class IncomeActivity2 extends AppCompatActivity {
         przyciskedytuj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String kwotapole = polekwota2.getText().toString();
-                zasob = "Karta płatnicza";
-                String kartapole = polekarta.getText().toString();
+                String kwotapole = polekwota.getText().toString();
                 if (cursor.getCount() == 0) {
                     Toast.makeText(getApplicationContext(), "Nie można zaaktualizować!",Toast.LENGTH_SHORT).show();
                 }
@@ -86,14 +91,13 @@ public class IncomeActivity2 extends AppCompatActivity {
                     if (!kwotapole.isEmpty()) {
                         try
                         {
-                            kwota = Integer.parseInt(polekwota2.getText().toString());
+                            kwota = Integer.parseInt(polekwota.getText().toString());
                         }catch(Throwable t)
                         {
                             Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zaaktualizowane dane, prosimy spróbować ponownie!", Toast.LENGTH_SHORT).show();
                         }
-                        if (bazadanych.zaaktualizujtekst2(zasob, kwota, kartapole)) {
-                            polekwota2.setText("");
-                            polekarta.setText("");
+                        if (bazadanych.zaaktualizujtekst3(wydatek, kwota)) {
+                            polekwota.setText("");
                             Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -108,7 +112,7 @@ public class IncomeActivity2 extends AppCompatActivity {
         przyciskwyswietl = (Button) findViewById(R.id.wyswietl);
         przyciskwyswietl.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                cursor = bazadanych.odczytajtekst2();
+                cursor = bazadanych.odczytajtekst3();
                 if (cursor.getCount() == 0) {
                     wyswietlwiadomosc("Error", "Brak zapisanych zasobów!");
                     return;
@@ -116,11 +120,10 @@ public class IncomeActivity2 extends AppCompatActivity {
                 StringBuffer buffer = new StringBuffer();
                 while (cursor.moveToNext()) {
                     buffer.append("ID: " + cursor.getString(0) + "\n");
-                    buffer.append("Zasób: " + cursor.getString(1) + "\n");
-                    buffer.append("Nazwa: " + cursor.getString(3) + "\n");
+                    buffer.append("Wydatek: " + cursor.getString(1) + "\n");
                     buffer.append("Kwota: " + cursor.getString(2) + "\n");
                 }
-                wyswietlwiadomosc("Zapisane zasoby: ", buffer.toString());
+                wyswietlwiadomosc("Zapisane wydatki stałe: ", buffer.toString());
                 cursor.close();
             }
         });
@@ -140,6 +143,31 @@ public class IncomeActivity2 extends AppCompatActivity {
                 onZapisz();
             }
         });
+
+        //Spinner wykorzystywany podczas pierwszej rejestracji użytkownika w oplatach stalych
+        ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(this,
+                R.array.wybordochodu, android.R.layout.simple_spinner_item);
+        adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner3.setAdapter(adapter3);
+        spinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                wydatek = parent.getItemAtPosition(position).toString();
+                switch (position) {
+                    case 0:
+                        Toast.makeText(parent.getContext(), "Prosze wybrać jedną z opcji!", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 11:
+                        Intent intent = new Intent(CashActivity.this, NewCashActivity.class);
+                        startActivity(intent);
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected (AdapterView < ? > parent){
+            }
+        });
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -156,12 +184,12 @@ public class IncomeActivity2 extends AppCompatActivity {
             Intent i = getIntent();
             Bundle extras = i.getExtras();
             if(extras.containsKey("Register")) {
-                Intent intent = new Intent(IncomeActivity2.this, RegisterActivity.class);
+                Intent intent = new Intent(CashActivity.this, RegisterActivity.class);
                 finish();
                 startActivity(intent);
             }
             if(extras.containsKey("Settings")) {
-                Intent intent = new Intent(IncomeActivity2.this, SettingsActivity.class);
+                Intent intent = new Intent(CashActivity.this, SettingsActivity.class);
                 finish();
                 startActivity(intent);
             }
@@ -169,31 +197,26 @@ public class IncomeActivity2 extends AppCompatActivity {
         cursor.close();
     }
 
-    //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onDodaj() {
-        String kwotapole = polekwota2.getText().toString();
-        String kartapole = polekarta.getText().toString();
+        String kwotapole = polekwota.getText().toString();
         if(!kwotapole.isEmpty()) {
             try
             {
-                kwota = Integer.parseInt(polekwota2.getText().toString());
+                kwota = Integer.parseInt(polekwota.getText().toString());
             }catch(Throwable t)
             {
                 Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisane dane, prosimy edytować bądź usunąć wydatek", Toast.LENGTH_SHORT).show();
             }
-        }
-        zasob = "Karta płatnicza";
-        if(!kwotapole.isEmpty()) {
-            if (bazadanych.dodajtekst2(zasob, kwota, kartapole)) {
-                polekwota2.setText("");
-                polekarta.setText("");
+            if (bazadanych.dodajtekst3(wydatek, kwota)) {
+                polekwota.setText("");
             }
             Toast.makeText(getApplicationContext(), "Dodano!",Toast.LENGTH_SHORT).show();
         }
         else {
-            Toast.makeText(getApplicationContext(), "Błąd! Dane nie zostały wprowadzone.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Błąd! Nic nie zostało wprowadzone.",Toast.LENGTH_SHORT).show();
         }
     }
+
     public void wyswietlwiadomosc(String tytul, String wiadomosc){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);

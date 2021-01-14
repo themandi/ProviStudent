@@ -1,4 +1,4 @@
-package com.example.provistudent;
+package com.example.provistudent.Activities;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
@@ -8,9 +8,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 
-import com.github.mikephil.charting.data.BarEntry;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.provistudent.Database.Bazadanych;
+import com.example.provistudent.Services.Notifications;
+import com.example.provistudent.R;
+import com.example.provistudent.Pickers.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -31,7 +32,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 public class SettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {

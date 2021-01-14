@@ -1,4 +1,4 @@
-package com.example.provistudent;
+package com.example.provistudent.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -7,7 +7,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,7 +16,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class CashActivity extends AppCompatActivity {
+import com.example.provistudent.Database.Bazadanych;
+import com.example.provistudent.R;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
+public class CheatdayActivity extends AppCompatActivity {
     Button przyciskzapisz;
     Button przyciskcofnij;
     Button przyciskdodaj;
@@ -30,36 +36,44 @@ public class CashActivity extends AppCompatActivity {
     TextView polekwota;
     String wydatek;
     int kwota;
+    String datadozapisu;
+    int datadozapisuint;
+    String dzienimiesiac;
+    String data;
+    int data_aktualnaint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cash);
+        setContentView(R.layout.activity_cheatday);
+        bazadanych = new Bazadanych(CheatdayActivity.this);
+        cursor = bazadanych.odczytajtekst5();
+        Intent calendarz = getIntent();
+        dzienimiesiac = calendarz.getStringExtra("data2");
+        data = calendarz.getStringExtra("data");
+        datadozapisu = calendarz.getStringExtra("datadozapisu");
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
+        String data_aktualnastring =  data_aktualna.format(cal.getTime());
+        data_aktualnaint = Integer.parseInt(data_aktualnastring);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        bazadanych = new Bazadanych(CashActivity.this);
-        cursor = bazadanych.odczytajtekst3();
-
         spinner3 = findViewById(R.id.spinner3);
         polekwota = findViewById(R.id.polekwota);
-
         przyciskcofnij = (Button) findViewById(R.id.cofnij);
         przyciskcofnij.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 Intent i = getIntent();
                 Bundle extras = i.getExtras();
-                if(extras.containsKey("Register")) {
-                    Intent intent = new Intent(CashActivity.this, RegisterActivity.class);
-                    finish();
+                if (extras.containsKey("Main")) {
+                    Intent intent = new Intent(CheatdayActivity.this, MainActivity.class);
                     startActivity(intent);
                 }
-                if(extras.containsKey("Settings")) {
-                    Intent intent = new Intent(CashActivity.this, SettingsActivity.class);
-                    finish();
+                if (extras.containsKey("Calendar")) {
+                    Intent intent = new Intent(CheatdayActivity.this, DayofcalendarActivity.class);
                     startActivity(intent);
                 }
             }
@@ -69,7 +83,7 @@ public class CashActivity extends AppCompatActivity {
         przyciskusun.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
             {
-                Integer usunwiersz = bazadanych.usuntekst3(polekwota.getText().toString());
+                Integer usunwiersz = bazadanych.usuntekst5(polekwota.getText().toString());
                 if(usunwiersz > 0)
                     Toast.makeText(getApplicationContext(), "Usunięto!",Toast.LENGTH_SHORT).show();
                 else
@@ -92,11 +106,23 @@ public class CashActivity extends AppCompatActivity {
                             kwota = Integer.parseInt(polekwota.getText().toString());
                         }catch(Throwable t)
                         {
-                            Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zaaktualizowane dane, prosimy spróbować ponownie!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisane dane, prosimy spróbować ponownie!", Toast.LENGTH_SHORT).show();
                         }
-                        if (bazadanych.zaaktualizujtekst3(wydatek, kwota)) {
-                            polekwota.setText("");
-                            Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
+                        String cheatday = "Tak";
+                        Intent i = getIntent();
+                        Bundle extras = i.getExtras();
+                        if (extras.containsKey("Main")) {
+                            if (bazadanych.zaaktualizujtekst5(data_aktualnaint, wydatek, kwota, cheatday)) {
+                                polekwota.setText("");
+                                Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        if (extras.containsKey("Calendar")) {
+                            datadozapisuint = Integer.parseInt(datadozapisu);
+                            if (bazadanych.zaaktualizujtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
+                                polekwota.setText("");
+                                Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                     else {
@@ -110,7 +136,7 @@ public class CashActivity extends AppCompatActivity {
         przyciskwyswietl = (Button) findViewById(R.id.wyswietl);
         przyciskwyswietl.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                cursor = bazadanych.odczytajtekst3();
+                cursor = bazadanych.odczytajtekstcheatday5();
                 if (cursor.getCount() == 0) {
                     wyswietlwiadomosc("Error", "Brak zapisanych zasobów!");
                     return;
@@ -118,10 +144,11 @@ public class CashActivity extends AppCompatActivity {
                 StringBuffer buffer = new StringBuffer();
                 while (cursor.moveToNext()) {
                     buffer.append("ID: " + cursor.getString(0) + "\n");
-                    buffer.append("Wydatek: " + cursor.getString(1) + "\n");
-                    buffer.append("Kwota: " + cursor.getString(2) + "\n");
+                    buffer.append("Data: " + cursor.getString(1) + "\n");
+                    buffer.append("Wydatek: " + cursor.getString(2) + "\n");
+                    buffer.append("Kwota: " + cursor.getString(3) + "\n");
                 }
-                wyswietlwiadomosc("Zapisane wydatki stałe: ", buffer.toString());
+                wyswietlwiadomosc("Wydatki za pomocą funkcji 'Cheatday': ", buffer.toString());
                 cursor.close();
             }
         });
@@ -144,7 +171,7 @@ public class CashActivity extends AppCompatActivity {
 
         //Spinner wykorzystywany podczas pierwszej rejestracji użytkownika w oplatach stalych
         ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(this,
-                R.array.wybordochodu, android.R.layout.simple_spinner_item);
+                R.array.wyborcheatday, android.R.layout.simple_spinner_item);
         adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner3.setAdapter(adapter3);
         spinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -155,8 +182,8 @@ public class CashActivity extends AppCompatActivity {
                     case 0:
                         Toast.makeText(parent.getContext(), "Prosze wybrać jedną z opcji!", Toast.LENGTH_SHORT).show();
                         break;
-                    case 11:
-                        Intent intent = new Intent(CashActivity.this, NewCashActivity.class);
+                    case 6:
+                        Intent intent = new Intent(CheatdayActivity.this, NewCheatdayActivity.class);
                         startActivity(intent);
                         break;
                 }
@@ -179,18 +206,8 @@ public class CashActivity extends AppCompatActivity {
         }
         else if(cursor.getCount()>0) {
             Toast.makeText(getApplicationContext(), "Zapisano!",Toast.LENGTH_SHORT).show();
-            Intent i = getIntent();
-            Bundle extras = i.getExtras();
-            if(extras.containsKey("Register")) {
-                Intent intent = new Intent(CashActivity.this, RegisterActivity.class);
-                finish();
-                startActivity(intent);
-            }
-            if(extras.containsKey("Settings")) {
-                Intent intent = new Intent(CashActivity.this, SettingsActivity.class);
-                finish();
-                startActivity(intent);
-            }
+            Intent intent = new Intent(CheatdayActivity.this, MainActivity.class);
+            startActivity(intent);
         }
         cursor.close();
     }
@@ -205,8 +222,25 @@ public class CashActivity extends AppCompatActivity {
             {
                 Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisane dane, prosimy edytować bądź usunąć wydatek", Toast.LENGTH_SHORT).show();
             }
-            if (bazadanych.dodajtekst3(wydatek, kwota)) {
-                polekwota.setText("");
+            String cheatday = "Tak";
+            Intent i = getIntent();
+            Bundle extras = i.getExtras();
+            if(extras.containsKey("Main")) {
+                if (bazadanych.dodajtekst5(data_aktualnaint, wydatek, kwota, cheatday)) {
+                    polekwota.setText("");
+                }
+            }
+            if(extras.containsKey("Calendar")) {
+                try
+                {
+                    datadozapisuint = Integer.parseInt(datadozapisu);
+                }catch(Throwable t)
+                {
+                    Toast.makeText(getApplicationContext(), "Error: Błąd zapisu daty z kalendarza!", Toast.LENGTH_SHORT).show();
+                }
+                if (bazadanych.dodajtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
+                    polekwota.setText("");
+                }
             }
             Toast.makeText(getApplicationContext(), "Dodano!",Toast.LENGTH_SHORT).show();
         }

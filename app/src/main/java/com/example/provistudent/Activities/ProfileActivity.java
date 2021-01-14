@@ -1,4 +1,4 @@
-package com.example.provistudent;
+package com.example.provistudent.Activities;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -7,10 +7,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import com.example.provistudent.Database.Bazadanych;
+import com.example.provistudent.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

@@ -1,5 +1,5 @@
 //Klasa potrzebna do przypominacza godziny powiadomień
-package com.example.provistudent;
+package com.example.provistudent.Pickers;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;

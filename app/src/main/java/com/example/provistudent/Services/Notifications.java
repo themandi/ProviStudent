@@ -1,4 +1,4 @@
-package com.example.provistudent;
+package com.example.provistudent.Services;
 
 
 import android.app.AlarmManager;
@@ -6,6 +6,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+
+import com.example.provistudent.Database.Bazadanych;
+import com.example.provistudent.Receiver.NotificationReceiver;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,7 +48,9 @@ public class Notifications {
     public void odlozpowiadomienie1(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
+        //opóźnienie powiadomienia o 1h w ms
         long interwal = 3600000L;
+        //ustawienie jednorazowego alarmu
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + interwal, alarmIntent3);
     }
 
@@ -58,9 +63,11 @@ public class Notifications {
 
     public void ustawNowePowiadomieniaWAlarmManager1(){
         // Ustawienie daty pierwszego powiadomienia
+        //Ustawienie domyślnego interwalu na 30 dni
         long interwal = 2592000000L;
         String powiadomieniadzien = null;
         String powiadomieniadzienczas = null;
+        //pobranie informacji z bazy danych
         Cursor cursor2;
         cursor2 = bazadanych.odczytajtekst4();
         if(cursor2 != null && cursor2.getCount() > 0) {
@@ -70,6 +77,7 @@ public class Notifications {
             }
         }
         cursor2.close();
+        //Przeformatowanie daty za pomocą SimpleDateFormat na zrozumiałą dla komputera
         SimpleDateFormat dataFormat = new SimpleDateFormat("yyyyMMdd");
         SimpleDateFormat czasFormat = new SimpleDateFormat("HHmm");
         czasFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -94,6 +102,7 @@ public class Notifications {
             }
         }
         cursor.close();
+        //Ustawienie cyklicznego alarmu co interwal
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, datawms, interwal, alarmIntent1);
 
     }

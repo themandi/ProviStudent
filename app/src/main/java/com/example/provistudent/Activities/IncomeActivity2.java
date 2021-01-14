@@ -1,4 +1,4 @@
-package com.example.provistudent;
+package com.example.provistudent.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -11,10 +11,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-public class IncomeActivity extends AppCompatActivity {
+import com.example.provistudent.Database.Bazadanych;
+import com.example.provistudent.R;
+
+public class IncomeActivity2 extends AppCompatActivity {
     Button przyciskzapisz;
     Button przyciskcofnij;
     Button przyciskdodaj;
@@ -23,25 +25,25 @@ public class IncomeActivity extends AppCompatActivity {
     Button przyciskedytuj;
     Bazadanych bazadanych;
     Cursor cursor;
-    EditText polekwota;
+    EditText polekwota2;
     String zasob;
     int kwota;
-    EditText polegotowka;
+    EditText polekarta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_income);
+        setContentView(R.layout.activity_income2);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        bazadanych = new Bazadanych(IncomeActivity.this);
+        bazadanych = new Bazadanych(IncomeActivity2.this);
         cursor = bazadanych.odczytajtekst2();
 
-        polegotowka = findViewById(R.id.gotowka);
-        polekwota = findViewById(R.id.polekwota);
+        polekarta = findViewById(R.id.karta);
+        polekwota2 = findViewById(R.id.polekwota2);
         przyciskcofnij = (Button) findViewById(R.id.cofnij);
         przyciskcofnij.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
@@ -49,12 +51,12 @@ public class IncomeActivity extends AppCompatActivity {
                 Intent i = getIntent();
                 Bundle extras = i.getExtras();
                 if(extras.containsKey("Register")) {
-                    Intent intent = new Intent(IncomeActivity.this, RegisterActivity.class);
+                    Intent intent = new Intent(IncomeActivity2.this, RegisterActivity.class);
                     finish();
                     startActivity(intent);
                 }
                 if(extras.containsKey("Settings")) {
-                    Intent intent = new Intent(IncomeActivity.this, SettingsActivity.class);
+                    Intent intent = new Intent(IncomeActivity2.this, SettingsActivity.class);
                     finish();
                     startActivity(intent);
                 }
@@ -65,7 +67,7 @@ public class IncomeActivity extends AppCompatActivity {
         przyciskusun.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
             {
-                Integer usunwiersz = bazadanych.usuntekst2(polekwota.getText().toString());
+                Integer usunwiersz = bazadanych.usuntekst2(polekwota2.getText().toString());
                 if(usunwiersz > 0)
                     Toast.makeText(getApplicationContext(), "Usunięto!",Toast.LENGTH_SHORT).show();
                 else
@@ -77,24 +79,24 @@ public class IncomeActivity extends AppCompatActivity {
         przyciskedytuj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String kwotapole = polekwota.getText().toString();
-                String gotowkapole = polegotowka.getText().toString();
-
+                String kwotapole = polekwota2.getText().toString();
+                zasob = "Karta płatnicza";
+                String kartapole = polekarta.getText().toString();
                 if (cursor.getCount() == 0) {
                     Toast.makeText(getApplicationContext(), "Nie można zaaktualizować!",Toast.LENGTH_SHORT).show();
-                    }
+                }
                 else if (cursor.getCount() > 0) {
-                    if(!kwotapole.isEmpty()) {
+                    if (!kwotapole.isEmpty()) {
                         try
                         {
-                            kwota = Integer.parseInt(polekwota.getText().toString());
+                            kwota = Integer.parseInt(polekwota2.getText().toString());
                         }catch(Throwable t)
                         {
                             Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zaaktualizowane dane, prosimy spróbować ponownie!", Toast.LENGTH_SHORT).show();
                         }
-                        if (bazadanych.zaaktualizujtekst2(zasob, kwota, gotowkapole)) {
-                            polekwota.setText("");
-                            polegotowka.setText("");
+                        if (bazadanych.zaaktualizujtekst2(zasob, kwota, kartapole)) {
+                            polekwota2.setText("");
+                            polekarta.setText("");
                             Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -114,15 +116,15 @@ public class IncomeActivity extends AppCompatActivity {
                     wyswietlwiadomosc("Error", "Brak zapisanych zasobów!");
                     return;
                 }
-                        StringBuffer buffer = new StringBuffer();
-                        while (cursor.moveToNext()) {
-                            buffer.append("ID: " + cursor.getString(0) + "\n");
-                            buffer.append("Zasób: " + cursor.getString(1) + "\n");
-                            buffer.append("Nazwa: "+ cursor.getString(3) + "\n");
-                            buffer.append("Kwota: " + cursor.getString(2) + "\n");
-                        }
-                        wyswietlwiadomosc("Zapisane zasoby: ", buffer.toString());
-                        cursor.close();
+                StringBuffer buffer = new StringBuffer();
+                while (cursor.moveToNext()) {
+                    buffer.append("ID: " + cursor.getString(0) + "\n");
+                    buffer.append("Zasób: " + cursor.getString(1) + "\n");
+                    buffer.append("Nazwa: " + cursor.getString(3) + "\n");
+                    buffer.append("Kwota: " + cursor.getString(2) + "\n");
+                }
+                wyswietlwiadomosc("Zapisane zasoby: ", buffer.toString());
+                cursor.close();
             }
         });
 
@@ -157,12 +159,12 @@ public class IncomeActivity extends AppCompatActivity {
             Intent i = getIntent();
             Bundle extras = i.getExtras();
             if(extras.containsKey("Register")) {
-                Intent intent = new Intent(IncomeActivity.this, RegisterActivity.class);
+                Intent intent = new Intent(IncomeActivity2.this, RegisterActivity.class);
                 finish();
                 startActivity(intent);
             }
             if(extras.containsKey("Settings")) {
-                Intent intent = new Intent(IncomeActivity.this, SettingsActivity.class);
+                Intent intent = new Intent(IncomeActivity2.this, SettingsActivity.class);
                 finish();
                 startActivity(intent);
             }
@@ -170,30 +172,31 @@ public class IncomeActivity extends AppCompatActivity {
         cursor.close();
     }
 
+    //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onDodaj() {
-        String kwotapole = polekwota.getText().toString();
-        zasob = "Gotówka";
-        String gotowkapole = polegotowka.getText().toString();
-
+        String kwotapole = polekwota2.getText().toString();
+        String kartapole = polekarta.getText().toString();
         if(!kwotapole.isEmpty()) {
             try
             {
-                kwota = Integer.parseInt(polekwota.getText().toString());
+                kwota = Integer.parseInt(polekwota2.getText().toString());
             }catch(Throwable t)
             {
                 Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisane dane, prosimy edytować bądź usunąć wydatek", Toast.LENGTH_SHORT).show();
             }
-                if (bazadanych.dodajtekst2(zasob, kwota, gotowkapole)) {
-                    polekwota.setText("");
-                    polegotowka.setText("");
-                }
-            Toast.makeText(getApplicationContext(), "Dodano!",Toast.LENGTH_SHORT).show();
+        }
+        zasob = "Karta płatnicza";
+        if(!kwotapole.isEmpty()) {
+            if (bazadanych.dodajtekst2(zasob, kwota, kartapole)) {
+                polekwota2.setText("");
+                polekarta.setText("");
             }
+            Toast.makeText(getApplicationContext(), "Dodano!",Toast.LENGTH_SHORT).show();
+        }
         else {
             Toast.makeText(getApplicationContext(), "Błąd! Dane nie zostały wprowadzone.",Toast.LENGTH_SHORT).show();
         }
     }
-
     public void wyswietlwiadomosc(String tytul, String wiadomosc){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);

@@ -1,10 +1,9 @@
-package com.example.provistudent;
+package com.example.provistudent.Activities;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
@@ -12,16 +11,13 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.Month;
-import java.time.format.TextStyle;
+import com.example.provistudent.Database.Bazadanych;
+import com.example.provistudent.R;
+
 import java.util.Calendar;
-import java.util.Locale;
 
 public class DayofcalendarActivity extends AppCompatActivity{
     Button przyciskzapisz;

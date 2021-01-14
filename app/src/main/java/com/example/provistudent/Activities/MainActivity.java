@@ -1,4 +1,4 @@
-package com.example.provistudent;
+package com.example.provistudent.Activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -15,6 +15,8 @@ import android.widget.CalendarView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.provistudent.Database.Bazadanych;
+import com.example.provistudent.R;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -303,17 +305,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
         String data_aktualnastring =  data_aktualna.format(cal.getTime());
         int data_aktualnaint = Integer.parseInt(data_aktualnastring);
-        while(data_aktualnaint >= maxid) {
-            if(maxid != 0) {
-                bazadanych.dodajtekst5(maxid, wydatek, kwotawydaj, cheatday);
-            }
-            else {
-                bazadanych.dodajtekst5(data_aktualnaint, wydatek, kwotawydaj, cheatday);
-            }
+        if(maxid == 0) {
+            bazadanych.dodajtekst5(data_aktualnaint, wydatek, kwotawydaj, cheatday);
+        }
+        while(data_aktualnaint > maxid) {
             cal.setTime(data_aktualna.parse(maxidString));
             cal.add(Calendar.DATE, 1);
             maxidString = data_aktualna.format(cal.getTime());
             maxid = Integer.parseInt(maxidString);
+            bazadanych.dodajtekst5(maxid, wydatek, kwotawydaj, cheatday);
         }
     }
 

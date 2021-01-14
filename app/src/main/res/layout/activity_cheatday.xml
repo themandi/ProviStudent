@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".CheatdayActivity"
+    tools:context=".Activities.CheatdayActivity"
     android:fitsSystemWindows="true"
     android:background="#ededed">
 

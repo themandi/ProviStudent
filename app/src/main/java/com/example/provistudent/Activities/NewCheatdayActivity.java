@@ -1,7 +1,4 @@
-package com.example.provistudent;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+package com.example.provistudent.Activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -9,15 +6,17 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class NewCashActivity extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.example.provistudent.Database.Bazadanych;
+import com.example.provistudent.R;
+
+public class NewCheatdayActivity extends AppCompatActivity {
     Button przyciskzapisz;
     Button przyciskcofnij;
     Button przyciskdodaj;
@@ -27,26 +26,27 @@ public class NewCashActivity extends AppCompatActivity {
     Bazadanych bazadanych;
     Cursor cursor;
     TextView polekwota;
-    TextView poleoplata;
+    TextView polewydatek;
+    Intent calendarz;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_cash);
+        setContentView(R.layout.activity_new_cheatday);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        bazadanych = new Bazadanych(NewCashActivity.this);
-        cursor = bazadanych.odczytajtekst3();
+        bazadanych = new Bazadanych(NewCheatdayActivity.this);
+        cursor = bazadanych.odczytajtekst5();
 
-        poleoplata = findViewById(R.id.poleoplata);
+        polewydatek = findViewById(R.id.polewydatek);
         polekwota = findViewById(R.id.polekwota);
         przyciskcofnij = (Button) findViewById(R.id.cofnij);
         przyciskcofnij.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent intent = new Intent(NewCashActivity.this, CashActivity.class);
+                Intent intent = new Intent(NewCheatdayActivity.this, CheatdayActivity.class);
                 startActivity(intent);
             }
         });
@@ -54,7 +54,7 @@ public class NewCashActivity extends AppCompatActivity {
         przyciskusun = (Button) findViewById(R.id.usun);
         przyciskusun.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Integer usunwiersz = bazadanych.usuntekst3(polekwota.getText().toString());
+                Integer usunwiersz = bazadanych.usuntekst5(polekwota.getText().toString());
                 if (usunwiersz > 0)
                     Toast.makeText(getApplicationContext(), "Usunięto!", Toast.LENGTH_SHORT).show();
                 else
@@ -66,21 +66,34 @@ public class NewCashActivity extends AppCompatActivity {
         przyciskedytuj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int kwota = 0;
                 String kwotapole = polekwota.getText().toString();
+                int kwota = 0;
                 try
                 {
                     kwota = Integer.parseInt(polekwota.getText().toString());
-                }catch(Throwable t)
+                }
+                catch(Throwable t)
                 {
                     Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zaaktualizowane dane, prosimy spróbować ponownie!", Toast.LENGTH_SHORT).show();
                 }
-                String oplata = poleoplata.getText().toString();
+                String wydatek = polewydatek.getText().toString();
+                String cheatday = "Tak";
+                calendarz = getIntent();
+                String datadozapisu = calendarz.getStringExtra("datadozapisu");
+                int datadozapisuint = 0;
+                try
+                {
+                    datadozapisuint = Integer.parseInt(datadozapisu);
+                }
+                catch(Throwable t)
+                {
+                    Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisana data!", Toast.LENGTH_SHORT).show();
+                }
                 if (cursor.getCount() == 0) {
                     Toast.makeText(getApplicationContext(), "Nie można zaaktualizować!", Toast.LENGTH_SHORT).show();
                 } else if (cursor.getCount() > 0) {
                     if (!kwotapole.isEmpty()) {
-                        if (bazadanych.zaaktualizujtekst3(oplata, kwota)) {
+                        if (bazadanych.zaaktualizujtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
                             polekwota.setText("");
                             Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
                         }
@@ -95,7 +108,7 @@ public class NewCashActivity extends AppCompatActivity {
         przyciskwyswietl = (Button) findViewById(R.id.wyswietl);
         przyciskwyswietl.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                cursor = bazadanych.odczytajtekst3();
+                cursor = bazadanych.odczytajtekst5();
                 if (cursor.getCount() == 0) {
                     wyswietlwiadomosc("Error", "Brak zapisanych zasobów!");
                     return;
@@ -103,10 +116,11 @@ public class NewCashActivity extends AppCompatActivity {
                 StringBuffer buffer = new StringBuffer();
                 while (cursor.moveToNext()) {
                     buffer.append("ID: " + cursor.getString(0) + "\n");
-                    buffer.append("Opłata: " + cursor.getString(1) + "\n");
-                    buffer.append("Kwota: " + cursor.getString(2) + "\n");
+                    buffer.append("Data: " + cursor.getString(1) + "\n");
+                    buffer.append("Wydatek: " + cursor.getString(2) + "\n");
+                    buffer.append("Kwota: " + cursor.getString(3) + "\n");
                 }
-                wyswietlwiadomosc("Zapisane wydatki stałe: ", buffer.toString());
+                wyswietlwiadomosc("Zapisane wydatki: ", buffer.toString());
                 cursor.close();
             }
         });
@@ -136,7 +150,7 @@ public class NewCashActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Błąd! Nic nie zostało zapisane", Toast.LENGTH_SHORT).show();
         } else if (cursor.getCount() > 0) {
             Toast.makeText(getApplicationContext(), "Zapisano!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(NewCashActivity.this, CashActivity.class);
+            Intent intent = new Intent(NewCheatdayActivity.this, CheatdayActivity.class);
             startActivity(intent);
         }
         cursor.close();
@@ -153,13 +167,23 @@ public class NewCashActivity extends AppCompatActivity {
         {
             Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisane dane, prosimy edytować bądź usunąć wydatek", Toast.LENGTH_SHORT).show();
         }
-        String oplata = poleoplata.getText().toString();
-
-
+        String wydatek = polewydatek.getText().toString();
+        String cheatday = "Tak";
+        calendarz = getIntent();
+        String datadozapisu = calendarz.getStringExtra("datadozapisu");
+        int datadozapisuint = 0;
+        try
+        {
+            datadozapisuint = Integer.parseInt(datadozapisu);
+        }
+        catch(Throwable t)
+        {
+            Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisana data", Toast.LENGTH_SHORT).show();
+        }
         if (!kwotapole.isEmpty()) {
-            if (bazadanych.dodajtekst3(oplata, kwota)) {
+            if (bazadanych.dodajtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
                 polekwota.setText("");
-                poleoplata.setText("");
+                polewydatek.setText("");
             }
             Toast.makeText(getApplicationContext(), "Dodano!", Toast.LENGTH_SHORT).show();
         } else {
@@ -174,4 +198,5 @@ public class NewCashActivity extends AppCompatActivity {
         builder.setMessage(wiadomosc);
         builder.show();
     }
+
 }

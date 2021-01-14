@@ -14,73 +14,73 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".EditCashActivity"
+            android:name=".Activities.EditCashActivity"
             android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".ConstantCashActivity"
+            android:name=".Activities.ConstantCashActivity"
             android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".DayofcalendarActivity"
+            android:name=".Activities.DayofcalendarActivity"
             android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".CheatdayActivity"
+            android:name=".Activities.CheatdayActivity"
             android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".IncomeActivity2"
+            android:name=".Activities.IncomeActivity2"
             android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".IncomeActivity"
+            android:name=".Activities.IncomeActivity"
             android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".NewCashActivity"
+            android:name=".Activities.NewCashActivity"
             android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".CashActivity"
+            android:name=".Activities.CashActivity"
             android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".ProfileActivity"
+            android:name=".Activities.ProfileActivity"
             android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".Activities.SettingsActivity"
             android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".HelpActivity"
+            android:name=".Activities.HelpActivity"
             android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".InfoActivity"
+            android:name=".Activities.InfoActivity"
             android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".NewCheatdayActivity"
+            android:name=".Activities.NewCheatdayActivity"
             android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".RegisterActivity"
+            android:name=".Activities.RegisterActivity"
             android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".StatsActivity"
+            android:name=".Activities.StatsActivity"
             android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.MainActivity"
             android:label="ProviStud"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".IntroActivity"
+            android:name=".Activities.IntroActivity"
             android:label="ProviStud">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -88,10 +88,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".NotificationReceiver"
+        <receiver android:name=".Receiver.NotificationReceiver"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
         </receiver>
-        <receiver android:name=".ActionReceiver">
+        <receiver android:name=".Receiver.ActionReceiver">
         </receiver>
         <meta-data
             android:name="preloaded_fonts"

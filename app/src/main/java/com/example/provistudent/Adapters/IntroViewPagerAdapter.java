@@ -1,4 +1,4 @@
-package com.example.provistudent;
+package com.example.provistudent.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
+
+import com.example.provistudent.R;
+import com.example.provistudent.Services.ScreenItem;
 
 import java.util.List;
 

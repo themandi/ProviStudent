@@ -1,10 +1,13 @@
-package com.example.provistudent;
+package com.example.provistudent.Receiver;
 
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import com.example.provistudent.Database.Bazadanych;
+import com.example.provistudent.Services.Notifications;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

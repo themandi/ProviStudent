@@ -1,4 +1,7 @@
-package com.example.provistudent;
+package com.example.provistudent.Activities;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -10,10 +13,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import com.example.provistudent.Database.Bazadanych;
+import com.example.provistudent.R;
 
-public class NewCheatdayActivity extends AppCompatActivity {
+public class NewCashActivity extends AppCompatActivity {
     Button przyciskzapisz;
     Button przyciskcofnij;
     Button przyciskdodaj;
@@ -23,27 +26,26 @@ public class NewCheatdayActivity extends AppCompatActivity {
     Bazadanych bazadanych;
     Cursor cursor;
     TextView polekwota;
-    TextView polewydatek;
-    Intent calendarz;
+    TextView poleoplata;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_cheatday);
+        setContentView(R.layout.activity_new_cash);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        bazadanych = new Bazadanych(NewCheatdayActivity.this);
-        cursor = bazadanych.odczytajtekst5();
+        bazadanych = new Bazadanych(NewCashActivity.this);
+        cursor = bazadanych.odczytajtekst3();
 
-        polewydatek = findViewById(R.id.polewydatek);
+        poleoplata = findViewById(R.id.poleoplata);
         polekwota = findViewById(R.id.polekwota);
         przyciskcofnij = (Button) findViewById(R.id.cofnij);
         przyciskcofnij.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent intent = new Intent(NewCheatdayActivity.this, CheatdayActivity.class);
+                Intent intent = new Intent(NewCashActivity.this, CashActivity.class);
                 startActivity(intent);
             }
         });
@@ -51,7 +53,7 @@ public class NewCheatdayActivity extends AppCompatActivity {
         przyciskusun = (Button) findViewById(R.id.usun);
         przyciskusun.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Integer usunwiersz = bazadanych.usuntekst5(polekwota.getText().toString());
+                Integer usunwiersz = bazadanych.usuntekst3(polekwota.getText().toString());
                 if (usunwiersz > 0)
                     Toast.makeText(getApplicationContext(), "Usunięto!", Toast.LENGTH_SHORT).show();
                 else
@@ -63,34 +65,21 @@ public class NewCheatdayActivity extends AppCompatActivity {
         przyciskedytuj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String kwotapole = polekwota.getText().toString();
                 int kwota = 0;
+                String kwotapole = polekwota.getText().toString();
                 try
                 {
                     kwota = Integer.parseInt(polekwota.getText().toString());
-                }
-                catch(Throwable t)
+                }catch(Throwable t)
                 {
                     Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zaaktualizowane dane, prosimy spróbować ponownie!", Toast.LENGTH_SHORT).show();
                 }
-                String wydatek = polewydatek.getText().toString();
-                String cheatday = "Tak";
-                calendarz = getIntent();
-                String datadozapisu = calendarz.getStringExtra("datadozapisu");
-                int datadozapisuint = 0;
-                try
-                {
-                    datadozapisuint = Integer.parseInt(datadozapisu);
-                }
-                catch(Throwable t)
-                {
-                    Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisana data!", Toast.LENGTH_SHORT).show();
-                }
+                String oplata = poleoplata.getText().toString();
                 if (cursor.getCount() == 0) {
                     Toast.makeText(getApplicationContext(), "Nie można zaaktualizować!", Toast.LENGTH_SHORT).show();
                 } else if (cursor.getCount() > 0) {
                     if (!kwotapole.isEmpty()) {
-                        if (bazadanych.zaaktualizujtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
+                        if (bazadanych.zaaktualizujtekst3(oplata, kwota)) {
                             polekwota.setText("");
                             Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
                         }
@@ -105,7 +94,7 @@ public class NewCheatdayActivity extends AppCompatActivity {
         przyciskwyswietl = (Button) findViewById(R.id.wyswietl);
         przyciskwyswietl.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                cursor = bazadanych.odczytajtekst5();
+                cursor = bazadanych.odczytajtekst3();
                 if (cursor.getCount() == 0) {
                     wyswietlwiadomosc("Error", "Brak zapisanych zasobów!");
                     return;
@@ -113,11 +102,10 @@ public class NewCheatdayActivity extends AppCompatActivity {
                 StringBuffer buffer = new StringBuffer();
                 while (cursor.moveToNext()) {
                     buffer.append("ID: " + cursor.getString(0) + "\n");
-                    buffer.append("Data: " + cursor.getString(1) + "\n");
-                    buffer.append("Wydatek: " + cursor.getString(2) + "\n");
-                    buffer.append("Kwota: " + cursor.getString(3) + "\n");
+                    buffer.append("Opłata: " + cursor.getString(1) + "\n");
+                    buffer.append("Kwota: " + cursor.getString(2) + "\n");
                 }
-                wyswietlwiadomosc("Zapisane wydatki: ", buffer.toString());
+                wyswietlwiadomosc("Zapisane wydatki stałe: ", buffer.toString());
                 cursor.close();
             }
         });
@@ -147,7 +135,7 @@ public class NewCheatdayActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Błąd! Nic nie zostało zapisane", Toast.LENGTH_SHORT).show();
         } else if (cursor.getCount() > 0) {
             Toast.makeText(getApplicationContext(), "Zapisano!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(NewCheatdayActivity.this, CheatdayActivity.class);
+            Intent intent = new Intent(NewCashActivity.this, CashActivity.class);
             startActivity(intent);
         }
         cursor.close();
@@ -164,23 +152,13 @@ public class NewCheatdayActivity extends AppCompatActivity {
         {
             Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisane dane, prosimy edytować bądź usunąć wydatek", Toast.LENGTH_SHORT).show();
         }
-        String wydatek = polewydatek.getText().toString();
-        String cheatday = "Tak";
-        calendarz = getIntent();
-        String datadozapisu = calendarz.getStringExtra("datadozapisu");
-        int datadozapisuint = 0;
-        try
-        {
-            datadozapisuint = Integer.parseInt(datadozapisu);
-        }
-        catch(Throwable t)
-        {
-            Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisana data", Toast.LENGTH_SHORT).show();
-        }
+        String oplata = poleoplata.getText().toString();
+
+
         if (!kwotapole.isEmpty()) {
-            if (bazadanych.dodajtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
+            if (bazadanych.dodajtekst3(oplata, kwota)) {
                 polekwota.setText("");
-                polewydatek.setText("");
+                poleoplata.setText("");
             }
             Toast.makeText(getApplicationContext(), "Dodano!", Toast.LENGTH_SHORT).show();
         } else {
@@ -195,5 +173,4 @@ public class NewCheatdayActivity extends AppCompatActivity {
         builder.setMessage(wiadomosc);
         builder.show();
     }
-
 }

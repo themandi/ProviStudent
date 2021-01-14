@@ -1,9 +1,8 @@
-package com.example.provistudent;
+package com.example.provistudent.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -15,6 +14,9 @@ import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.example.provistudent.Database.Bazadanych;
+import com.example.provistudent.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

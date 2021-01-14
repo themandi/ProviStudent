@@ -1,4 +1,4 @@
-package com.example.provistudent;
+package com.example.provistudent.Receiver;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -12,6 +12,11 @@ import android.net.Uri;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
+
+import com.example.provistudent.Activities.ConstantCashActivity;
+import com.example.provistudent.Activities.MainActivity;
+import com.example.provistudent.Database.Bazadanych;
+import com.example.provistudent.R;
 
 
 public class NotificationReceiver extends BroadcastReceiver {
@@ -59,19 +64,33 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         // Wysłanie powiadomienia
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                //dodanie małej ikonki
                 .setSmallIcon(R.mipmap.logo_round)
+                //tytuł powiadomienia
                 .setContentTitle(tekstpow)
+                //tekst powiadomienia
                 .setContentText("Dotknij, aby wyświetlić aplikację.")
+                //określenie priorytetu powiadomienia
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                //dodanie kategorii do wiadomości
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                //ustawienie koloru zielonego
                 .setColor(Color.GREEN)
+                //dodanie flagi aby odtwarzać wibracje i dźwięk
                 .setOnlyAlertOnce(true)
+                //automatyczne usuwanie powiadomienia z listy powiadomień
                 .setAutoCancel(true)
+                //ustawienie intentu powiadomienia
                 .setContentIntent(activity)
+                //dodanie wibracji
                 .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
+                //dodanie ledu w telefonie podczas dostania powiadomienia
                 .setLights(Color.MAGENTA, 3000, 3000)
+                //dodanie dźwięku
                 .setSound(uri)
+                //dodanie widoczności na ekranie blokady
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                //dodanie akcji na powiadomieniu
                 .addAction(R.mipmap.logo, titlepow, pendingIntentoplaclubpomin)
                 .addAction(R.mipmap.logo, "Odłóż", pendingIntentodloz);
         notificationManager.notify(id, builder.build());

@@ -1,4 +1,4 @@
-package com.example.provistudent;
+package com.example.provistudent.Activities;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
@@ -28,6 +28,11 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.provistudent.Database.Bazadanych;
+import com.example.provistudent.Services.Notifications;
+import com.example.provistudent.R;
+import com.example.provistudent.Pickers.TimePicker;
 
 import java.util.Calendar;
 

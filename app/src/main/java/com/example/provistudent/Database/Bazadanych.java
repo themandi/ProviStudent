@@ -1,4 +1,4 @@
-package com.example.provistudent;
+package com.example.provistudent.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -412,27 +412,4 @@ public class Bazadanych extends SQLiteOpenHelper {
         maxid = (cursor.moveToFirst() ? cursor.getInt(0) : 0);
         return maxid;
     }
-
-//    public int datapowiadomienia() {
-//        int datapow = 0;
-//        SQLiteDatabase sqLitebaza = this.getReadableDatabase();
-//        Cursor cursor = sqLitebaza.rawQuery("SELECT MAX(" + COL4_2 + ") FROM " + TABLE_NAME4, null);
-//        datapow = (cursor.moveToFirst() ? cursor.getInt(0) : 0);
-//        return datapow;
-//    }
-//
-//    public int godzpowiadomienia() {
-//        int godzpowiad = 0;
-//        SQLiteDatabase sqLitebaza = this.getReadableDatabase();
-//        Cursor cursor = sqLitebaza.rawQuery("SELECT MAX(" + COL4_3 + ") FROM " + TABLE_NAME4, null);
-//        godzpowiad = (cursor.moveToFirst() ? cursor.getInt(0) : 0);
-//        return godzpowiad;
-//    }
-//    public int godzdane() {
-//        int godzdaneint = 0;
-//        SQLiteDatabase sqLitebaza = this.getReadableDatabase();
-//        Cursor cursor = sqLitebaza.rawQuery("SELECT MAX(" + COL4_5 + ") FROM " + TABLE_NAME4, null);
-//        godzdaneint = (cursor.moveToFirst() ? cursor.getInt(0) : 0);
-//        return godzdaneint;
-//    }
 }

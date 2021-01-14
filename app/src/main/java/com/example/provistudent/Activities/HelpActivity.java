@@ -1,8 +1,9 @@
-package com.example.provistudent;
+package com.example.provistudent.Activities;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
 
+import com.example.provistudent.R;
 import com.github.mikephil.charting.data.BarEntry;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;

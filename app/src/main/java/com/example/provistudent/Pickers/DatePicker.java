@@ -1,5 +1,5 @@
 //Klasa potrzebna do przypominacza daty powiadomień
-package com.example.provistudent;
+package com.example.provistudent.Pickers;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
