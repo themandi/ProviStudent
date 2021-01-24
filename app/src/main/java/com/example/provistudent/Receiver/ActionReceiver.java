@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.example.provistudent.Database.Bazadanych;
-import com.example.provistudent.Services.Notifications;
+import com.example.provistudent.Helpers.Notifications;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -27,7 +27,8 @@ public class ActionReceiver extends BroadcastReceiver {
         int id = intent.getIntExtra("NotId", -1);
         if (action.equals("OPLACPOMIN_ACTION")) {
             if (titlepow.equals("Opłać wszystkie")) {
-                int kwota = bazadanych.sumawydatkowstalych();
+                int kwota = bazadanych.sumawydatkistalegotowka();
+                int kwota2 = bazadanych.sumawydatkistalekartabankowa();
                 if(kwota != 0) {
                     Calendar cal = Calendar.getInstance();
                     SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
@@ -35,7 +36,18 @@ public class ActionReceiver extends BroadcastReceiver {
                     int data_aktualnaint = Integer.parseInt(data_aktualnastring);
                     String wydatek = "Stały";
                     String cheatday = "Nie";
-                    bazadanych.dodajtekst5(data_aktualnaint, wydatek, kwota, cheatday);
+                    String zasob = "Gotówka";
+                    bazadanych.dodajtekst5(data_aktualnaint, wydatek, kwota, cheatday, zasob);
+                }
+                if(kwota2 != 0) {
+                    Calendar cal = Calendar.getInstance();
+                    SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
+                    String data_aktualnastring =  data_aktualna.format(cal.getTime());
+                    int data_aktualnaint = Integer.parseInt(data_aktualnastring);
+                    String wydatek = "Stały";
+                    String cheatday = "Nie";
+                    String zasob = "Karta płatnicza";
+                    bazadanych.dodajtekst5(data_aktualnaint, wydatek, kwota2, cheatday, zasob);
                 }
             }
             if (titlepow.equals("Pomiń")) {

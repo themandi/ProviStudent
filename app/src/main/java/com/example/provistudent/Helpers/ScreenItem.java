@@ -1,4 +1,4 @@
-package com.example.provistudent.Services;
+package com.example.provistudent.Helpers;
 
 public class ScreenItem {
     String Tytul, Opis;

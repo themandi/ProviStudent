@@ -135,8 +135,8 @@ public class ProfileActivity extends AppCompatActivity {
                 if (powiadomieniadzientime == null || powiadomieniadzientime.equals("")) {
                     powiadomieniadzienczas.setText("Brak");
                 } else {
-                    SimpleDateFormat timebaza = new SimpleDateFormat("hhmm");
-                    SimpleDateFormat timestring = new SimpleDateFormat("hh:mm");
+                    SimpleDateFormat timebaza = new SimpleDateFormat("HHmm");
+                    SimpleDateFormat timestring = new SimpleDateFormat("HH:mm");
                     Date time = null;
                     try {
                         time = timebaza.parse(powiadomieniadzientime);
@@ -169,8 +169,8 @@ public class ProfileActivity extends AppCompatActivity {
                 if (powiadomieniagodz == null || powiadomieniagodz.equals("")) {
                     powiadomieniagodzinaprofil.setText("Brak");
                 } else {
-                    SimpleDateFormat timebaza = new SimpleDateFormat("hhmm");
-                    SimpleDateFormat timestring = new SimpleDateFormat("hh:mm");
+                    SimpleDateFormat timebaza = new SimpleDateFormat("HHmm");
+                    SimpleDateFormat timestring = new SimpleDateFormat("HH:mm");
                     Date time = null;
                     try {
                         time = timebaza.parse(powiadomieniagodz);

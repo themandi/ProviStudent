@@ -16,7 +16,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.provistudent.Adapters.IntroViewPagerAdapter;
 import com.example.provistudent.R;
-import com.example.provistudent.Services.ScreenItem;
+import com.example.provistudent.Helpers.ScreenItem;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;

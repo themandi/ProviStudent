@@ -9,7 +9,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 
 import com.example.provistudent.Database.Bazadanych;
-import com.example.provistudent.Services.Notifications;
+import com.example.provistudent.Helpers.Notifications;
 import com.example.provistudent.R;
 import com.example.provistudent.Pickers.TimePicker;
 
@@ -32,7 +32,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class SettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     private Notifications powiadomienia;
@@ -107,6 +110,134 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 Toast.makeText(getApplicationContext(), "Aby zmienić ustawienia aplikacji należy edytować tylko to pole, które nas interesuje. Pozostałe twoje dane nie będą mieć wprowadzonych zmian!", Toast.LENGTH_LONG).show();
             }
         });
+
+        cursor = bazadanych.odczytajtekst();
+        while(cursor.moveToNext()) {
+            String zapisaneimie = cursor.getString(cursor.getColumnIndex("nazwa_uzytkownika"));
+            poleimie.setText(zapisaneimie);
+        }
+        cursor.close();
+
+        cursor = bazadanych.odczytajtekst();
+        while(cursor.moveToNext()) {
+            String checkoplatystring = cursor.getString(cursor.getColumnIndex("checkoplaty"));
+            String checkoplatykiedystring = cursor.getString(cursor.getColumnIndex("checkoplatykiedy"));
+            String checkoszczednoscistring = cursor.getString(cursor.getColumnIndex("checkoszczednosci"));
+            String checkdanestring = cursor.getString(cursor.getColumnIndex("checkdane"));
+            if(checkoplatystring.equals("Yes")) {
+                checkoplaty.setChecked(true);
+            }
+            if(checkoplatykiedystring.equals("Yes")) {
+                checkoplatykiedy.setChecked(true);
+                LinearLayout linearlayout4 = findViewById(R.id.linearlayout4);
+                LinearLayout linearlayout5 = findViewById(R.id.linearlayout5);
+                View view1 = findViewById(R.id.view1);
+                View view2 = findViewById(R.id.view2);
+                View view3 = findViewById(R.id.view3);
+                View view4 = findViewById(R.id.view4);
+                linearlayout4.setVisibility(View.VISIBLE);
+                linearlayout5.setVisibility(View.VISIBLE);
+                view1.setVisibility(View.VISIBLE);
+                view2.setVisibility(View.VISIBLE);
+                view3.setVisibility(View.VISIBLE);
+                view4.setVisibility(View.VISIBLE);
+            }
+            if(checkoszczednoscistring.equals("Yes")) {
+                checkoszczednosci.setChecked(true);
+                LinearLayout linearlayout6 = findViewById(R.id.linearlayout6);
+                View view5 = findViewById(R.id.view5);
+                View view6 = findViewById(R.id.view6);
+                linearlayout6.setVisibility(View.VISIBLE);
+                view5.setVisibility(View.VISIBLE);
+                view6.setVisibility(View.VISIBLE);
+            }
+            if(checkdanestring.equals("Yes")) {
+                LinearLayout linearlayout7 = findViewById(R.id.linearlayout7);
+                View view7 = findViewById(R.id.view7);
+                View view8 = findViewById(R.id.view8);
+                linearlayout7.setVisibility(View.VISIBLE);
+                view7.setVisibility(View.VISIBLE);
+                view8.setVisibility(View.VISIBLE);
+                checkdane.setChecked(true);
+            }
+        }
+        cursor.close();
+
+        cursor = bazadanych.odczytajtekst();
+        while(cursor.moveToNext()) {
+            String zapisaneoszcz = cursor.getString(cursor.getColumnIndex("oszczednosci"));
+            poleoszczednosci.setText(zapisaneoszcz);
+        }
+        cursor.close();
+
+        powiadomieniadzien = (TextView) findViewById(R.id.powiadomieniadzien);
+        cursor2 = bazadanych.odczytajtekst4();
+        if(cursor2 != null && cursor2.getCount() > 0) {
+            while (cursor2.moveToNext()) {
+                String powiadomieniadzienbaza = cursor2.getString(cursor2.getColumnIndex("kiedypow"));
+                if (powiadomieniadzienbaza == null || powiadomieniadzienbaza.equals("")) {
+                    powiadomieniadzien.setText("Brak");
+                } else {
+                    SimpleDateFormat datebaza = new SimpleDateFormat("yyyyMMdd");
+                    SimpleDateFormat datestring = new SimpleDateFormat("dd/MM/yyyy");
+                    Date data = null;
+                    try {
+                        data = datebaza.parse(powiadomieniadzienbaza);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    String dataformat = datestring.format(data);
+                    powiadomieniadzien.setText(dataformat);
+                }
+            }
+        }
+        cursor2.close();
+
+        powiadomieniadzien2 = (TextView) findViewById(R.id.powiadomieniadzien2);
+        cursor2 = bazadanych.odczytajtekst4();
+        if(cursor2 != null && cursor2.getCount() > 0) {
+            while (cursor2.moveToNext()) {
+                String powiadomieniadzientime = cursor2.getString(cursor2.getColumnIndex("kiedypowczas"));
+                if (powiadomieniadzientime == null || powiadomieniadzientime.equals("")) {
+                    powiadomieniadzien2.setText("Brak");
+                } else {
+                    SimpleDateFormat timebaza = new SimpleDateFormat("HHmm");
+                    SimpleDateFormat timestring = new SimpleDateFormat("HH:mm");
+                    Date time = null;
+                    try {
+                        time = timebaza.parse(powiadomieniadzientime);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    String timeformat = timestring.format(time);
+                    powiadomieniadzien2.setText(timeformat);
+                }
+            }
+        }
+        cursor2.close();
+
+        powiadomieniagodzina = (TextView) findViewById(R.id.powiadomieniagodzina);
+        cursor2 = bazadanych.odczytajtekst4();
+        if(cursor2 != null && cursor2.getCount() > 0) {
+            while (cursor2.moveToNext()) {
+                String powiadomieniagodz = cursor2.getString(cursor2.getColumnIndex("kiedydane"));
+                if (powiadomieniagodz == null || powiadomieniagodz.equals("")) {
+                    powiadomieniagodzina.setText("Brak");
+                } else {
+                    SimpleDateFormat timebaza = new SimpleDateFormat("HHmm");
+                    SimpleDateFormat timestring = new SimpleDateFormat("HH:mm");
+                    Date time = null;
+                    try {
+                        time = timebaza.parse(powiadomieniagodz);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    String timeformat = timestring.format(time);
+                    powiadomieniagodzina.setText(timeformat);
+                }
+            }
+        }
+        cursor2.close();
 
         //Metoda wykorzystywana do pobierania wybranej opcji w checkboxie Opłat oraz zapisywaniu do bazy danych
         checkoplaty.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -225,19 +356,19 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 czestotliwoscopcje = parent.getItemAtPosition(position).toString();
                 switch (position) {
                     case 1:
-                        Toast.makeText(parent.getContext(), "Wybrano opcje: Co miesiąc", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(parent.getContext(), "Wybrano opcje: Co miesiąc", Toast.LENGTH_SHORT).show();
                         interwal = 2592000000L;
                         break;
                     case 2:
-                        Toast.makeText(parent.getContext(), "Wybrano opcje: Co trzy miesiące", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(parent.getContext(), "Wybrano opcje: Co trzy miesiące", Toast.LENGTH_SHORT).show();
                         interwal = 7776000000L;
                         break;
                     case 3:
-                        Toast.makeText(parent.getContext(), "Wybrano opcje: Co pół roku", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(parent.getContext(), "Wybrano opcje: Co pół roku", Toast.LENGTH_SHORT).show();
                         interwal = 15552000000L;
                         break;
                     case 4:
-                        Toast.makeText(parent.getContext(), "Wybrano opcje: Co rok", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(parent.getContext(), "Wybrano opcje: Co rok", Toast.LENGTH_SHORT).show();
                         interwal = 31104000000L;
                         break;
                 }
@@ -247,6 +378,28 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
+        cursor2 = bazadanych.odczytajtekst4();
+        if(cursor2 != null && cursor2.getCount() > 0) {
+            String coilepowiad = "Brak";
+            while (cursor2.moveToNext()) {
+                coilepowiad = cursor2.getString(cursor2.getColumnIndex("czestotliwosc"));
+                if (coilepowiad.equals("Co miesiąc")) {
+                    spinner2.setSelection(adapter2.getPosition("Co miesiąc"));
+                }
+                if (coilepowiad.equals("Co trzy miesiące")) {
+                    spinner2.setSelection(adapter2.getPosition("Co trzy miesiące"));
+                }
+                if (coilepowiad.equals("Co pół roku")) {
+                    spinner2.setSelection(adapter2.getPosition("Co pół roku"));
+                }
+                if (coilepowiad.equals("Co rok")) {
+                    spinner2.setSelection(adapter2.getPosition("Co rok"));
+                }
+            }
+        }
+        cursor2.close();
+
 
 //      przypominacz godziny
         przypominaczgodzina = (Button) findViewById(R.id.przypominaczgodzina);
@@ -296,7 +449,6 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             if (cursor.getCount() > 0) {
                 while (cursor.moveToNext()) {
                     imie = cursor.getString(cursor.getColumnIndex("nazwa_uzytkownika"));
-                    poleimie.setText(imie);
                 }
             }
         }
@@ -359,9 +511,11 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             cursor2.close();
 
             cursor2 = bazadanych.odczytajtekst4();
-            if (cursor2.getCount() > 0) {
-                while (cursor2.moveToNext()) {
-                    godzina = cursor2.getString(cursor2.getColumnIndex("kiedydane"));
+            if(godzina == null || godzina.equals("")) {
+                if (cursor2.getCount() > 0) {
+                    while (cursor2.moveToNext()) {
+                        godzina = cursor2.getString(cursor2.getColumnIndex("kiedydane"));
+                    }
                 }
             }
             if (cursor2.getCount() == 0) {
@@ -370,7 +524,10 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
             }
             cursor2.close();
-            powiadomienia.ustawNowePowiadomieniaWAlarmManager1();
+
+            if(!date.equals("") && !time2.equals("")) {
+                powiadomienia.ustawNowePowiadomieniaWAlarmManager1();
+            }
         }
 
         cursor = bazadanych.odczytajtekst();
@@ -456,7 +613,10 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
             }
             cursor2.close();
-            powiadomienia.ustawNowePowiadomieniaWAlarmManager2();
+
+            if(!time.equals("")) {
+                powiadomienia.ustawNowePowiadomieniaWAlarmManager2();
+            }
         }
 
         cursor = bazadanych.odczytajtekst();
@@ -471,6 +631,20 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
         cursor = bazadanych.odczytajtekst();
         if (cursor.getCount() > 0) {
+            if (cursor.moveToNext()) {
+                if(wybrano.equals("No")) {
+                 wybrano = cursor.getString(cursor.getColumnIndex("checkoplaty"));
+                }
+                if(wybrano2.equals("No")) {
+                    wybrano2 = cursor.getString(cursor.getColumnIndex("checkoplatykiedy"));
+                }
+                if(wybrano3.equals("No")) {
+                    wybrano3 = cursor.getString(cursor.getColumnIndex("checkoszczednosci"));
+                }
+                if(wybrano4.equals("No")) {
+                    wybrano4 = cursor.getString(cursor.getColumnIndex("checkdane"));
+                }
+            }
             if (bazadanych.zaaktualizujtekst(imie, wybrano, wybrano2, wybrano3, wybrano4, oszczednosci)) {
                 poleimie.setText("");
                 poleoszczednosci.setText("");
@@ -541,13 +715,19 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
             }
             cursor2.close();
-            powiadomienia.ustawNowePowiadomieniaWAlarmManager1();
-            powiadomienia.ustawNowePowiadomieniaWAlarmManager2();
+            if(!time2.equals("") && !date.equals("")) {
+                powiadomienia.ustawNowePowiadomieniaWAlarmManager1();
+            }
+            if(!time.equals("")) {
+                powiadomienia.ustawNowePowiadomieniaWAlarmManager2();
+            }
         }
 
         if(wybrano5.equals("Yes")) {
             powiadomienia.usunPowiadomieniaZAlarmManager1();
             czywlaczone = "No";
+            wybrano = "No";
+            wybrano2 = "No";
             String data = null;
             String godzina2 = null;
             String godzina = null;
@@ -568,11 +748,18 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
             }
             cursor2.close();
+
+            cursor = bazadanych.odczytajtekst();
+            if(cursor.getCount() > 0) {
+                bazadanych.zaaktualizujtekst(imie, wybrano, wybrano2, wybrano3, wybrano4, oszczednosci);
+            }
+            cursor.close();
         }
 
         if(wybrano6.equals("Yes")) {
             powiadomienia.usunPowiadomieniaZAlarmManager2();
             czywlaczone2 = "No";
+            wybrano4 = "No";
             String data = null;
             String godzina2 = null;
             String godzina = null;
@@ -594,12 +781,21 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
             }
             cursor2.close();
+
+            cursor = bazadanych.odczytajtekst();
+            if(cursor.getCount() > 0) {
+                bazadanych.zaaktualizujtekst(imie, wybrano, wybrano2, wybrano3, wybrano4, oszczednosci);
+            }
+            cursor.close();
         }
         if(wybrano5.equals("Yes") && wybrano6.equals("Yes")) {
             powiadomienia.usunPowiadomieniaZAlarmManager1();
             powiadomienia.usunPowiadomieniaZAlarmManager2();
             czywlaczone = "No";
             czywlaczone2 = "No";
+            wybrano = "No";
+            wybrano2 = "No";
+            wybrano4 = "No";
             String data = null;
             String godzina2 = null;
             String godzina = null;
@@ -620,6 +816,12 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 bazadanych.zaaktualizujtekst4(data, godzina2, czestotliwoscopcje, godzina, czywlaczone, interwal, czywlaczone2);
             }
             cursor2.close();
+
+            cursor = bazadanych.odczytajtekst();
+            if(cursor.getCount() > 0) {
+                bazadanych.zaaktualizujtekst(imie, wybrano, wybrano2, wybrano3, wybrano4, oszczednosci);
+            }
+            cursor.close();
         }
 
         Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
@@ -639,11 +841,9 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         if (TextUtils.isEmpty(timezmienna))
             return;
         if (timezmienna.equalsIgnoreCase("picker1")) {
-            powiadomieniagodzina = (TextView) findViewById(R.id.powiadomieniagodzina);
             powiadomieniagodzina.setText("Czas: " + hourstring + ":" + minutestring);
             time = hourstring + "" + minutestring;
         } else if (timezmienna.equalsIgnoreCase("picker2")) {
-            powiadomieniadzien2 = (TextView) findViewById(R.id.powiadomieniadzien2);
             powiadomieniadzien2.setText("Czas: " + hourstring + ":" + minutestring);
             time2 = hourstring + "" + minutestring;
         }
@@ -661,7 +861,6 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         if (dayOfMonth < 10) {
             daystring = "0" + daystring;
         }
-        powiadomieniadzien = (TextView) findViewById(R.id.powiadomieniadzien);
         powiadomieniadzien.setText("Data: " + daystring + "/" + monthstring + "/" + year);
         date = year + "" + monthstring + "" + daystring;
     }

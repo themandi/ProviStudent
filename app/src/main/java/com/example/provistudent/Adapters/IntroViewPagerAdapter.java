@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.example.provistudent.R;
-import com.example.provistudent.Services.ScreenItem;
+import com.example.provistudent.Helpers.ScreenItem;
 
 import java.util.List;
 

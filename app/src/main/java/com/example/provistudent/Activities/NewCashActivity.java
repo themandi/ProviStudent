@@ -9,7 +9,10 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +28,8 @@ public class NewCashActivity extends AppCompatActivity {
     Button przyciskedytuj;
     Bazadanych bazadanych;
     Cursor cursor;
+    Spinner spinnerzaplata;
+    String zasob;
     TextView polekwota;
     TextView poleoplata;
 
@@ -41,6 +46,7 @@ public class NewCashActivity extends AppCompatActivity {
         cursor = bazadanych.odczytajtekst3();
 
         poleoplata = findViewById(R.id.poleoplata);
+        spinnerzaplata = findViewById(R.id.spinnerzaplata);
         polekwota = findViewById(R.id.polekwota);
         przyciskcofnij = (Button) findViewById(R.id.cofnij);
         przyciskcofnij.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +85,7 @@ public class NewCashActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Nie można zaaktualizować!", Toast.LENGTH_SHORT).show();
                 } else if (cursor.getCount() > 0) {
                     if (!kwotapole.isEmpty()) {
-                        if (bazadanych.zaaktualizujtekst3(oplata, kwota)) {
+                        if (bazadanych.zaaktualizujtekst3(oplata, kwota, zasob)) {
                             polekwota.setText("");
                             Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
                         }
@@ -104,6 +110,7 @@ public class NewCashActivity extends AppCompatActivity {
                     buffer.append("ID: " + cursor.getString(0) + "\n");
                     buffer.append("Opłata: " + cursor.getString(1) + "\n");
                     buffer.append("Kwota: " + cursor.getString(2) + "\n");
+                    buffer.append("Zapłata za pomocą: " + cursor.getString(3) + "\n");
                 }
                 wyswietlwiadomosc("Zapisane wydatki stałe: ", buffer.toString());
                 cursor.close();
@@ -121,6 +128,30 @@ public class NewCashActivity extends AppCompatActivity {
         przyciskzapisz.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 onZapisz();
+            }
+        });
+        //Spinner wykorzystywany podczas pierwszej rejestracji użytkownika w oplatach stalych
+        ArrayAdapter<CharSequence> adapter4 = ArrayAdapter.createFromResource(this,
+                R.array.srodki, android.R.layout.simple_spinner_item);
+        adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerzaplata.setAdapter(adapter4);
+        spinnerzaplata.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        zasob = "Gotówka";
+                        break;
+                    case 1:
+                        zasob = "Gotówka";
+                        break;
+                    case 2:
+                        zasob = "Karta płatnicza";
+                        break;
+                }
+            }
+            @Override
+            public void onNothingSelected (AdapterView < ? > parent){
             }
         });
     }
@@ -156,7 +187,7 @@ public class NewCashActivity extends AppCompatActivity {
 
 
         if (!kwotapole.isEmpty()) {
-            if (bazadanych.dodajtekst3(oplata, kwota)) {
+            if (bazadanych.dodajtekst3(oplata, kwota, zasob)) {
                 polekwota.setText("");
                 poleoplata.setText("");
             }

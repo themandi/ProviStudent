@@ -129,12 +129,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         kartabankowa = findViewById(R.id.zasob1);
         findViewById(R.id.zasob1).invalidate();
-        sumakartabankowa = bazadanych.sumakartabankowa();
+        sumakartabankowa = bazadanych.sumakartabankowa() - bazadanych.sumawydatkikartabankowa();
         kartabankowa.setText("Karta bankowa: " + Integer.toString(sumakartabankowa) + " zł");
 
         gotowka = findViewById(R.id.zasob2);
         findViewById(R.id.zasob2).invalidate();
-        sumagotowka = bazadanych.sumagotowka();
+        sumagotowka = bazadanych.sumagotowka() - bazadanych.sumawydatkigotowka();
         gotowka.setText("Gotówka: " + Integer.toString(sumagotowka) + " zł");
 
         try {
@@ -157,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     buffer.append("Data: " + cursor.getString(1) + "\n");
                     buffer.append("Wydatek: " + cursor.getString(2) + "\n");
                     buffer.append("Kwota: " + cursor.getString(3) + "\n");
+                    buffer.append("Wykorzystany zasób: " + cursor.getString(5) + "\n");
                     buffer.append("Cheatday: " + cursor.getString(4) + "\n");
                 }
                 wyswietlwiadomosc2("Zapisane wydatki: ", buffer.toString());
@@ -302,18 +303,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int kwotawydaj = sumaprzychodu/days;
         String wydatek = "Automatyczny";
         String cheatday = "Nie";
+        String zasob = "Gotówka";
         SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
         String data_aktualnastring =  data_aktualna.format(cal.getTime());
         int data_aktualnaint = Integer.parseInt(data_aktualnastring);
         if(maxid == 0) {
-            bazadanych.dodajtekst5(data_aktualnaint, wydatek, kwotawydaj, cheatday);
+            bazadanych.dodajtekst5(data_aktualnaint, wydatek, kwotawydaj, cheatday, zasob);
         }
         while(data_aktualnaint > maxid) {
             cal.setTime(data_aktualna.parse(maxidString));
             cal.add(Calendar.DATE, 1);
             maxidString = data_aktualna.format(cal.getTime());
             maxid = Integer.parseInt(maxidString);
-            bazadanych.dodajtekst5(maxid, wydatek, kwotawydaj, cheatday);
+            bazadanych.dodajtekst5(maxid, wydatek, kwotawydaj, cheatday, zasob);
         }
     }
 
@@ -378,8 +380,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 int kwota = bazadanych.sumaoszczednosci();
                 if (kwota != 0) {
                     String cheatday = "Nie";
-                    String wydatek = "Oszczędności";
-                    if (bazadanych.dodajtekst5(data_aktualnaint, wydatek, kwota, cheatday)) {
+                    String wydatek = "Nieokreślony";
+                    String zasob = "Oszczędności";
+                    if (bazadanych.dodajtekst5(data_aktualnaint, wydatek, kwota, cheatday, zasob)) {
                         cursor = bazadanych.odczytajtekst();
                         int oszczednosci = 0;
                         while(cursor.moveToNext())

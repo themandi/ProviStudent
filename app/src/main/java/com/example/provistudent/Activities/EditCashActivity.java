@@ -9,8 +9,11 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +40,8 @@ public class EditCashActivity extends AppCompatActivity {
     int kwota;
     String data;
     String dzienimiesiac;
+    Spinner spinnerzaplata;
+    String zasob;
     int dataint;
 
     @Override
@@ -50,6 +55,7 @@ public class EditCashActivity extends AppCompatActivity {
 
         bazadanych = new Bazadanych(EditCashActivity.this);
         cursor = bazadanych.odczytajtekst5();
+        spinnerzaplata = findViewById(R.id.spinnerzaplata);
 
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
@@ -103,7 +109,7 @@ public class EditCashActivity extends AppCompatActivity {
                         {
                             Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zaaktualizowane dane, prosimy spróbować ponownie!", Toast.LENGTH_SHORT).show();
                         }
-                        if (bazadanych.zaaktualizujtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
+                        if (bazadanych.zaaktualizujtekst5(datadozapisuint, wydatek, kwota, cheatday, zasob)) {
                             polekwota.setText("");
                             Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
                         }
@@ -130,6 +136,7 @@ public class EditCashActivity extends AppCompatActivity {
                     buffer.append("Data: " + cursor.getString(1) + "\n");
                     buffer.append("Wydatek: " + cursor.getString(2) + "\n");
                     buffer.append("Kwota: " + cursor.getString(3) + "\n");
+                    buffer.append("Zapłata za pomocą: " + cursor.getString(5) + "\n");
                 }
                 wyswietlwiadomosc("Zapisane wydatki: ", buffer.toString());
                 cursor.close();
@@ -149,6 +156,31 @@ public class EditCashActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 onZapisz();
+            }
+        });
+
+        //Spinner wykorzystywany podczas pierwszej rejestracji użytkownika w oplatach stalych
+        ArrayAdapter<CharSequence> adapter4 = ArrayAdapter.createFromResource(this,
+                R.array.srodki, android.R.layout.simple_spinner_item);
+        adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerzaplata.setAdapter(adapter4);
+        spinnerzaplata.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        zasob = "Gotówka";
+                        break;
+                    case 1:
+                        zasob = "Gotówka";
+                        break;
+                    case 2:
+                        zasob = "Karta płatnicza";
+                        break;
+                }
+            }
+            @Override
+            public void onNothingSelected (AdapterView < ? > parent){
             }
         });
     }
@@ -222,7 +254,7 @@ public class EditCashActivity extends AppCompatActivity {
                 // Jeśli nie znaleziono wydatku automatycznego wydatku, można dodać wydatek
                 if (licznik == 0) {
                     if (!kwotapole.isEmpty()) {
-                        if (bazadanych.dodajtekst5(datadozapisuint, wydatek, kwota, cheatday)) {
+                        if (bazadanych.dodajtekst5(datadozapisuint, wydatek, kwota, cheatday, zasob)) {
                             polekwota.setText("");
                         }
                         Toast.makeText(getApplicationContext(), "Dodano!", Toast.LENGTH_SHORT).show();

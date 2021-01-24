@@ -30,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.provistudent.Database.Bazadanych;
-import com.example.provistudent.Services.Notifications;
+import com.example.provistudent.Helpers.Notifications;
 import com.example.provistudent.R;
 import com.example.provistudent.Pickers.TimePicker;
 

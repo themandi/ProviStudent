@@ -55,16 +55,28 @@ public class ConstantCashActivity extends AppCompatActivity {
         oplacwszystko.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
             {
-               int kwota = bazadanych.sumawydatkowstalych();
-               if(kwota != 0) {
-                   Calendar cal = Calendar.getInstance();
-                   SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
-                   String data_aktualnastring =  data_aktualna.format(cal.getTime());
-                   data_aktualnaint = Integer.parseInt(data_aktualnastring);
-                   String wydatek = "Stały";
-                   String cheatday = "Nie";
-                   bazadanych.dodajtekst5(data_aktualnaint, wydatek, kwota, cheatday);
-               }
+                int kwota = bazadanych.sumawydatkistalegotowka();
+                int kwota2 = bazadanych.sumawydatkistalekartabankowa();
+                if(kwota != 0) {
+                    Calendar cal = Calendar.getInstance();
+                    SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
+                    String data_aktualnastring =  data_aktualna.format(cal.getTime());
+                    int data_aktualnaint = Integer.parseInt(data_aktualnastring);
+                    String wydatek = "Stały";
+                    String cheatday = "Nie";
+                    String zasob = "Gotówka";
+                    bazadanych.dodajtekst5(data_aktualnaint, wydatek, kwota, cheatday, zasob);
+                }
+                if(kwota2 != 0) {
+                    Calendar cal = Calendar.getInstance();
+                    SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
+                    String data_aktualnastring =  data_aktualna.format(cal.getTime());
+                    int data_aktualnaint = Integer.parseInt(data_aktualnastring);
+                    String wydatek = "Stały";
+                    String cheatday = "Nie";
+                    String zasob = "Karta płatnicza";
+                    bazadanych.dodajtekst5(data_aktualnaint, wydatek, kwota2, cheatday, zasob);
+                }
                 Intent intent = new Intent(ConstantCashActivity.this, MainActivity.class);
                 finish();
                 startActivity(intent);
@@ -91,7 +103,7 @@ public class ConstantCashActivity extends AppCompatActivity {
         }
         ArrayList<String> lista = new ArrayList<>();
         while (cursor.moveToNext()) {
-            lista.add("Wydatek: " + cursor.getString(1) + "\n" + "Kwota: " + cursor.getString(2) + "\n");
+            lista.add("Wydatek: " + cursor.getString(1) + "\n" + "Kwota: " + cursor.getString(2) + "\n" + "Wykorzystany zasób: " + cursor.getString(3) + "\n");
         }
         ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lista);
         listView.setAdapter(adapter);

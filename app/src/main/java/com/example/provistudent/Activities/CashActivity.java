@@ -29,8 +29,10 @@ public class CashActivity extends AppCompatActivity {
     Bazadanych bazadanych;
     Cursor cursor;
     Spinner spinner3;
+    Spinner spinnerzaplata;
     TextView polekwota;
     String wydatek;
+    String zasob;
     int kwota;
 
     @Override
@@ -46,6 +48,7 @@ public class CashActivity extends AppCompatActivity {
         cursor = bazadanych.odczytajtekst3();
 
         spinner3 = findViewById(R.id.spinner3);
+        spinnerzaplata = findViewById(R.id.spinnerzaplata);
         polekwota = findViewById(R.id.polekwota);
 
         przyciskcofnij = (Button) findViewById(R.id.cofnij);
@@ -96,7 +99,7 @@ public class CashActivity extends AppCompatActivity {
                         {
                             Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zaaktualizowane dane, prosimy spróbować ponownie!", Toast.LENGTH_SHORT).show();
                         }
-                        if (bazadanych.zaaktualizujtekst3(wydatek, kwota)) {
+                        if (bazadanych.zaaktualizujtekst3(wydatek, kwota, zasob)) {
                             polekwota.setText("");
                             Toast.makeText(getApplicationContext(), "Dane zostały zaaktualizowane!", Toast.LENGTH_SHORT).show();
                         }
@@ -122,6 +125,7 @@ public class CashActivity extends AppCompatActivity {
                     buffer.append("ID: " + cursor.getString(0) + "\n");
                     buffer.append("Wydatek: " + cursor.getString(1) + "\n");
                     buffer.append("Kwota: " + cursor.getString(2) + "\n");
+                    buffer.append("Zapłata za pomocą: " + cursor.getString(3) + "\n");
                 }
                 wyswietlwiadomosc("Zapisane wydatki stałe: ", buffer.toString());
                 cursor.close();
@@ -163,7 +167,31 @@ public class CashActivity extends AppCompatActivity {
                         break;
                 }
             }
+            @Override
+            public void onNothingSelected (AdapterView < ? > parent){
+            }
+        });
 
+        //Spinner wykorzystywany podczas pierwszej rejestracji użytkownika w oplatach stalych
+        ArrayAdapter<CharSequence> adapter4 = ArrayAdapter.createFromResource(this,
+                R.array.srodki, android.R.layout.simple_spinner_item);
+        adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerzaplata.setAdapter(adapter4);
+        spinnerzaplata.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        zasob = "Gotówka";
+                        break;
+                    case 1:
+                        zasob = "Gotówka";
+                        break;
+                    case 2:
+                        zasob = "Karta płatnicza";
+                        break;
+                }
+            }
             @Override
             public void onNothingSelected (AdapterView < ? > parent){
             }
@@ -207,7 +235,7 @@ public class CashActivity extends AppCompatActivity {
             {
                 Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisane dane, prosimy edytować bądź usunąć wydatek", Toast.LENGTH_SHORT).show();
             }
-            if (bazadanych.dodajtekst3(wydatek, kwota)) {
+            if (bazadanych.dodajtekst3(wydatek, kwota, zasob)) {
                 polekwota.setText("");
             }
             Toast.makeText(getApplicationContext(), "Dodano!",Toast.LENGTH_SHORT).show();
