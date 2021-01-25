@@ -22,6 +22,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -53,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView wydajoszczednosci;
     Cursor cursor;
     int sumaprzychodu;
-    int sumawydatkowstalych;
     int sumaoszczednosci;
     int sumadochodaktualny;
     int sumakartabankowa;
@@ -153,12 +154,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 StringBuffer buffer = new StringBuffer();
                 while (cursor.moveToNext()) {
-                    buffer.append("ID: " + cursor.getString(0) + "\n");
-                    buffer.append("Data: " + cursor.getString(1) + "\n");
-                    buffer.append("Wydatek: " + cursor.getString(2) + "\n");
-                    buffer.append("Kwota: " + cursor.getString(3) + "\n");
-                    buffer.append("Wykorzystany zasób: " + cursor.getString(5) + "\n");
-                    buffer.append("Cheatday: " + cursor.getString(4) + "\n");
+                    String powiadomieniadzienbaza = cursor.getString(cursor.getColumnIndex("data"));
+                    if (powiadomieniadzienbaza != null || !powiadomieniadzienbaza.equals("")) {
+                        SimpleDateFormat datebaza = new SimpleDateFormat("yyyyMMdd");
+                        SimpleDateFormat datestring = new SimpleDateFormat("dd/MM/yyyy");
+                        Date data = null;
+                        try {
+                            data = datebaza.parse(powiadomieniadzienbaza);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        String dataformat = datestring.format(data);
+                        buffer.append("ID: " + cursor.getString(0) + "\n");
+                        buffer.append("Data: " + dataformat + "\n");
+                        buffer.append("Wydatek: " + cursor.getString(2) + "\n");
+                        buffer.append("Kwota: " + cursor.getString(3) + "\n");
+                        buffer.append("Wykorzystany zasób: " + cursor.getString(5) + "\n");
+                        buffer.append("Cheatday: " + cursor.getString(4) + "\n");
+                    }
                 }
                 wyswietlwiadomosc2("Zapisane wydatki: ", buffer.toString());
                 cursor.close();
@@ -233,6 +246,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 dzienimiesiac = daystring + " " + miesiac;
                 Log.d(TAG, "onSelectDayChange: data:" + dzienimiesiac);
+
+                Intent intent = new Intent(MainActivity.this, DayofcalendarActivity.class);
+                intent.putExtra("data",data);
+                intent.putExtra("data2",dzienimiesiac);
+                intent.putExtra("datadozapisu",datadozapisu);
+                startActivity(intent);
+            }
+        });
+
+        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SimpleDateFormat data_zapis = new SimpleDateFormat("dd/MM/yyyy", new Locale("pl", "PL"));
+                data = data_zapis.format(cal.getTime());
+                SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
+                datadozapisu =  data_aktualna.format(cal.getTime());
+                SimpleDateFormat dayandmies = new SimpleDateFormat("dd MMMM", new Locale("pl", "PL"));
+                dzienimiesiac = dayandmies.format(cal.getTime());
 
                 Intent intent = new Intent(MainActivity.this, DayofcalendarActivity.class);
                 intent.putExtra("data",data);

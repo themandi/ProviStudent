@@ -19,6 +19,10 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.provistudent.Database.Bazadanych;
 import com.example.provistudent.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class NewCheatdayActivity extends AppCompatActivity {
     Button przyciskzapisz;
     Button przyciskcofnij;
@@ -121,12 +125,26 @@ public class NewCheatdayActivity extends AppCompatActivity {
                 }
                 StringBuffer buffer = new StringBuffer();
                 while (cursor.moveToNext()) {
-                    buffer.append("ID: " + cursor.getString(0) + "\n");
-                    buffer.append("Data: " + cursor.getString(1) + "\n");
-                    buffer.append("Wydatek: " + cursor.getString(2) + "\n");
-                    buffer.append("Kwota: " + cursor.getString(3) + "\n");
-                    buffer.append("Zapłata za pomocą: " + cursor.getString(5) + "\n");
+                    String powiadomieniadzienbaza = cursor.getString(cursor.getColumnIndex("data"));
+                    if (powiadomieniadzienbaza != null || !powiadomieniadzienbaza.equals("")) {
+                        SimpleDateFormat datebaza = new SimpleDateFormat("yyyyMMdd");
+                        SimpleDateFormat datestring = new SimpleDateFormat("dd/MM/yyyy");
+                        Date data = null;
+                        try {
+                            data = datebaza.parse(powiadomieniadzienbaza);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        String dataformat = datestring.format(data);
+
+                        buffer.append("ID: " + cursor.getString(0) + "\n");
+                        buffer.append("Data: " + dataformat + "\n");
+                        buffer.append("Wydatek: " + cursor.getString(2) + "\n");
+                        buffer.append("Kwota: " + cursor.getString(3) + "\n");
+                        buffer.append("Zapłata za pomocą: " + cursor.getString(5) + "\n");
+                    }
                 }
+
                 wyswietlwiadomosc("Zapisane wydatki: ", buffer.toString());
                 cursor.close();
             }

@@ -30,7 +30,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="197dp"
             android:orientation="horizontal">
 
             <com.github.mikephil.charting.charts.PieChart
@@ -47,8 +47,8 @@
                     android:id="@+id/miesiac"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"
                     android:text="@string/miesiac"
                     android:textColor="@android:color/black"
                     android:textSize="24sp"
@@ -117,6 +117,7 @@
                     tools:ignore="MissingConstraints"
                     tools:layout_editor_absoluteX="200dp"
                     tools:layout_editor_absoluteY="162dp" />
+
                 <TextView
                     android:id="@+id/wydajoszczednosci"
                     android:layout_width="wrap_content"
@@ -131,16 +132,11 @@
 
                 <Button
                     android:id="@+id/cheatday"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="167dp"
+                    android:layout_height="37dp"
                     android:text="CHEAT DAY" />
             </LinearLayout>
         </LinearLayout>
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/zasoby"
@@ -155,6 +151,11 @@
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="212dp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/zasob1"
@@ -189,12 +190,23 @@
 
         <CalendarView
             android:id="@+id/zobaczKalendarz"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="411dp"
+            android:layout_height="297dp"
             android:layout_gravity="center"
             android:background="#FFF"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="34dp"
             tools:layout_editor_absoluteY="329dp"></CalendarView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            app:fabSize="mini"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginRight="10dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_baseline_add_24" />
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
