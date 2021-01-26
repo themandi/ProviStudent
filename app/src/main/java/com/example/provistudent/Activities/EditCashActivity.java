@@ -33,6 +33,7 @@ public class EditCashActivity extends AppCompatActivity {
     Button przyciskusun;
     Button przyciskwyswietl;
     Button przyciskedytuj;
+    Button przyciskprzychody;
     Bazadanych bazadanych;
     Cursor cursor;
     TextView polekwota;
@@ -43,7 +44,9 @@ public class EditCashActivity extends AppCompatActivity {
     String data;
     String dzienimiesiac;
     Spinner spinnerzaplata;
+    Spinner spinnerwybor;
     String zasob;
+    String wybor;
     int dataint;
 
     @Override
@@ -150,9 +153,30 @@ public class EditCashActivity extends AppCompatActivity {
                         buffer.append("Wydatek: " + cursor.getString(2) + "\n");
                         buffer.append("Kwota: " + cursor.getString(3) + "\n");
                         buffer.append("Zapłata za pomocą: " + cursor.getString(5) + "\n");
+                        buffer.append("\n");
                     }
                 }
                 wyswietlwiadomosc("Zapisane wydatki: ", buffer.toString());
+                cursor.close();
+            }
+        });
+
+        przyciskprzychody = (Button) findViewById(R.id.wyswietlprzychody);
+        przyciskprzychody.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                cursor = bazadanych.odczytajtekst2();
+                if (cursor.getCount() == 0) {
+                    wyswietlwiadomosc("Error", "Brak zapisanych zasobów!");
+                    return;
+                }
+                StringBuffer buffer2 = new StringBuffer();
+                while (cursor.moveToNext()) {
+                    buffer2.append("Zasób: " + cursor.getString(1) + "\n");
+                    buffer2.append("Kwota: " + cursor.getString(2) + "\n");
+                    buffer2.append("Nazwa: " + cursor.getString(3) + "\n");
+                    buffer2.append("\n");
+                }
+                wyswietlwiadomosc("Zapisane przychody: ", buffer2.toString());
                 cursor.close();
             }
         });
@@ -197,6 +221,29 @@ public class EditCashActivity extends AppCompatActivity {
             public void onNothingSelected (AdapterView < ? > parent){
             }
         });
+
+        spinnerwybor = findViewById(R.id.spinnerwybor);
+        //Spinner wykorzystywany podczas pierwszej rejestracji użytkownika w oplatach stalych
+        ArrayAdapter<CharSequence> adapter5 = ArrayAdapter.createFromResource(this,
+                R.array.wybor, android.R.layout.simple_spinner_item);
+        adapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerwybor.setAdapter(adapter5);
+        spinnerwybor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        wybor = "Wydatek";
+                        break;
+                    case 1:
+                        wybor = "Przychód";
+                        break;
+                }
+            }
+            @Override
+            public void onNothingSelected (AdapterView < ? > parent){
+            }
+        });
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -215,72 +262,95 @@ public class EditCashActivity extends AppCompatActivity {
             intent.putExtra("data",data);
             intent.putExtra("data2",dzienimiesiac);
             intent.putExtra("datadozapisu",datadozapisu);
+            finish();
             startActivity(intent);
         }
         cursor.close();
     }
 
     void onDodaj() {
-        // Odczytanie informacji z EditText
-        String kwotapole = polekwota.getText().toString();
-        try
-        {
-            kwota = Integer.parseInt(polekwota.getText().toString());
-        }catch(Throwable t)
-        {
-            Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisane dane, prosimy edytować bądź usunąć wydatek", Toast.LENGTH_SHORT).show();
-        }
-        String wydatek = wydanoedycja.getText().toString();
-        // Zmienne potrzebne do odczytania oraz zaaktualizowania bazy danych
-        String cheatday = "Nie";
-        String wydatekbaza;
-        String databaza;
-        int licznik = 0;
-        String wydatekstring = "Automatyczny";
-        Integer ID;
-        // Odczytanie informacji z bazy danych
-        cursor = bazadanych.odczytajtekst5();
-        // Zabezpieczenie przed przedwczesnym wprowadzeniem danych o wydatkach
-        if (datadozapisuint <= dataint) {
-            // Jeśli nie ma żadnych wydatków
-            if (cursor.getCount() == 0) {
-                Toast.makeText(getApplicationContext(), "Brak wydatków!", Toast.LENGTH_SHORT).show();
-            } else {
-                // Odczytywanie wydatków z bazy danych
-                while (cursor.moveToNext()) {
-                    wydatekbaza = cursor.getString(cursor.getColumnIndex("wydatek"));
-                    databaza = cursor.getString(cursor.getColumnIndex("data"));
-                    // Jeśli wydatek jest automatyczny i data odpowiada dacie zaznaczonej w kalendarzu
-                    if (wydatekbaza.equals(wydatekstring) && databaza.equals(datadozapisu)) {
-                        ID = cursor.getInt(cursor.getColumnIndex("ID"));
-                        // Zabezpieczenie przed wprowadzeniem pustej kwoty wydatku
-                        if (!kwotapole.isEmpty()) {
-                            if (bazadanych.zaaktualizujtekstcash(ID, datadozapisuint, wydatek, kwota, cheatday)) {
-                                polekwota.setText("");
-                                licznik = 1;
+        if (wybor.equals("Wydatek")) {
+            // Odczytanie informacji z EditText
+            String kwotapole = polekwota.getText().toString();
+            try {
+                kwota = Integer.parseInt(polekwota.getText().toString());
+            } catch (Throwable t) {
+                Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisane dane, prosimy edytować bądź usunąć wydatek", Toast.LENGTH_SHORT).show();
+            }
+            String wydatek = wydanoedycja.getText().toString();
+            // Zmienne potrzebne do odczytania oraz zaaktualizowania bazy danych
+            String cheatday = "Nie";
+            String wydatekbaza;
+            String databaza;
+            int licznik = 0;
+            String wydatekstring = "Automatyczny";
+            Integer ID;
+            // Odczytanie informacji z bazy danych
+            cursor = bazadanych.odczytajtekst5();
+            // Zabezpieczenie przed przedwczesnym wprowadzeniem danych o wydatkach
+            if (datadozapisuint <= dataint) {
+                // Jeśli nie ma żadnych wydatków
+                if (cursor.getCount() == 0) {
+                    Toast.makeText(getApplicationContext(), "Brak wydatków!", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Odczytywanie wydatków z bazy danych
+                    while (cursor.moveToNext()) {
+                        wydatekbaza = cursor.getString(cursor.getColumnIndex("wydatek"));
+                        databaza = cursor.getString(cursor.getColumnIndex("data"));
+                        // Jeśli wydatek jest automatyczny i data odpowiada dacie zaznaczonej w kalendarzu
+                        if (wydatekbaza.equals(wydatekstring) && databaza.equals(datadozapisu)) {
+                            ID = cursor.getInt(cursor.getColumnIndex("ID"));
+                            // Zabezpieczenie przed wprowadzeniem pustej kwoty wydatku
+                            if (!kwotapole.isEmpty()) {
+                                if (bazadanych.zaaktualizujtekstcash(ID, datadozapisuint, wydatek, kwota, cheatday)) {
+                                    polekwota.setText("");
+                                    licznik = 1;
+                                }
+                                Toast.makeText(getApplicationContext(), "Edytowano!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Błąd! Dane nie zostały wprowadzone.", Toast.LENGTH_SHORT).show();
                             }
-                            Toast.makeText(getApplicationContext(), "Edytowano!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    // Jeśli nie znaleziono wydatku automatycznego wydatku, można dodać wydatek
+                    if (licznik == 0) {
+                        if (!kwotapole.isEmpty()) {
+                            if (bazadanych.dodajtekst5(datadozapisuint, wydatek, kwota, cheatday, zasob)) {
+                                polekwota.setText("");
+                            }
+                            Toast.makeText(getApplicationContext(), "Dodano!", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(getApplicationContext(), "Błąd! Dane nie zostały wprowadzone.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
-                // Jeśli nie znaleziono wydatku automatycznego wydatku, można dodać wydatek
-                if (licznik == 0) {
-                    if (!kwotapole.isEmpty()) {
-                        if (bazadanych.dodajtekst5(datadozapisuint, wydatek, kwota, cheatday, zasob)) {
-                            polekwota.setText("");
-                        }
-                        Toast.makeText(getApplicationContext(), "Dodano!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Błąd! Dane nie zostały wprowadzone.", Toast.LENGTH_SHORT).show();
-                    }
-                }
+                // Zamknięcie kursora
+                cursor.close();
+            } else {
+                Toast.makeText(getApplicationContext(), "Nie możesz dodać wcześniej wydatków!", Toast.LENGTH_SHORT).show();
             }
-            // Zamknięcie kursora
-            cursor.close();
-        } else {
-            Toast.makeText(getApplicationContext(), "Nie możesz dodać wcześniej wydatków!", Toast.LENGTH_SHORT).show();
+        }
+        else if (wybor.equals("Przychód")) {
+            // Odczytanie informacji z EditText
+            String kwotapole = polekwota.getText().toString();
+            try {
+                kwota = Integer.parseInt(polekwota.getText().toString());
+            } catch (Throwable t) {
+                Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisane dane, prosimy edytować bądź usunąć przychód", Toast.LENGTH_SHORT).show();
+            }
+            String wydatek = wydanoedycja.getText().toString();
+            // Odczytywanie wydatków z bazy danych
+            if (!kwotapole.isEmpty()) {
+                if (bazadanych.dodajtekst2(zasob, kwota, wydatek)) {
+                    polekwota.setText("");
+                }
+                Toast.makeText(getApplicationContext(), "Dodano przychód!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Błąd! Dane nie zostały wprowadzone.", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Nie możesz dodać wcześniej wydatków/przychodu!", Toast.LENGTH_SHORT).show();
         }
     }
 

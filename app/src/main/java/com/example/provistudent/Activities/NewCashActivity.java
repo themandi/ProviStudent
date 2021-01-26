@@ -107,10 +107,10 @@ public class NewCashActivity extends AppCompatActivity {
                 }
                 StringBuffer buffer = new StringBuffer();
                 while (cursor.moveToNext()) {
-                    buffer.append("ID: " + cursor.getString(0) + "\n");
                     buffer.append("Opłata: " + cursor.getString(1) + "\n");
                     buffer.append("Kwota: " + cursor.getString(2) + "\n");
                     buffer.append("Zapłata za pomocą: " + cursor.getString(3) + "\n");
+                    buffer.append("\n");
                 }
                 wyswietlwiadomosc("Zapisane wydatki stałe: ", buffer.toString());
                 cursor.close();
@@ -167,6 +167,7 @@ public class NewCashActivity extends AppCompatActivity {
         } else if (cursor.getCount() > 0) {
             Toast.makeText(getApplicationContext(), "Zapisano!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(NewCashActivity.this, CashActivity.class);
+            finish();
             startActivity(intent);
         }
         cursor.close();

@@ -22,40 +22,39 @@
             android:gravity="center"
             android:text="@string/wydatki"
             android:textColor="@android:color/white"
-            android:textSize="30sp"
+            android:textSize="22sp"
             android:textStyle="bold|normal"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="0dp" />
 
+        <TextView
+            android:id="@+id/miesiac"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/miesiac"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold|normal"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="259dp"
+            tools:layout_editor_absoluteY="48dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="197dp"
+            android:layout_height="185dp"
             android:orientation="horizontal">
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/wykreskolowy"
                 android:layout_width="216dp"
-                android:layout_height="220dp"></com.github.mikephil.charting.charts.PieChart>
+                android:layout_height="180dp"></com.github.mikephil.charting.charts.PieChart>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/miesiac"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="15dp"
-                    android:text="@string/miesiac"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp"
-                    android:textStyle="bold|normal"
-                    tools:ignore="MissingConstraints"
-                    tools:layout_editor_absoluteX="259dp"
-                    tools:layout_editor_absoluteY="48dp" />
 
                 <TextView
                     android:id="@+id/przychod"
@@ -70,10 +69,22 @@
                     tools:layout_editor_absoluteY="90dp" />
 
                 <TextView
+                    android:id="@+id/zobaczprzychody"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/zobacz_list_przychod_w"
+                    android:textColor="@color/gradient_start_color"
+                    android:textSize="13sp"
+                    android:textStyle="bold|normal"
+                    tools:ignore="DuplicateIds,MissingConstraints"
+                    tools:layout_editor_absoluteX="200dp"
+                    tools:layout_editor_absoluteY="126dp" />
+
+                <TextView
                     android:id="@+id/dochodaktualny"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Dochód: 123zł"
+                    android:text="Bilans: 123zł"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold|normal"
@@ -92,7 +103,6 @@
                     tools:ignore="MissingConstraints"
                     tools:layout_editor_absoluteX="200dp"
                     tools:layout_editor_absoluteY="90dp" />
-
 
                 <TextView
                     android:id="@+id/zobaczwydatki"
@@ -146,7 +156,7 @@
             android:gravity="center"
             android:text="@string/zasoby"
             android:textColor="@android:color/white"
-            android:textSize="30sp"
+            android:textSize="22sp"
             android:textStyle="bold|normal"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="0dp"

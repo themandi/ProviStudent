@@ -240,7 +240,7 @@
                 android:layout_width="226dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10px"
-                android:text="Kiedy chcesz otrzymywać powiadomienia?"
+                android:text="Wprowadź datę pierwszego powiadomienia"
                 android:textColor="@android:color/black"
                 android:textSize="18dp"
                 android:textStyle="bold|normal"

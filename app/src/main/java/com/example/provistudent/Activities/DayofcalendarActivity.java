@@ -189,6 +189,7 @@ public class DayofcalendarActivity extends AppCompatActivity{
     //Metoda wykorzystywana podczas wywołania przycisku "Zapisz"
     void onZapisz() {
         Intent intent = new Intent(DayofcalendarActivity.this, MainActivity.class);
+        finish();
         startActivity(intent);
         //Metoda do zapisywania
     }

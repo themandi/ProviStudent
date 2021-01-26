@@ -170,13 +170,11 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                     case 1:
                         Intent intent = new Intent(RegisterActivity.this, IncomeActivity.class);
                         intent.putExtra("Register", "RegisterActivity");
-                        finish();
                         startActivity(intent);
                         break;
                     case 2:
                         Intent intent2 = new Intent(RegisterActivity.this, IncomeActivity2.class);
                         intent2.putExtra("Register", "RegisterActivity");
-                        finish();
                         startActivity(intent2);
                         break;
                 }
@@ -432,7 +430,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 {
                     Intent intent = new Intent(RegisterActivity.this, CashActivity.class);
                     intent.putExtra("Register", "RegisterActivity");
-                    finish();
                     startActivity(intent);
                 }
                 break;

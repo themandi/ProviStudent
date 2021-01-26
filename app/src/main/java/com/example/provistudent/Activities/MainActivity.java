@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView kartabankowa;
     TextView gotowka;
     TextView zobaczwydatki;
+    TextView zobaczprzychody;
     TextView wydajoszczednosci;
     Cursor cursor;
     int sumaprzychodu;
@@ -109,40 +110,79 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         przychod = findViewById(R.id.przychod);
-        findViewById(R.id.przychod).invalidate();
         sumaprzychodu = bazadanych.sumaprzychodu();
+        przychod.invalidate();
         przychod.setText("Przychód: " + Integer.toString(sumaprzychodu) + " zł");
 
         wydatki = findViewById(R.id.wydatki);
-        findViewById(R.id.wydatki).invalidate();
         sumawydatkow = bazadanych.sumawydatkow();
+        wydatki.invalidate();
         wydatki.setText("Wydatki: " + Integer.toString(sumawydatkow) + " zł");
 
+        if(sumaprzychodu <= sumawydatkow) {
+            Toast.makeText(getApplicationContext(), "Wydano wszystkie pieniądze na dany miesiąc! Wprowadź przychód!", Toast.LENGTH_SHORT).show();
+        }
+        int sumaostrzezenie = sumaprzychodu - sumawydatkow;
+        if(sumaostrzezenie <= 100) {
+            if (sumaostrzezenie > 0) {
+                Toast.makeText(getApplicationContext(), "Pozostało Ci mniej niż 100 zł na dany miesiąc!", Toast.LENGTH_SHORT).show();
+            }
+        }
+
         dochodaktualny = findViewById(R.id.dochodaktualny);
-        findViewById(R.id.dochodaktualny).invalidate();
         sumadochodaktualny = sumaprzychodu - sumawydatkow;
+        dochodaktualny.invalidate();
         dochodaktualny.setText("Dochód: " + Integer.toString(sumadochodaktualny) + " zł");
 
         oszczednosci = findViewById(R.id.oszczednosci);
-        findViewById(R.id.oszczednosci).invalidate();
         sumaoszczednosci = bazadanych.sumaoszczednosci();
+        oszczednosci.invalidate();
         oszczednosci.setText("Oszczędności: " + Integer.toString(sumaoszczednosci) + " zł");
 
         kartabankowa = findViewById(R.id.zasob1);
-        findViewById(R.id.zasob1).invalidate();
         sumakartabankowa = bazadanych.sumakartabankowa() - bazadanych.sumawydatkikartabankowa();
+        kartabankowa.invalidate();
         kartabankowa.setText("Karta bankowa: " + Integer.toString(sumakartabankowa) + " zł");
 
         gotowka = findViewById(R.id.zasob2);
-        findViewById(R.id.zasob2).invalidate();
         sumagotowka = bazadanych.sumagotowka() - bazadanych.sumawydatkigotowka();
+        gotowka.invalidate();
         gotowka.setText("Gotówka: " + Integer.toString(sumagotowka) + " zł");
+
+        if(sumagotowka < 0)
+        {
+            Toast.makeText(getApplicationContext(), "Skończyły Ci się pieniądze w gotówce!", Toast.LENGTH_SHORT).show();
+        }
+        if(sumakartabankowa < 0)
+        {
+            Toast.makeText(getApplicationContext(), "Skończyły Ci się pieniądze na karcie!", Toast.LENGTH_SHORT).show();
+        }
 
         try {
             sprawdzdata();
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        zobaczprzychody = (TextView) findViewById(R.id.zobaczprzychody);
+        zobaczprzychody.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                cursor = bazadanych.odczytajtekst2();
+                if (cursor.getCount() == 0) {
+                    wyswietlwiadomosc2("Error", "Brak zapisanych zasobów!");
+                    return;
+                }
+                StringBuffer buffer2 = new StringBuffer();
+                while (cursor.moveToNext()) {
+                        buffer2.append("Zasób: " + cursor.getString(1) + "\n");
+                        buffer2.append("Kwota: " + cursor.getString(2) + "\n");
+                        buffer2.append("Nazwa: " + cursor.getString(3) + "\n");
+                        buffer2.append("\n");
+                    }
+                wyswietlwiadomosc2("Zapisane przychody: ", buffer2.toString());
+                cursor.close();
+            }
+        });
 
         zobaczwydatki = (TextView) findViewById(R.id.zobaczwydatki);
         zobaczwydatki.setOnClickListener(new View.OnClickListener() {
@@ -165,12 +205,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             e.printStackTrace();
                         }
                         String dataformat = datestring.format(data);
-                        buffer.append("ID: " + cursor.getString(0) + "\n");
                         buffer.append("Data: " + dataformat + "\n");
                         buffer.append("Wydatek: " + cursor.getString(2) + "\n");
                         buffer.append("Kwota: " + cursor.getString(3) + "\n");
                         buffer.append("Wykorzystany zasób: " + cursor.getString(5) + "\n");
                         buffer.append("Cheatday: " + cursor.getString(4) + "\n");
+                        buffer.append("\n");
                     }
                 }
                 wyswietlwiadomosc2("Zapisane wydatki: ", buffer.toString());

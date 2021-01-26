@@ -16,7 +16,9 @@ import com.example.provistudent.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class ProfileActivity extends AppCompatActivity {
     @Override
@@ -45,11 +47,18 @@ public class ProfileActivity extends AppCompatActivity {
         int sumawydatkowstalych;
         int sumaprzychodu;
         String powiadomieniadzien;
+        String czestotliwoscdzien;
         String powiadomieniadzientime;
         String coilepowiad;
         String powiadomieniagodz;
         String stanpowiadomienstring;
         String stanpowiadomienstring2;
+        String powiadomieniatime;
+        String powiadomieniadane;
+        long interwal;
+        String czywlaczone;
+        String czywlaczone2;
+
 
         bazadanych = new Bazadanych(ProfileActivity.this);
         cursor = bazadanych.odczytajtekst();
@@ -68,24 +77,106 @@ public class ProfileActivity extends AppCompatActivity {
         sumawydatkowstalych = bazadanych.sumawydatkowstalych();
         oplatystale.setText(Integer.toString(sumawydatkowstalych) + " zł");
 
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat data_aktualna = new SimpleDateFormat("yyyyMMdd", new Locale("pl", "PL"));
+        String datadozapisu =  data_aktualna.format(cal.getTime());
+        int data_aktualnaint = Integer.parseInt(datadozapisu);
+
         powiadomieniadzienprofil = findViewById(R.id.powiadomieniadzienprofil);
         cursor2 = bazadanych.odczytajtekst4();
         if(cursor2 != null && cursor2.getCount() > 0) {
             while (cursor2.moveToNext()) {
                 powiadomieniadzien = cursor2.getString(cursor2.getColumnIndex("kiedypow"));
+                powiadomieniatime = cursor2.getString(cursor2.getColumnIndex("kiedypowczas"));
+                czestotliwoscdzien = cursor2.getString(cursor2.getColumnIndex("czestotliwosc"));
+                powiadomieniadane = cursor2.getString(cursor2.getColumnIndex("kiedydane"));
+                czywlaczone = cursor2.getString(cursor2.getColumnIndex("czywlaczone"));
+                interwal = cursor2.getInt(cursor2.getColumnIndex("interwal"));
+                czywlaczone2 = cursor2.getString(cursor2.getColumnIndex("czywlaczone2"));
+
+                int powiadomieniadzienint = Integer.parseInt(powiadomieniadzien);
                 if (powiadomieniadzien == null || powiadomieniadzien.equals("")) {
                     powiadomieniadzienprofil.setText("Brak");
                 } else {
-                    SimpleDateFormat datebaza = new SimpleDateFormat("yyyyMMdd");
-                    SimpleDateFormat datestring = new SimpleDateFormat("dd/MM/yyyy");
-                    Date data = null;
-                    try {
-                        data = datebaza.parse(powiadomieniadzien);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    if(powiadomieniadzienint >= data_aktualnaint) {
+                        SimpleDateFormat datebaza = new SimpleDateFormat("yyyyMMdd");
+                        SimpleDateFormat datestring = new SimpleDateFormat("dd/MM/yyyy");
+                        Date data = null;
+                        try {
+                            data = datebaza.parse(powiadomieniadzien);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        String dataformat = datestring.format(data);
+                        powiadomieniadzienprofil.setText(dataformat);
                     }
-                    String dataformat = datestring.format(data);
-                    powiadomieniadzienprofil.setText(dataformat);
+                    else if (powiadomieniadzienint < data_aktualnaint) {
+                        if(czestotliwoscdzien.equals("Co miesiąc")) {
+                            SimpleDateFormat datebaza = new SimpleDateFormat("yyyyMMdd");
+                            SimpleDateFormat datestring = new SimpleDateFormat("dd/MM/yyyy");
+                            Date data = null;
+                            try {
+                                data = datebaza.parse(powiadomieniadzien);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            cal.setTime(data);
+                            cal.add(Calendar.MONTH, 1);
+
+                            String databezformat = datebaza.format(cal.getTime());
+                            String dataformat = datestring.format(cal.getTime());
+                            powiadomieniadzienprofil.setText(dataformat);
+                            bazadanych.zaaktualizujtekst4(databezformat, powiadomieniatime, czestotliwoscdzien, powiadomieniadane, czywlaczone, interwal, czywlaczone2);
+                        }
+                        if(czestotliwoscdzien.equals("Co trzy miesiące")) {
+                            SimpleDateFormat datebaza = new SimpleDateFormat("yyyyMMdd");
+                            SimpleDateFormat datestring = new SimpleDateFormat("dd/MM/yyyy");
+                            Date data = null;
+                            try {
+                                data = datebaza.parse(powiadomieniadzien);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            cal.setTime(data);
+                            cal.add(Calendar.MONTH, 3);
+                            String databezformat = datebaza.format(cal.getTime());
+                            String dataformat = datestring.format(cal.getTime());
+                            powiadomieniadzienprofil.setText(dataformat);
+                            bazadanych.zaaktualizujtekst4(databezformat, powiadomieniatime, czestotliwoscdzien, powiadomieniadane, czywlaczone, interwal, czywlaczone2);
+                        }
+                        if(czestotliwoscdzien.equals("Co pół roku")) {
+                            SimpleDateFormat datebaza = new SimpleDateFormat("yyyyMMdd");
+                            SimpleDateFormat datestring = new SimpleDateFormat("dd/MM/yyyy");
+                            Date data = null;
+                            try {
+                                data = datebaza.parse(powiadomieniadzien);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            cal.setTime(data);
+                            cal.add(Calendar.MONTH, 6);
+                            String databezformat = datebaza.format(cal.getTime());
+                            String dataformat = datestring.format(cal.getTime());
+                            powiadomieniadzienprofil.setText(dataformat);
+                            bazadanych.zaaktualizujtekst4(databezformat, powiadomieniatime, czestotliwoscdzien, powiadomieniadane, czywlaczone, interwal, czywlaczone2);
+                        }
+                        if(czestotliwoscdzien.equals("Co rok")) {
+                            SimpleDateFormat datebaza = new SimpleDateFormat("yyyyMMdd");
+                            SimpleDateFormat datestring = new SimpleDateFormat("dd/MM/yyyy");
+                            Date data = null;
+                            try {
+                                data = datebaza.parse(powiadomieniadzien);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            cal.setTime(data);
+                            cal.add(Calendar.MONTH, 12);
+                            String databezformat = datebaza.format(cal.getTime());
+                            String dataformat = datestring.format(cal.getTime());
+                            powiadomieniadzienprofil.setText(dataformat);
+                            bazadanych.zaaktualizujtekst4(databezformat, powiadomieniatime, czestotliwoscdzien, powiadomieniadane, czywlaczone, interwal, czywlaczone2);
+                        }
+                    }
                 }
             }
         }
@@ -191,6 +282,7 @@ public class ProfileActivity extends AppCompatActivity {
         przyciskedytuj.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
                 Intent intent = new Intent(ProfileActivity.this, SettingsActivity.class);
+                finish();
                 startActivity(intent);
             }
         });

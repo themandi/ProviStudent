@@ -57,7 +57,7 @@ public class HelpActivity extends AppCompatActivity {
             }
         });
         button3 = findViewById(R.id.button3);
-        button2.setOnClickListener(new View.OnClickListener() {
+        button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 StringBuffer buffer = new StringBuffer();
@@ -70,11 +70,11 @@ public class HelpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 StringBuffer buffer = new StringBuffer();
-                buffer.append("Aby wprowadzić wydatki należy wejść w dany dzień w kalendarzu dla którego chcemy wprowadzić wydatki i użyć opcji 'Edytuj wydatki'. " +
+                buffer.append("Aby wprowadzić wydatki/przychody należy wejść w dany dzień w kalendarzu dla którego chcemy wprowadzić wydatki i użyć opcji 'Edytuj wydatki/przychody'. " +
                                 "Jeśli nasze wydatki nie zostaną przez Ciebie wprowadzone system zapisuje sugerowaną ilość do wydania na jeden dzień. " +
-                                "Jeśli użyjesz opcji 'Edytuj wydatki' twoje wydatki zostaną zaaktualizowane i wprowadzone poprawne do systemu, a poprzednie" +
+                                "Jeśli użyjesz opcji 'Edytuj wydatki/przychody' twoje wydatki bądź przychody zostaną zaaktualizowane i wprowadzone poprawne do systemu, a poprzednie" +
                         " zostaną usunięte");
-                wyswietlwiadomosc("Jak wprowadzić wydatki?", buffer.toString());
+                wyswietlwiadomosc("Jak wprowadzić wydatki/przychody?", buffer.toString());
             }
         });
         button5 = findViewById(R.id.button5);

@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/button"
-            android:text="Jak wprowadzić wydatki?" />
+            android:text="Jak wprowadzić wydatki/przychody?" />
 
         <Button
             android:id="@+id/button5"

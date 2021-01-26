@@ -122,10 +122,10 @@ public class CashActivity extends AppCompatActivity {
                 }
                 StringBuffer buffer = new StringBuffer();
                 while (cursor.moveToNext()) {
-                    buffer.append("ID: " + cursor.getString(0) + "\n");
                     buffer.append("Wydatek: " + cursor.getString(1) + "\n");
                     buffer.append("Kwota: " + cursor.getString(2) + "\n");
                     buffer.append("Zapłata za pomocą: " + cursor.getString(3) + "\n");
+                    buffer.append("\n");
                 }
                 wyswietlwiadomosc("Zapisane wydatki stałe: ", buffer.toString());
                 cursor.close();
@@ -213,7 +213,6 @@ public class CashActivity extends AppCompatActivity {
             Bundle extras = i.getExtras();
             if(extras.containsKey("Register")) {
                 Intent intent = new Intent(CashActivity.this, RegisterActivity.class);
-                finish();
                 startActivity(intent);
             }
             if(extras.containsKey("Settings")) {

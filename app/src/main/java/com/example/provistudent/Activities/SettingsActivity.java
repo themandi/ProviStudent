@@ -326,13 +326,11 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                     case 1:
                         Intent intent = new Intent(SettingsActivity.this, IncomeActivity.class);
                         intent.putExtra("Settings", "SettingsActivity");
-                        finish();
                         startActivity(intent);
                         break;
                     case 2:
                         Intent intent2 = new Intent(SettingsActivity.this, IncomeActivity2.class);
                         intent2.putExtra("Settings", "SettingsActivity");
-                        finish();
                         startActivity(intent2);
                         break;
                 }
@@ -825,6 +823,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         }
 
         Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+        finish();
         startActivity(intent);
     }
 
@@ -882,7 +881,6 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 if (zaznaczony == true) {
                     Intent intent = new Intent(SettingsActivity.this, CashActivity.class);
                     intent.putExtra("Settings", "SettingsActivity");
-                    finish();
                     startActivity(intent);
                 }
                 break;

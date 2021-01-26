@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:background="#0b5225"
             android:gravity="center"
-            android:text="Edytuj wydatki"
+            android:text="Edytuj wydatki \n lub przychody"
             android:textColor="@android:color/white"
             android:textSize="35sp"
             android:textStyle="bold|normal"
@@ -42,6 +42,47 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
+
+        <LinearLayout
+            android:id="@+id/linearLayout22"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/wyborwydczyprzy"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10px"
+                android:layout_marginLeft="10px"
+                android:text="Dodanie:"
+                android:textColor="@android:color/black"
+                android:textSize="20dp"
+                android:textStyle="bold|normal" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Spinner
+                    android:id="@+id/spinnerwybor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10px"
+                    android:layout_marginLeft="10px"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            tools:ignore="MissingConstraints" />
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -55,7 +96,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="10px"
                 android:layout_marginLeft="10px"
-                android:text="Wydano na:"
+                android:text="Nazwa:"
                 android:textColor="@android:color/black"
                 android:textSize="20dp"
                 android:textStyle="bold|normal" />
@@ -84,7 +125,7 @@
 
         <View
             android:layout_width="wrap_content"
-            android:layout_height="60dp"
+            android:layout_height="30dp"
             tools:ignore="MissingConstraints" />
 
         <LinearLayout
@@ -99,7 +140,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="10px"
                 android:layout_marginLeft="10px"
-                android:text="Wydatek"
+                android:hint="wpisz nazwę"
                 android:textColor="@android:color/black"
                 android:textSize="20dp"
                 android:textStyle="bold|normal" />
@@ -147,7 +188,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="10px"
                 android:layout_marginLeft="10px"
-                android:text="Zapłacono za pomocą:"
+                android:text="Wybór zasobu:"
                 android:textColor="@android:color/black"
                 android:textSize="20dp"
                 android:textStyle="bold|normal" />
@@ -190,7 +231,7 @@
                 android:layout_height="wrap_content"
                 android:text="EDYTUJ" />
             <View
-                android:layout_width="10mm"
+                android:layout_width="wrap_content"
                 android:layout_height="1dp"
                 android:layout_weight="1" />
             <!--           Aby gdy przyciśniemy przycisk dodaj moglibysmy wybrac czy chcemy gotowke czy karte-->
@@ -199,17 +240,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="DODAJ +" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:ignore="MissingConstraints">
+            <Button
+                android:id="@+id/wyswietlprzychody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3mm"
+                android:text="WYŚWIETL PRZYCHODY" />
             <View
-                android:layout_width="10mm"
+                android:layout_width="wrap_content"
                 android:layout_height="1dp"
                 android:layout_weight="1" />
-            <!--            Przycisk zapisz zapisujący do bazy dane-->
+            <!--           Aby gdy przyciśniemy przycisk dodaj moglibysmy wybrac czy chcemy gotowke czy karte-->
             <Button
                 android:id="@+id/wyswietl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="3mm"
-                android:text="WYŚWIETL" />
+                android:text="WYŚWIETL WYDATKI" />
         </LinearLayout>
 
         <LinearLayout
@@ -224,7 +277,7 @@
                 android:layout_height="wrap_content"
                 android:text="COFNIJ" />
             <View
-                android:layout_width="10mm"
+                android:layout_width="15mm"
                 android:layout_height="1dp"
                 android:layout_weight="1" />
             <Button
@@ -233,7 +286,7 @@
                 android:layout_height="wrap_content"
                 android:text="USUŃ" />
             <View
-                android:layout_width="10mm"
+                android:layout_width="15mm"
                 android:layout_height="1dp"
                 android:layout_weight="1" />
             <!--            Przycisk zapisz zapisujący do bazy dane-->
@@ -241,7 +294,6 @@
                 android:id="@+id/zapisz"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="3mm"
                 android:text="@string/zapisz" />
         </LinearLayout>
     </LinearLayout>

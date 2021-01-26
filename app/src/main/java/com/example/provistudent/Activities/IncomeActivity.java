@@ -118,10 +118,10 @@ public class IncomeActivity extends AppCompatActivity {
                 }
                         StringBuffer buffer = new StringBuffer();
                         while (cursor.moveToNext()) {
-                            buffer.append("ID: " + cursor.getString(0) + "\n");
                             buffer.append("Zasób: " + cursor.getString(1) + "\n");
                             buffer.append("Nazwa: "+ cursor.getString(3) + "\n");
                             buffer.append("Kwota: " + cursor.getString(2) + "\n");
+                            buffer.append("\n");
                         }
                         wyswietlwiadomosc("Zapisane zasoby: ", buffer.toString());
                         cursor.close();
@@ -160,7 +160,6 @@ public class IncomeActivity extends AppCompatActivity {
             Bundle extras = i.getExtras();
             if(extras.containsKey("Register")) {
                 Intent intent = new Intent(IncomeActivity.this, RegisterActivity.class);
-                finish();
                 startActivity(intent);
             }
             if(extras.containsKey("Settings")) {
@@ -183,7 +182,7 @@ public class IncomeActivity extends AppCompatActivity {
                 kwota = Integer.parseInt(polekwota.getText().toString());
             }catch(Throwable t)
             {
-                Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisane dane, prosimy edytować bądź usunąć wydatek", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Error: Niepoprawnie zapisane dane, prosimy edytować bądź usunąć przychód", Toast.LENGTH_SHORT).show();
             }
                 if (bazadanych.dodajtekst2(zasob, kwota, gotowkapole)) {
                     polekwota.setText("");

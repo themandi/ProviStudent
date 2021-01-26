@@ -28,6 +28,10 @@
         <item>Gotówka</item>
         <item>Karta płatnicza</item>
     </string-array>
+    <string-array name="wybor">
+        <item>Wydatek</item>
+        <item>Przychód</item>
+    </string-array>
     <!--    Wykorzystywane do spinnera w rejestracji, czestotliwosc powiadomien-->
     <string-array name="czestotliwosc">
         <item>Wybierz</item>
@@ -84,4 +88,5 @@
     <string name="zobacz_list_wydatk_w"><![CDATA[>>Zobacz listę wydatków<<]]></string>
     <string name="wydaj_oszcz_dno_ci"><![CDATA[>>Wydaj oszczędności<<]]></string>
     <string name="wykorzystaj_oszcz_dno_ci"><![CDATA[>>Wykorzystaj oszczędności<<]]></string>
+    <string name="zobacz_list_przychod_w"><![CDATA[>>Zobacz listę przychodów<<]]></string>
 </resources>

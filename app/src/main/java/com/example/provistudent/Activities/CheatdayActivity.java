@@ -160,11 +160,11 @@ public class CheatdayActivity extends AppCompatActivity {
                         }
                         String dataformat = datestring.format(data);
 
-                        buffer.append("ID: " + cursor.getString(0) + "\n");
                         buffer.append("Data: " + dataformat + "\n");
                         buffer.append("Wydatek: " + cursor.getString(2) + "\n");
                         buffer.append("Kwota: " + cursor.getString(3) + "\n");
                         buffer.append("Zapłata za pomocą: " + cursor.getString(5) + "\n");
+                        buffer.append("\n");
                     }
                 }
                 wyswietlwiadomosc("Wydatki za pomocą funkcji 'Cheatday': ", buffer.toString());
@@ -251,6 +251,7 @@ public class CheatdayActivity extends AppCompatActivity {
         else if(cursor.getCount()>0) {
             Toast.makeText(getApplicationContext(), "Zapisano!",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(CheatdayActivity.this, MainActivity.class);
+            finish();
             startActivity(intent);
         }
         cursor.close();
