@@ -148,7 +148,6 @@ public class EditCashActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         String dataformat = datestring.format(data);
-                        buffer.append("ID: " + cursor.getString(0) + "\n");
                         buffer.append("Data: " + dataformat + "\n");
                         buffer.append("Wydatek: " + cursor.getString(2) + "\n");
                         buffer.append("Kwota: " + cursor.getString(3) + "\n");
